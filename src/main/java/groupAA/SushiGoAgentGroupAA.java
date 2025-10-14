@@ -11,17 +11,12 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
   
   public SushiGoAgentGroupAA(long randomSeed) {
       //calling AbstractPlayer (super class) args constructor
-      super(new SushiGoAgentGroupAAParams(), "GroupAA MCTS Agent"); //TODO: Create MyAgentGroupAAParams class to set params for this agent 
-      parameters.setRandomSeed(randomSeed); //
-      randomSeed = new Random(randomSeed);
+      super(new AMAF_Params(), "GroupAA MCTS Agent"); 
+      //TODO: Create MyAgentGroupAAParams class to set params for this agent 
+      //TODO: Experiment and define parameter values for our MCTS in AMAF_Params
 
-      // TODO: Experiment and define parameter values for our MCTS
-      SushiGoAgentGroupAAParams params = getParameters();
-      params.K = Math.sqrt(/*TODO*/);
-      params.rolloutLength = /*TODO*/;
-      params.maxTreeDepth = /*TODO*/;
-      params.epsilon = /*TODO*/;
-      
+      parameters.setRandomSeed(randomSeed);
+      randomSeed = new Random(randomSeed);   
   }
 
   @Override
@@ -30,7 +25,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
   }
 
   @Override
-  public SushiGoAgentGroupAAParams getParameters() {
+  public AMAF_Params getParameters() {
     //TODO: return the parameter values for the MCTS
   }
 
@@ -40,8 +35,8 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
   }
 
   @Override
-  public SushiGoAgentGroupAAParams copy() {
-    SushiGoAgentGroupAAParams parametersCopy = (SushiGoAgentGroupAAParams) parameters.copy();
+  public SushiGoAgentGroupAA copy() {
+    AMAF_Params parametersCopy = (AMAF_Params) parameters.copy();
     SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy);
     return agentCopy;
   }
