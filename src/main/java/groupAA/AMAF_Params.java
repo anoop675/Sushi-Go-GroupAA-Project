@@ -48,7 +48,7 @@ public class AMAF_Params extends PlayerParameters {
 
     @Override
     public BasicMCTSPlayer instantiate() {
-        return new AMAF_Params((AMAF_Params) this.copy());
+        return new BasicMCTSPlayer((AMAF_Params) this.copy());
     }
 
 }
