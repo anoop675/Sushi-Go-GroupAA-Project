@@ -1,55 +1,30 @@
 package groupAA;
 
-public class MyAgentGroupAA extends AbstractPlayer {
+import core.AbstractGameState;
+import core.actions.AbstractAction;
+import players.basicMCTS.BasicMCTSParams;
+import players.basicMCTS.BasicMCTSPlayer;
 
-    public MyAgentGroupAA() {
-        this(System.currentTimeMillis());
-    }
+import java.util.List;
 
-    // TODO
-    // CHANGE THE PARAMETERS TO APPROPRIATE MCTS-RAVE ARGUEMENTS
-    //
-    public MyAgentGroupAA(long seed) {
-        super(new MyAgentGroupAA(), "GroupAA RAVE-MCTS");
-        // for clarity we create a new set of parameters here, but we could just use the default parameters
-        parameters.setRandomSeed(seed);
-        rnd = new Random(seed);
+public class MyAgentGroupAA extends BasicMCTSPlayer {
 
-        // TODO
-        // CHANGES THIS
-        // These parameters can be changed, and will impact the Basic MCTS algorithm
-        BasicMCTSParams params = getParameters();
-        params.K = Math.sqrt(2);
-        params.rolloutLength = 10;
-        params.maxTreeDepth = 5;
-        params.epsilon = 1e-6;
+    // Placeholder for future GroupAA-specific configuration
 
-    }
+    public MyAgentGroupAA() { super(System.currentTimeMillis()); }
 
-    public BasicMCTSPlayer(BasicMCTSParams params) {
-        super(params, "GroupAA RAVE-MCTS");
-        rnd = new Random(params.getRandomSeed());
-    }
+    public MyAgentGroupAA(long seed) { super(seed); }
 
-    // TODO
-    // Create new class TreeNode (can extends BasicTreeNode)
-    //
+    // Custom parameter defaults could be set here in future if needed
+
+    public MyAgentGroupAA(BasicMCTSParams params) { super(params); }
+
+    @Override
     public AbstractAction _getAction(AbstractGameState gameState, List<AbstractAction> actions) {
-        // Search for best action from the root
-        MyAgentGroupAA root = new BasicTreeNode(this, null, gameState, rnd);
-
-        // mctsSearch does all of the hard work
-        root.mctsSearch();
-
-        // Return best action
-        return root.bestAction();
+        // For now, use the default BasicMCTS implementation
+        return super._getAction(gameState, actions);
     }
 
     @Override
-    public MyAgentGroupAA copy() {
-        return new MyAgentGroupAA((BasicMCTSParams) parameters.copy());
-    }
-
-    // TODO
-    // OVERIDE FUNCTIONS LIKE IN BasicMTCSPlayer
+    public MyAgentGroupAA copy() { return new MyAgentGroupAA((BasicMCTSParams) parameters.copy()); }
 }

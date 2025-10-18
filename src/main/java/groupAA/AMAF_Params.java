@@ -1,4 +1,4 @@
-package players.basicMCTS;
+package groupAA;
 
 import core.AbstractGameState;
 import core.interfaces.IStateHeuristic;
@@ -22,6 +22,8 @@ public class AMAF_Params extends PlayerParameters {
         addTunableParameter("epsilon", 1e-6);
         addTunableParameter("heuristic", (IStateHeuristic) AbstractGameState::getHeuristicScore);
     }
+
+    public int getRolloutDepth() { return rolloutLength; }
 
     @Override
     public void _reset() {
@@ -47,8 +49,8 @@ public class AMAF_Params extends PlayerParameters {
     }
 
     @Override
-    public BasicMCTSPlayer instantiate() {
-        return new BasicMCTSPlayer((AMAF_Params) this.copy());
+    public players.basicMCTS.BasicMCTSPlayer instantiate() {
+        return new players.basicMCTS.BasicMCTSPlayer((players.basicMCTS.BasicMCTSParams) new players.basicMCTS.BasicMCTSParams().copy());
     }
 
 }

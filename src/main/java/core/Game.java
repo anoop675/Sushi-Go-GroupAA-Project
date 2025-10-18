@@ -27,6 +27,9 @@ import utilities.Pair;
 import utilities.Utils;
 
 import javax.swing.Timer;
+
+import core.AbstractPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -191,7 +194,7 @@ public class Game {
         int currentPlayer = gameState.getCurrentPlayer();
         AbstractPlayer player = getPlayers().get(currentPlayer);
         if (gui != null) {
-            gui.update(player, gameState, isHumanToMove());
+            gui.update(player, gameState);
             frame.repaint();
         }
     }
@@ -215,7 +218,7 @@ public class Game {
         // set forward models for all players
         for (AbstractPlayer player : players) {
             if (forwardModel instanceof PandemicForwardModel pfm)
-                player.setForwardModel(pfm.copy());
+                player.setForwardModel((AbstractForwardModel) pfm.copy());
             else
                 player.setForwardModel(this.forwardModel);
         }
@@ -231,7 +234,12 @@ public class Game {
             for (int i = 0; i < gameState.getNPlayers(); i++) {
                 int team = gameState.getTeam(i);
                 AbstractPlayer player = players.get(team);
-                this.players.add(player.copy());
+                try {
+                    this.players.add(player.getClass().getDeclaredConstructor().newInstance());
+                } catch (Exception e) {
+                    // Fallback to using the same player instance
+                    this.players.add(player);
+                }
             }
         } else
             throw new IllegalArgumentException("PlayerList provided to Game.reset() must be empty, or have the same number of entries as there are players");
