@@ -1,4 +1,4 @@
-package players.basicMCTS;
+package groupAA;
 
 import core.AbstractGameState;
 import core.interfaces.IStateHeuristic;
@@ -15,9 +15,14 @@ public class AMAF_Params extends PlayerParameters {
     public double epsilon = 1e-6;
     public IStateHeuristic heuristic = AbstractGameState::getHeuristicScore;
 
+    // constructor to define tunable parameters for the AMAF-enhanced MCTS Agent
+    // TODO: tweak params like exploration constant, rollout length, etc.) to find the best-performing setup.
     public AMAF_Params() {
+        // Math.sqrt(2) is default for the exploration constant
         addTunableParameter("K", Math.sqrt(2), Arrays.asList(0.0, 0.1, 1.0, Math.sqrt(2), 3.0, 10.0));
+        // simulates 10 steps ahead, NOTE: deeper the rollout, the more accurate but slower the value estimate.
         addTunableParameter("rolloutLength", 10, Arrays.asList(0, 3, 10, 30, 100));
+        //
         addTunableParameter("maxTreeDepth", 100, Arrays.asList(1, 3, 10, 30, 100));
         addTunableParameter("epsilon", 1e-6);
         addTunableParameter("heuristic", (IStateHeuristic) AbstractGameState::getHeuristicScore);
@@ -47,8 +52,8 @@ public class AMAF_Params extends PlayerParameters {
     }
 
     @Override
-    public BasicMCTSPlayer instantiate() {
-        return new BasicMCTSPlayer((AMAF_Params) this.copy());
+    public SushiGoAgentGroupAA instantiate() {
+        return new SushiGoAgentGroupAA((AMAF_Params) this.copy());
     }
 
 }

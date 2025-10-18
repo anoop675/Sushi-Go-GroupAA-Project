@@ -32,7 +32,6 @@ public class BasicMCTSPlayer extends AbstractPlayer {
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
         params.epsilon = 1e-6;
-
     }
 
     public BasicMCTSPlayer(BasicMCTSParams params) {
