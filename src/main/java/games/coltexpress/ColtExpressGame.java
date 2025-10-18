@@ -28,12 +28,8 @@ public class ColtExpressGame extends Game {
         agents.add(new RandomPlayer());
 
         for (int i=0; i<1; i++) {
-            ColtExpressParameters params = new ColtExpressParameters();
-            AbstractForwardModel forwardModel = new ColtExpressForwardModel();
-            ColtExpressGameState tmp_gameState = new ColtExpressGameState(params, agents.size());
-
-            Game game = new ColtExpressGame(agents, forwardModel, tmp_gameState);
-//            game.run(new ColtExpressGUI(game, ac, 1)); TODO
+            // Use the standard entry point that will create and run the GUI when an ActionController is provided
+            Game game = Game.runOne(GameType.ColtExpress, null, agents, System.currentTimeMillis(), false, null, ac, 1);
             ColtExpressGameState gameState = (ColtExpressGameState) game.getGameState();
 
             //gameState.printToConsole();
