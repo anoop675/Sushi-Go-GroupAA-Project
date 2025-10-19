@@ -5,6 +5,7 @@ import core.AbstractGameState;
 import core.actions.AbstractAction;
 import players.PlayerConstants;
 //import players.basicMCTS.BasicTreeNode;
+import players.PlayerParameters;
 import players.simple.RandomPlayer;
 import utilities.ElapsedCpuTimer;
 
@@ -88,7 +89,7 @@ class GroupAATreeNode {
     }
 
     void mctsSearch() {
-        AMAF_Params params = player.getParameters(4);
+        PlayerParameters params = player.getParameters();
 
         // Variables for tracking time budget
         double avgTimeTaken;
@@ -139,7 +140,7 @@ class GroupAATreeNode {
     private GroupAATreeNode treePolicy() {
         GroupAATreeNode currentNode = this;
         //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
-        while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters(4).maxTreeDepth) {
+        while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
             if (!currentNode.unexpandedActions().isEmpty()) {
                 // We have an unexpanded action
                 currentNode = currentNode.expand();

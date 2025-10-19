@@ -30,6 +30,7 @@ public class PlayerParameters extends TunableParameters<AbstractPlayer> {
     // Action space type for this player
     public ActionSpace actionSpace = new ActionSpace();
     public IPlayerDecorator decorator = null;
+    public int maxTreeDepth;
 
     public PlayerParameters() {
         addTunableParameter("budgetType", PlayerConstants.BUDGET_FM_CALLS, Arrays.asList(PlayerConstants.values()));
