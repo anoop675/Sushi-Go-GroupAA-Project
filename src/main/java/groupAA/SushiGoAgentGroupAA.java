@@ -4,6 +4,7 @@ import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
 import core.components.PlayerParameters;
+
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -60,7 +61,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     // Bridge to maintain compatibility with code calling getParameters() on AbstractPlayer
     @Override
-    public PlayerParameters getParameters() {
+    public players.PlayerParameters getParameters() {
         return amafParams;
     }
 

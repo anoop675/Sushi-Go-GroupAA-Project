@@ -46,8 +46,8 @@ class GroupAATreeNode {
     private AbstractAction ucb() {
         // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
-        double bestValue = -Double.MAX_VALUE;
-        AMAF_Params params = player.getAMAFParams();
+        double bestValue = Double.MAX_VALUE;
+        PlayerParameters params = player.getParameters();
 
         for (AbstractAction action : children.keySet()) {
             GroupAATreeNode child = children.get(action);
