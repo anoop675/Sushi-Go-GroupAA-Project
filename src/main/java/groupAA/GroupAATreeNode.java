@@ -4,8 +4,6 @@ import java.util.*;
 import core.AbstractGameState;
 import core.actions.AbstractAction;
 import players.PlayerConstants;
-import players.basicMCTS.BasicMCTSParams;
-import players.basicMCTS.BasicMCTSPlayer;
 //import players.basicMCTS.BasicTreeNode;
 import players.simple.RandomPlayer;
 import utilities.ElapsedCpuTimer;
@@ -48,7 +46,7 @@ class GroupAATreeNode {
         // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
         double bestValue = -Double.MAX_VALUE;
-        AMAF_Params params = player.getParameters();
+        AMAF_Params params = player.getParameters(4);
 
         for (AbstractAction action : children.keySet()) {
             GroupAATreeNode child = children.get(action);
@@ -90,7 +88,7 @@ class GroupAATreeNode {
     }
 
     void mctsSearch() {
-        AMAF_Params params = player.getParameters();
+        AMAF_Params params = player.getParameters(4);
 
         // Variables for tracking time budget
         double avgTimeTaken;
@@ -141,7 +139,7 @@ class GroupAATreeNode {
     private GroupAATreeNode treePolicy() {
         GroupAATreeNode currentNode = this;
         //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
-        while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
+        while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters(4).maxTreeDepth) {
             if (!currentNode.unexpandedActions().isEmpty()) {
                 // We have an unexpanded action
                 currentNode = currentNode.expand();
@@ -158,7 +156,7 @@ class GroupAATreeNode {
     private void setState(AbstractGameState newState) {
         state = newState;
         if (newState.isNotTerminal())
-            for (AbstractAction action : player.getForwardModel().computeAvailableActions(state, player.getParameters().actionSpace)) {
+            for (AbstractAction action : player.getForwardModel().computeAvailableActions(state, player.getParameters(4).actionSpace)) {
                 children.put(action, null); // mark a new node to be expanded
             }
     }
@@ -170,7 +168,7 @@ class GroupAATreeNode {
     //Expands the node by creating a new random child node and adding to the tree.
     private GroupAATreeNode expand() {
         // Find random child not already created
-        Random r = new Random(player.getParameters().getRandomSeed());
+        Random r = new Random(player.getParameters(4).getRandomSeed());
         // pick a random unchosen action
         List<AbstractAction> notChosen = unexpandedActions();
         AbstractAction chosen = notChosen.get(r.nextInt(notChosen.size()));
@@ -204,7 +202,7 @@ class GroupAATreeNode {
 
         // If rollouts are enabled, select actions for the rollout in line with the rollout policy
         AbstractGameState rolloutState = state.copy();
-        if (player.getParameters().rolloutLength > 0) {
+        if (player.getParameters(4).rolloutLength > 0) {
             while (!finishRollout(rolloutState, rolloutDepth)) {
                 //TODO: Use a heuristic rollout policy instead of random rollouts
                 AbstractAction next = randomPlayer.getAction(rolloutState, randomPlayer.getForwardModel().computeAvailableActions(rolloutState, randomPlayer.parameters.actionSpace));
@@ -213,7 +211,7 @@ class GroupAATreeNode {
             }
         }
         // Evaluate final state and return normalised score
-        double value = player.getParameters().getStateHeuristic().evaluateState(rolloutState, player.getPlayerID());
+        double value = player.getParameters(4).getStateHeuristic().evaluateState(rolloutState, player.getPlayerID());
         if (Double.isNaN(value))
             throw new AssertionError("Illegal heuristic value - should be a number");
         return value;
@@ -221,7 +219,7 @@ class GroupAATreeNode {
 
     //Checks if rollout is finished. Rollouts end on maximum length, or if game ended.
     private boolean finishRollout(AbstractGameState rollerState, int depth) {
-        if (depth >= player.getParameters().rolloutLength)
+        if (depth >= player.getParameters(4).rolloutLength)
             return true;
 
         // End of game
@@ -249,7 +247,7 @@ class GroupAATreeNode {
                 double childValue = childNode.n;
 
                 // Apply small noise to break ties randomly
-                childValue = noise(childValue, player.getParameters().epsilon, player.getRnd().nextDouble());
+                childValue = noise(childValue, player.getParameters(4).epsilon, player.getRnd().nextDouble());
 
                 // Save best value (highest visit count)
                 if (childValue > bestValue) {

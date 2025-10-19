@@ -36,7 +36,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         this.rnd = new Random(randomSeed);
 
         // Overwrite AMAF parameter values (getParameters() returns AMAF_Params)
-        AMAF_Params params = getParameters();
+        AMAF_Params params = getParameters(4);
         params.K = Math.sqrt(2);
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
@@ -52,8 +52,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         return node.bestAction();
     }
 
-    @Override
-    public AMAF_Params getParameters() {
+    public AMAF_Params getParameters(int i) {
         return amafParams;
     }
 
