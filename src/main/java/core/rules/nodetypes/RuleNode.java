@@ -72,12 +72,19 @@ public abstract class RuleNode extends Node {
 
         boolean interrupted = !run(gs);
         if (gameOverConditions != null && gameOverConditions.size() > 0) {
-            for (GameOverCondition goc: gameOverConditions) {  // TODO: this triggers first condition, maybe order matters/loss first
+            // Evaluate all game-over conditions and pick the most severe result (lowest numeric value).
+            // This prevents a later, less severe condition from overwriting a loss/disqualify decided earlier.
+            CoreConstants.GameResult worst = GAME_ONGOING;
+            for (GameOverCondition goc: gameOverConditions) {
                 CoreConstants.GameResult result = goc.test(gs);
                 if (result != GAME_ONGOING) {
-                    gs.setGameStatus(result);
-//                    childNext = null;
+                    if (worst == GAME_ONGOING || result.value < worst.value) {
+                        worst = result;
+                    }
                 }
+            }
+            if (worst != GAME_ONGOING) {
+                gs.setGameStatus(worst);
             }
         }
         if (!interrupted) return childNext;
