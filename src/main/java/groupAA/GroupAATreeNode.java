@@ -157,7 +157,7 @@ class GroupAATreeNode {
     private void setState(AbstractGameState newState) {
         state = newState;
         if (newState.isNotTerminal())
-            for (AbstractAction action : player.getForwardModel().computeAvailableActions(state, player.getParameters(4).actionSpace)) {
+            for (AbstractAction action : player.getForwardModel().computeAvailableActions(state, player.getParameters().actionSpace)) {
                 children.put(action, null); // mark a new node to be expanded
             }
     }
