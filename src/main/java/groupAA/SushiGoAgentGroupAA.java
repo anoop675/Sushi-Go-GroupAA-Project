@@ -59,11 +59,8 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         return amafParams;
     }
 
-    // Bridge to maintain compatibility with code calling getParameters() on AbstractPlayer
-    @Override
-    public players.PlayerParameters getParameters() {
-        return amafParams;
-    }
+    // Remove the incorrect override that changed the return type/package and keep base class method with no args.
+    // If external code needs typed access, use getAMAFParams().
 
     @Override
     public String toString() {
