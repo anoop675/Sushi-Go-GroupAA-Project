@@ -26,8 +26,19 @@ public abstract class StandardForwardModel extends AbstractForwardModel {
             // we are only interested in notifying an IES about later actions taken
             if (!topOfStack.equals(action))
                 topOfStack._afterAction(currentState, action);
+            }
+        
+            // Only inform the forward model of the action taken if this forward model is actually
+            // controlling the game flow for that action. Previously we always called _afterAction
+            // here even when an IExtendedSequence (action in progress) was controlling the flow.
+            // This led to duplicate / unnecessary notifications. Now we only call _afterAction when
+            // there is no action-in-progress, or when the action executed is the IExtendedSequence at
+            // the top of the stack (i.e. this forward model is responsible for handling it).
+            if (currentState.actionsInProgress.isEmpty() ||
+                    currentState.actionsInProgress.peek().equals(action)) {
+                _afterAction(currentState, action);
         }
-        // TODO: Currently we always inform the forward model of the action taken, even if it is not
+        
         // currently controlling the game flow. All games check this independently; so would be good to remove this
         // if possible..but need to check if any games rely on this behaviour first.
         _afterAction(currentState, action);
