@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     private static final Logger LOGGER = Logger.getLogger(SushiGoAgentGroupAA.class.getName());
+    // Store our algorithm-specific params separately from AbstractPlayer.parameters to avoid type clashes
+    private AMAF_Params amafParams;
 
     public SushiGoAgentGroupAA(AMAF_Params params) {
         super(params, "GroupAA MCTS Agent");
-        long seed = params != null ? params.getRandomSeed() : System.currentTimeMillis(); // adapt field name if needed
+        this.amafParams = params != null ? params : new AMAF_Params();
+        long seed = this.amafParams != null ? this.amafParams.getRandomSeed() : System.currentTimeMillis(); // adapt field name if needed
         this.rnd = new Random(seed);
         LOGGER.info("SushiGoAgentGroupAA initialized and ready!");
     }
@@ -24,7 +27,11 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     public SushiGoAgentGroupAA(long randomSeed) {
         super(new AMAF_Params(), "GroupAA MCTS Agent");
         // store the seed for reproducibility
+        // keep AbstractPlayer.parameters in sync but do not rely on its concrete type elsewhere
         parameters.setRandomSeed(randomSeed);
+        // also maintain our local params
+        this.amafParams = new AMAF_Params();
+        this.amafParams.setRandomSeed(randomSeed);
 
         this.rnd = new Random(randomSeed);
 
@@ -47,7 +54,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     @Override
     public AMAF_Params getParameters() {
-        return (AMAF_Params) parameters;
+        return amafParams;
     }
 
     @Override
@@ -58,8 +65,8 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     @Override
     public SushiGoAgentGroupAA copy() {
         LOGGER.info("Creating copy of SushiGoAgentGroupAA agent with parameters");
-        // copy parameters first
-        AMAF_Params parametersCopy = (AMAF_Params) parameters.copy();
+        // copy our local params explicitly
+        AMAF_Params parametersCopy = (AMAF_Params) this.amafParams.copy();
 
         // create a new agent using the params-copy constructor
         SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy);
