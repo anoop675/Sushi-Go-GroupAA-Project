@@ -12,6 +12,6 @@
   "budget": 40,
   "breakMS": 0,
   "heuristic": {
-    "class": "groupAA.AMAFHeuristic"
+    "class": "groupAA.GroupAAHeuristic"
   }
 }
