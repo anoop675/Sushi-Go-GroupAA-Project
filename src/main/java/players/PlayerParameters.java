@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 public class PlayerParameters extends TunableParameters<AbstractPlayer> {
 
+    public static final double K = 0.01;
     public double noiseEpsilon = 1e-6;
 
     // Budget settings
@@ -31,6 +32,8 @@ public class PlayerParameters extends TunableParameters<AbstractPlayer> {
     public ActionSpace actionSpace = new ActionSpace();
     public IPlayerDecorator decorator = null;
     public int maxTreeDepth;
+    public double epsilon;
+    public int rolloutLength;
 
     public PlayerParameters() {
         addTunableParameter("budgetType", PlayerConstants.BUDGET_FM_CALLS, Arrays.asList(PlayerConstants.values()));

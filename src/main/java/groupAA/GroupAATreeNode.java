@@ -169,7 +169,7 @@ class GroupAATreeNode {
     //Expands the node by creating a new random child node and adding to the tree.
     private GroupAATreeNode expand() {
         // Find random child not already created
-        Random r = new Random(player.getParameters(4).getRandomSeed());
+        Random r = new Random(player.getParameters().getRandomSeed());
         // pick a random unchosen action
         List<AbstractAction> notChosen = unexpandedActions();
         AbstractAction chosen = notChosen.get(r.nextInt(notChosen.size()));
@@ -203,7 +203,7 @@ class GroupAATreeNode {
 
         // If rollouts are enabled, select actions for the rollout in line with the rollout policy
         AbstractGameState rolloutState = state.copy();
-        if (player.getParameters(4).rolloutLength > 0) {
+        if (player.getParameters().rolloutLength > 0) {
             while (!finishRollout(rolloutState, rolloutDepth)) {
                 //TODO: Use a heuristic rollout policy instead of random rollouts
                 AbstractAction next = randomPlayer.getAction(rolloutState, randomPlayer.getForwardModel().computeAvailableActions(rolloutState, randomPlayer.parameters.actionSpace));
@@ -212,7 +212,7 @@ class GroupAATreeNode {
             }
         }
         // Evaluate final state and return normalised score
-        double value = player.getParameters(4).getStateHeuristic().evaluateState(rolloutState, player.getPlayerID());
+        double value = player.getParameters().getStateHeuristic().evaluateState(rolloutState, player.getPlayerID());
         if (Double.isNaN(value))
             throw new AssertionError("Illegal heuristic value - should be a number");
         return value;
@@ -220,7 +220,7 @@ class GroupAATreeNode {
 
     //Checks if rollout is finished. Rollouts end on maximum length, or if game ended.
     private boolean finishRollout(AbstractGameState rollerState, int depth) {
-        if (depth >= player.getParameters(4).rolloutLength)
+        if (depth >= player.getParameters().rolloutLength)
             return true;
 
         // End of game
@@ -248,7 +248,7 @@ class GroupAATreeNode {
                 double childValue = childNode.n;
 
                 // Apply small noise to break ties randomly
-                childValue = noise(childValue, player.getParameters(4).epsilon, player.getRnd().nextDouble());
+                childValue = noise(childValue, player.getParameters().epsilon, player.getRnd().nextDouble());
 
                 // Save best value (highest visit count)
                 if (childValue > bestValue) {
