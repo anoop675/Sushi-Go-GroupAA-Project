@@ -3,15 +3,18 @@ package groupAA;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
-
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class SushiGoAgentGroupAA extends AbstractPlayer {
+
+    private static final Logger LOGGER = Logger.getLogger(SushiGoAgentGroupAA.class.getName());
 
     public SushiGoAgentGroupAA(AMAF_Params params) {
         super(params, "GroupAA MCTS Agent");
         long seed = params != null ? params.getRandomSeed() : System.currentTimeMillis(); // adapt field name if needed
         this.rnd = new Random(seed);
+        LOGGER.info("SushiGoAgentGroupAA initialized and ready!");
     }
 
     public SushiGoAgentGroupAA() {
@@ -31,11 +34,13 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
         params.epsilon = 1e-6;
+        LOGGER.info("AMAF Parameters initialized!");
     }
 
     @Override
     public AbstractAction _getAction(AbstractGameState gameState, java.util.List<AbstractAction> actions) {
         GroupAATreeNode node = new GroupAATreeNode(this, null, gameState, this.rnd);
+        LOGGER.info("SushiGoAgentGroupAA performing search and finding the best action for this gameState: " + gameState.toString());
         node.mctsSearch();
         return node.bestAction();
     }
@@ -52,6 +57,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     @Override
     public SushiGoAgentGroupAA copy() {
+        LOGGER.info("Creating copy of SushiGoAgentGroupAA agent with parameters");
         // copy parameters first
         AMAF_Params parametersCopy = (AMAF_Params) parameters.copy();
 

@@ -27,7 +27,7 @@ class GroupAATreeNode {
 
     private SushiGoAgentGroupAA player;
     private Random rand;
-    private RandomPlayer randomPlayer = new RandomPlayer();
+    private RandomPlayer randomPlayer = new RandomPlayer(); //TODO: Use a heuristic instead of random rollouts
 
     private AbstractGameState state; //current state for this current node
 
@@ -42,6 +42,51 @@ class GroupAATreeNode {
         setState(state); //setting current state
         this.rand = rand;
         randomPlayer.setForwardModel(player.getForwardModel());
+    }
+
+    private AbstractAction ucb() {
+        // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
+        AbstractAction bestAction = null;
+        double bestValue = -Double.MAX_VALUE;
+        AMAF_Params params = player.getParameters();
+
+        for (AbstractAction action : children.keySet()) {
+            GroupAATreeNode child = children.get(action);
+            if (child == null)
+                throw new AssertionError("Should not be here");
+            else if (bestAction == null)
+                bestAction = action;
+
+            // Find child value
+            double hvVal = child.t;
+            double childValue = hvVal / (child.n + params.epsilon);
+
+            // default to standard UCB
+            double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1) / (child.n + params.epsilon));
+            // unless we are using a variant
+
+            // Find 'UCB' value
+            // If 'we' are taking a turn we use classic UCB
+            // If it is an opponent's turn, then we assume they are trying to minimise our score (with exploration)
+            boolean iAmMoving = state.getCurrentPlayer() == player.getPlayerID();
+            double uctValue = iAmMoving ? childValue : -childValue;
+            uctValue += explorationTerm;
+
+            // Apply small noise to break ties randomly
+            uctValue = noise(uctValue,params.epsilon, player.getRnd().nextDouble());
+
+            // Assign value
+            if (uctValue > bestValue) {
+                bestAction = action;
+                bestValue = uctValue;
+            }
+        }
+
+        if (bestAction == null)
+            throw new AssertionError("We have a null value in UCT : shouldn't really happen!");
+
+        root.fmCalls++;  // log one iteration complete
+        return bestAction;
     }
 
     void mctsSearch() {
@@ -94,20 +139,20 @@ class GroupAATreeNode {
     }
 
     private GroupAATreeNode treePolicy() {
-        GroupAATreeNode cur = this;
-        // Keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
-        while (cur.state.isNotTerminal() && cur.depth < player.getParameters().maxTreeDepth) {
-            if (!cur.unexpandedActions().isEmpty()) {
+        GroupAATreeNode currentNode = this;
+        //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
+        while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
+            if (!currentNode.unexpandedActions().isEmpty()) {
                 // We have an unexpanded action
-                cur = cur.expand();
-                return cur;
+                currentNode = currentNode.expand();
+                return currentNode;
             } else {
                 // Move to next child given by UCT function
-                AbstractAction actionChosen = cur.ucb();
-                cur = cur.children.get(actionChosen);
+                AbstractAction actionChosen = currentNode.ucb();
+                currentNode = currentNode.children.get(actionChosen);
             }
         }
-        return cur;
+        return currentNode;
     }
 
     private void setState(AbstractGameState newState) {
@@ -152,52 +197,8 @@ class GroupAATreeNode {
         root.fmCalls++;
     }
 
-    private AbstractAction ucb() {
-        // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
-        AbstractAction bestAction = null;
-        double bestValue = -Double.MAX_VALUE;
-        AMAF_Params params = player.getParameters();
-
-        for (AbstractAction action : children.keySet()) {
-            GroupAATreeNode child = children.get(action);
-            if (child == null)
-                throw new AssertionError("Should not be here");
-            else if (bestAction == null)
-                bestAction = action;
-
-            // Find child value
-            double hvVal = child.t;
-            double childValue = hvVal / (child.n + params.epsilon);
-
-            // default to standard UCB
-            double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1) / (child.n + params.epsilon));
-            // unless we are using a variant
-
-            // Find 'UCB' value
-            // If 'we' are taking a turn we use classic UCB
-            // If it is an opponent's turn, then we assume they are trying to minimise our score (with exploration)
-            boolean iAmMoving = state.getCurrentPlayer() == player.getPlayerID();
-            double uctValue = iAmMoving ? childValue : -childValue;
-            uctValue += explorationTerm;
-
-            // Apply small noise to break ties randomly
-            uctValue = noise(uctValue,params.epsilon, player.getRnd().nextDouble());
-
-            // Assign value
-            if (uctValue > bestValue) {
-                bestAction = action;
-                bestValue = uctValue;
-            }
-        }
-
-        if (bestAction == null)
-            throw new AssertionError("We have a null value in UCT : shouldn't really happen!");
-
-        root.fmCalls++;  // log one iteration complete
-        return bestAction;
-    }
-
     //Performs the rollout phase in MCTS
+    //TODO: Use heuristic field in AMAF_Params, in this function
     private double rollOut() {
         int rolloutDepth = 0; // counting from end of tree
 
@@ -205,6 +206,7 @@ class GroupAATreeNode {
         AbstractGameState rolloutState = state.copy();
         if (player.getParameters().rolloutLength > 0) {
             while (!finishRollout(rolloutState, rolloutDepth)) {
+                //TODO: Use a heuristic rollout policy instead of random rollouts
                 AbstractAction next = randomPlayer.getAction(rolloutState, randomPlayer.getForwardModel().computeAvailableActions(rolloutState, randomPlayer.parameters.actionSpace));
                 advance(rolloutState, next);
                 rolloutDepth++;
