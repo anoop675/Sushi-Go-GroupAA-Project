@@ -3,6 +3,7 @@ package groupAA;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
+import core.components.PlayerParameters;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -54,6 +55,12 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     // Clear, specific accessor for algorithm parameters to avoid clashing with AbstractPlayer.getParameters()
     public AMAF_Params getAMAFParams() {
+        return amafParams;
+    }
+
+    // Bridge to maintain compatibility with code calling getParameters() on AbstractPlayer
+    @Override
+    public PlayerParameters getParameters() {
         return amafParams;
     }
 
