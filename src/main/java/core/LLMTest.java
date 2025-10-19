@@ -6,6 +6,7 @@ import players.basicMCTS.BasicMCTSPlayer;
 import players.heuristics.StringHeuristic;
 import players.human.ActionController;
 import players.simple.OSLAPlayer;
+import players.human.HumanGUIPlayer;
 import utilities.Utils;
 
 import java.util.ArrayList;
@@ -61,9 +62,15 @@ public class LLMTest {
 
         /* Set up players for the game */
         ArrayList<AbstractPlayer> players = new ArrayList<>();
-//        players.add(new MCTSPlayer());
-        players.add(new OSLAPlayer());
-        players.add(agent.createPlayer(evaluatorFileName, className));
+        // If GUI is requested, put a human in the loop as player 0 using the ActionController
+        if (useGUI) {
+            players.add(new HumanGUIPlayer(ac));
+            players.add(agent.createPlayer(evaluatorFileName, className));
+        } else {
+            // Headless automated play
+            players.add(new OSLAPlayer());
+            players.add(agent.createPlayer(evaluatorFileName, className));
+        }
 
 //        MCTSParams params = new MCTSParams();
 //        params.heuristic = new StringHeuristic();
@@ -74,9 +81,13 @@ public class LLMTest {
         int ties = 0;
         int playerToMonitor = 1;
         for (int i = 0; i < nGames; i++) {
-            Game game = gameType.createGameInstance(players.size());
-            game.reset(players);
-            game.run();
+            Game game;
+            if (useGUI) {
+                // Game.runOne will create and manage the GUI when an ActionController is provided
+                game = Game.runOne(gameType, null, players, seed + i, false, null, ac, turnPause);
+            } else {
+                game = Game.runOne(gameType, null, players, seed + i, false, null, null, 0);
+            }
             CoreConstants.GameResult[] results = game.getGameState().getPlayerResults();
             if (results[playerToMonitor] == CoreConstants.GameResult.WIN_GAME) {
                 wins++;

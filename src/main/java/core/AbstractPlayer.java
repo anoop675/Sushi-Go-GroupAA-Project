@@ -18,7 +18,7 @@ public abstract class AbstractPlayer {
 
     protected String name;
     protected AbstractForwardModel forwardModel;
-    protected PlayerParameters parameters;
+    public PlayerParameters parameters;
     protected Random rnd = new Random();
 
     // Optional action decorators chain (kept for compatibility)

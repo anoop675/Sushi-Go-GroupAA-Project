@@ -75,10 +75,7 @@ public class Castle extends AbstractAction {
 
     @Override
     public String toString() {
-        // TODO: Replace with appropriate string, including any action parameters
-        return "Castle{" +
-                "castleType=" + castleType +
-                '}';
+        return "Castle(" + castleType + ")";
     }
 
     @Override

@@ -37,11 +37,37 @@ Games in progress:
 - [ ] 7 Wonders (Antoine Bauza 2010)
 
 ## Setting up
-The project requires Java with minimum version 8. In order to run the code, you must either download the repository, or clone it. If you are looking for a particular release, you can find all listed [here](https://github.com/GAIGResearch/TabletopGames/releases). 
+The project now requires Java 21 (LTS). In order to run the code, you must either download the repository, or clone it. If you are looking for a particular release, you can find all listed [here](https://github.com/GAIGResearch/TabletopGames/releases). 
 
 The simplest way to run the code is to create a new project in [IntelliJ IDEA](https://www.jetbrains.com/idea/) or a similar IDE. In IntelliJ, create a new project from existing sources, pointing to the code downloaded or cloned and selecting the **Maven** framework for import. This process should automatically set up the environment and add any project libraries as well.
 
 Alternatively, open the code directly in your IDE of choice, right click the pom.xml file and setup the project with the Maven framework. Make sure src/main/java is marked as sources root. You can run the `core.Game.java` class to test if all is set up properly and compiling. [This video](https://youtu.be/-U7SCGNOcsg) includes the steps of loading the project correctly in IntelliJ.
+
+### Build and run (Maven)
+
+To compile on Java 21 and produce runnable JARs:
+
+1. Build (skip tests if desired):
+
+```bash
+mvn -DskipTests package
+```
+
+2. Run the packaged applications from `target/`:
+
+```bash
+# Frontend UI
+java -jar target/FrontEnd.jar
+
+# Batch runner
+java -jar target/RunGames.jar
+
+# Other packaged tools
+java -jar target/ParameterSearch.jar
+java -jar target/OneStepDeviations.jar
+java -jar target/ExpertIteration.jar
+java -jar target/SkillLadder.jar
+```
 
 ## Getting started
 
