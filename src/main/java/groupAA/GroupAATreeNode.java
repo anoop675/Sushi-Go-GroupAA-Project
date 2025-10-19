@@ -106,6 +106,7 @@ class GroupAATreeNode {
 
         boolean stop = false;
 
+        System.out.println("SushiGoAgentGroupAA doing search");
         while (!stop) {
             // New timer for this iteration
             ElapsedCpuTimer elapsedTimerIteration = new ElapsedCpuTimer();

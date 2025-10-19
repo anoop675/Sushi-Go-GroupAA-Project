@@ -3,42 +3,40 @@ package groupAA;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
-import core.components.PlayerParameters;
-
 import java.util.Random;
 import java.util.logging.Logger;
 
 public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     private static final Logger LOGGER = Logger.getLogger(SushiGoAgentGroupAA.class.getName());
-    // Store our algorithm-specific params separately from AbstractPlayer.parameters to avoid type clashes
-    private AMAF_Params amafParams;
 
     public SushiGoAgentGroupAA(AMAF_Params params) {
         super(params, "GroupAA MCTS Agent");
-        this.amafParams = params != null ? params : new AMAF_Params();
-        long seed = this.amafParams != null ? this.amafParams.getRandomSeed() : System.currentTimeMillis(); // adapt field name if needed
-        this.rnd = new Random(seed);
-        LOGGER.info("SushiGoAgentGroupAA initialized and ready!");
+        initRandom();
+        System.out.println("SushiGoAgentGroupAA initialized and ready!");
     }
 
     public SushiGoAgentGroupAA() {
-        this(System.currentTimeMillis());
+        this(new AMAF_Params());
     }
 
     public SushiGoAgentGroupAA(long randomSeed) {
         super(new AMAF_Params(), "GroupAA MCTS Agent");
-        // store the seed for reproducibility
-        // keep AbstractPlayer.parameters in sync but do not rely on its concrete type elsewhere
         parameters.setRandomSeed(randomSeed);
-        // also maintain our local params
-        this.amafParams = new AMAF_Params();
-        this.amafParams.setRandomSeed(randomSeed);
+        initRandom();
+        setDefaultParams();
+    }
 
-        this.rnd = new Random(randomSeed);
+    private void initRandom() {
+        long seed = (parameters != null) ? parameters.getRandomSeed() : System.currentTimeMillis();
+        if (seed == 0L) seed = System.currentTimeMillis(); //use system time for fallback
+        this.rnd = new Random(seed);
+        LOGGER.info("Random seed set to: " + seed);
+    }
 
-        // Initialize AMAF parameter values using the local params holder
-        AMAF_Params params = this.amafParams;
+    //Overwrites the default AMAF parameters
+    private void setDefaultParams() {
+        AMAF_Params params = getParameters();
         params.K = Math.sqrt(2);
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
@@ -54,13 +52,10 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         return node.bestAction();
     }
 
-    // Clear, specific accessor for algorithm parameters to avoid clashing with AbstractPlayer.getParameters()
-    public AMAF_Params getAMAFParams() {
-        return amafParams;
+    @Override
+    public AMAF_Params getParameters() {
+        return (AMAF_Params) parameters;
     }
-
-    // Remove the incorrect override that changed the return type/package and keep base class method with no args.
-    // If external code needs typed access, use getAMAFParams().
 
     @Override
     public String toString() {
@@ -70,8 +65,8 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     @Override
     public SushiGoAgentGroupAA copy() {
         LOGGER.info("Creating copy of SushiGoAgentGroupAA agent with parameters");
-        // copy our local params explicitly
-        AMAF_Params parametersCopy = (AMAF_Params) this.amafParams.copy();
+        // copy parameters first
+        AMAF_Params parametersCopy = (AMAF_Params) parameters.copy();
 
         // create a new agent using the params-copy constructor
         SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy);
