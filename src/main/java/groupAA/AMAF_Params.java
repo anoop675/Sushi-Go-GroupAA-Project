@@ -5,6 +5,8 @@ import core.interfaces.IStateHeuristic;
 import players.PlayerParameters;
 
 import java.util.Arrays;
+// import the actual package where the class is
+import some.other.package.SushiGoAgentGroupAA;
 
 
 public class AMAF_Params extends PlayerParameters {
@@ -40,9 +42,6 @@ public class AMAF_Params extends PlayerParameters {
 
     @Override
     protected AMAF_Params _copy() {
-        // All the copying is done in TunableParameters.copy()
-        // Note that any *local* changes of parameters will not be copied
-        // unless they have been 'registered' with setParameterValue("name", value)
         return new AMAF_Params();
     }
 

@@ -3,6 +3,7 @@ package games.terraformingmars.rules.requirements;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.components.Award;
 import games.terraformingmars.components.Milestone;
+import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class ClaimableAwardMilestoneRequirement implements Requirement<TMGameSta
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         int p = player;
         if (p == -1) {
             p = gs.getCurrentPlayer();

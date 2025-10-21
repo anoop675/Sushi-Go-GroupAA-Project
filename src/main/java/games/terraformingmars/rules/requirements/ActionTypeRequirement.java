@@ -3,6 +3,7 @@ package games.terraformingmars.rules.requirements;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
 import games.terraformingmars.actions.TMAction;
+import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public record ActionTypeRequirement(TMTypes.ActionType actionType,
     }
 
     @Override
-    public boolean testCondition(TMAction o) {
+    public boolean testCondition(TMCard o) {
         return o.actionType == actionType
                 && (project == null && o.standardProject == null
                 || o.standardProject == project);

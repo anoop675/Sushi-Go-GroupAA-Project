@@ -2,6 +2,7 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 import games.terraformingmars.components.TMMapTile;
 import utilities.Group;
 
@@ -24,7 +25,7 @@ public class AdjacencyRequirement implements Requirement<Group<TMGameState, TMMa
     }
 
     @Override
-    public boolean testCondition(Group<TMGameState, TMMapTile, Integer> o) {
+    public boolean testCondition(TMCard o) {
         if (owned) return isAdjacentToPlayerOwnedTiles(o.a, o.b, o.c);
         if (noneAdjacent) {
             boolean isAdjacent = isAdjacentToAny(o.a, o.b);

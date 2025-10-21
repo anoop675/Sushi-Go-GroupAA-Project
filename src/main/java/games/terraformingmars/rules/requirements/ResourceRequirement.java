@@ -24,7 +24,7 @@ public class ResourceRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         if (amount == 0) return true;
 
         TMCard card = null;

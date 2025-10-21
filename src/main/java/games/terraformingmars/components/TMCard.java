@@ -48,6 +48,8 @@ public class TMCard extends Card {
     public TMTypes.Resource resourceOnCard;
     transient public int nResourcesOnCard;  // One count for each type of token
     public boolean canResourcesBeRemoved = true;
+    public TMTypes.ActionType actionType;
+    public TMTypes.StandardProject standardProject;
 
     public TMCard() {
         nResourcesOnCard = 0;
@@ -66,7 +68,7 @@ public class TMCard extends Card {
 
     public boolean meetsRequirements(TMGameState gs) {
         for (Requirement r: requirements) {
-            if (!r.testCondition(gs)) return false;
+            if (!r.testCondition(gs.drawCard())) return false;
         }
         return true;
     }

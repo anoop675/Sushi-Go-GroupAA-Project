@@ -2,6 +2,7 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
 import java.util.Objects;
@@ -15,7 +16,7 @@ public class ResourceIncGenRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         // Check if this resource was increased for current player in this generation
         return gs.getPlayerResourceIncreaseGen()[gs.getCurrentPlayer()].get(resource);
     }

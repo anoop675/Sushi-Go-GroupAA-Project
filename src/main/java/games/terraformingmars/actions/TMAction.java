@@ -127,7 +127,7 @@ public class TMAction extends AbstractAction {
         if (played && standardProject == null && basicResourceAction == null) return false;
         if (requirements != null && requirements.size() > 0) {
             for (Requirement r: requirements) {
-                if (!r.testCondition(gs)) return false;
+                if (!r.testCondition(gs.drawCard())) return false;
             }
         }
         return true;

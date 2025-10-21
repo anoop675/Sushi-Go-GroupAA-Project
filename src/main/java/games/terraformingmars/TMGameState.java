@@ -1,6 +1,7 @@
 package games.terraformingmars;
 
 import core.AbstractGameStateWithTurnOrder;
+import core.AbstractParameters;
 import core.components.*;
 import core.interfaces.IGamePhase;
 import core.turnorders.TurnOrder;
@@ -530,7 +531,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
         return playedCards;
     }
 
-    public int discountActionTypeCost(TMAction action, int player) {
+    public int discountActionTypeCost(TMCard action, int player) {
         // Apply tag discount effects
         int discount = 0;
         if (player == -1) player = getCurrentPlayer();
@@ -821,6 +822,18 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
         return new Pair<>(bestPlayers, secondBestPlayers);
     }
 
-    public class ResourceMapping {
+    public static class ResourceMapping {
+        public TMTypes.Resource from;
+        public TMTypes.Resource to;
+        public ActionTypeRequirement requirement;
+        public int rate;
+
+        public ResourceMapping(TMTypes.Resource from, TMTypes.Resource to, double rate, Object o) {
+
+        }
+
+        public ResourceMapping copy() {
+                return null;
+        }
     }
 }

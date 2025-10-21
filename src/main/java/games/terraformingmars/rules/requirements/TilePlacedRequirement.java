@@ -3,6 +3,7 @@ package games.terraformingmars.rules.requirements;
 import games.terraformingmars.TMGameParameters;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 import utilities.ImageIO;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ public record TilePlacedRequirement(TMTypes.Tile tile, int threshold, boolean ma
                                     boolean any) implements Requirement<TMGameState> {
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         int nPlaced = nPlaced(gs);
         if (max && nPlaced <= threshold) return true;
         return !max && nPlaced >= threshold;

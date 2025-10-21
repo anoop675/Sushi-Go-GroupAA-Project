@@ -2,10 +2,10 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 import utilities.ImageIO;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -27,7 +27,7 @@ public class TagsPlayedRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         for (int i = 0; i < nMin.length; i++) {
             TMTypes.Tag tag = tags[i];
             if (gs.getPlayerCardsPlayedTags()[gs.getCurrentPlayer()].get(tag).getValue() < nMin[i]) return false;

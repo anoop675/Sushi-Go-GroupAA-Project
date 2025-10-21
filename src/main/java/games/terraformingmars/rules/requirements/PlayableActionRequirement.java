@@ -2,6 +2,7 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.actions.TMAction;
+import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
 import java.util.Objects;
@@ -15,7 +16,7 @@ public class PlayableActionRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         return action.canBePlayed(gs);
     }
 

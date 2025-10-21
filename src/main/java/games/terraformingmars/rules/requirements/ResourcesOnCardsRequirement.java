@@ -28,7 +28,7 @@ public class ResourcesOnCardsRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         for (int i = 0; i < nMin.length; i++) {
             TMTypes.Resource res = resources[i];
             int nRes = 0;

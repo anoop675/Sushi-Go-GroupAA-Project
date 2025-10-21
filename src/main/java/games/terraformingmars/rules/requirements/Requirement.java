@@ -2,6 +2,7 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
 
@@ -11,7 +12,7 @@ public interface Requirement<T> {
         - counter: global parameter / player resource / player production min or max;
         - minimum N tags on cards played by player
      */
-    boolean testCondition(T o);
+    boolean testCondition(TMCard o);
     boolean max();
     boolean appliesWhenAnyPlayer();
     String getDisplayText(TMGameState gs);

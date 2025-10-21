@@ -3,6 +3,7 @@ package games.terraformingmars.rules.requirements;
 import core.components.Counter;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
+import games.terraformingmars.components.TMCard;
 import utilities.Utils;
 
 import java.awt.*;
@@ -24,7 +25,7 @@ public class CounterRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean testCondition(TMGameState gs) {
+    public boolean testCondition(TMCard gs) {
         int value = getCounter(gs).getValueIdx();
         int discount = discount(gs);
 
