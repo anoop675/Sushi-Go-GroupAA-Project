@@ -38,9 +38,8 @@ public class ReplaceAllCards extends DrawComponents {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReplaceAllCards)) return false;
+        if (!(o instanceof ReplaceAllCards that)) return false;
         if (!super.equals(o)) return false;
-        ReplaceAllCards that = (ReplaceAllCards) o;
         return deckDraw == that.deckDraw;
     }
 

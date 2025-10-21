@@ -5,7 +5,6 @@ import core.AbstractParameters;
 import core.components.BoardNode;
 import core.components.Component;
 import core.components.GridBoard;
-import core.components.Token;
 import core.interfaces.IGridGameState;
 import core.interfaces.IPrintable;
 import games.GameType;
@@ -50,7 +49,7 @@ public class Connect4GameState extends AbstractGameState implements IPrintable, 
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        Connect4GameState s = new Connect4GameState(gameParameters.copy(), getNPlayers());
+        Connect4GameState s = new Connect4GameState(gameParameters.copy(), getNPlayers(playerId));
         s.gridBoard = gridBoard.copy();
 
         s.winnerCells.clear();

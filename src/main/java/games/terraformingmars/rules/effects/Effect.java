@@ -30,8 +30,7 @@ public abstract class Effect {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Effect)) return false;
-        Effect effect = (Effect) o;
+        if (!(o instanceof Effect effect)) return false;
         return mustBeCurrentPlayer == effect.mustBeCurrentPlayer && Objects.equals(effectAction, effect.effectAction);
     }
 

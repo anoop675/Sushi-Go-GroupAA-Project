@@ -6,11 +6,9 @@ import core.actions.DoNothing;
 import core.interfaces.IExtendedSequence;
 import games.monopolydeal.MonopolyDealGameState;
 import games.monopolydeal.actions.ActionState;
-import games.monopolydeal.actions.informationcontainer.ChoosePropertySet;
 import games.monopolydeal.actions.informationcontainer.RentOf;
 import games.monopolydeal.actions.informationcontainer.TargetPlayer;
 import games.monopolydeal.cards.CardType;
-import games.monopolydeal.cards.MonopolyDealCard;
 import games.monopolydeal.cards.PropertySet;
 import games.monopolydeal.cards.SetType;
 
@@ -57,7 +55,7 @@ public class MulticolorRentAction extends AbstractAction implements IExtendedSeq
 
         switch (actionState){
             case Target:
-                for(int i=0;i<MDGS.getNPlayers();i++){
+                for(int i = 0; i<MDGS.getNPlayers(playerId); i++){
                     if(playerID!=i)
                         availableActions.add(new TargetPlayer(i));
                 }

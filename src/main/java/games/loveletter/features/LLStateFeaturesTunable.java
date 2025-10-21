@@ -59,7 +59,7 @@ public class LLStateFeaturesTunable extends TunableStateFeatures {
 
         if (active[10]) {
             int visibleCards = 0;
-            for (int player = 0; player < llgs.getNPlayers(); player++) {
+            for (int player = 0; player < llgs.getNPlayers(playerId); player++) {
                 if (player != playerId) {
                     PartialObservableDeck<LoveLetterCard> deck = llgs.getPlayerHandCards().get(player);
                     visibleCards += (int) IntStream.range(0, deck.getSize()).filter(i -> deck.getVisibilityForPlayer(i, playerId)).count();
@@ -69,7 +69,7 @@ public class LLStateFeaturesTunable extends TunableStateFeatures {
         }
 
         if (active[11]) {
-            int maxOtherScore = IntStream.range(0, llgs.getNPlayers())
+            int maxOtherScore = IntStream.range(0, llgs.getNPlayers(playerId))
                     .filter(p -> p != playerId)
                     .map(p -> (int) llgs.getGameScore(p)).max().orElseThrow(() -> new AssertionError("??"));
             data[11] = llgs.getGameScore(playerId) - maxOtherScore;
@@ -79,7 +79,7 @@ public class LLStateFeaturesTunable extends TunableStateFeatures {
         // Knowledge - known player identities
         if (active[14]) {
             int value = 0;
-            for (int p = 0; p < llgs.getNPlayers(); p++) {
+            for (int p = 0; p < llgs.getNPlayers(playerId); p++) {
                 if (p != playerId && llgs.isNotTerminalForPlayer(p)) {
                     PartialObservableDeck<LoveLetterCard> hand = llgs.getPlayerHandCards().get(p);
                     if (hand.getSize() > 0 && hand.getVisibilityForPlayer(0, playerId)) {
@@ -91,7 +91,7 @@ public class LLStateFeaturesTunable extends TunableStateFeatures {
         }
         // Protection - whether the player is protected
         if (active[15]) {
-            data[15] = IntStream.range(0, llgs.getNPlayers()).map(p -> llgs.isProtected(p) ? (int) Math.pow(2, p) : 0).sum();
+            data[15] = IntStream.range(0, llgs.getNPlayers(playerId)).map(p -> llgs.isProtected(p) ? (int) Math.pow(2, p) : 0).sum();
         }
         // Discard piles
         if (active[16])

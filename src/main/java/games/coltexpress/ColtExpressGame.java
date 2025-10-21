@@ -41,7 +41,7 @@ public class ColtExpressGame extends Game {
             //System.out.println(Arrays.toString(gameState.getPlayerResults()));
 
             CoreConstants.GameResult[] playerResults = gameState.getPlayerResults();
-            for (int j = 0; j < gameState.getNPlayers(); j++){
+            for (int j = 0; j < gameState.getNPlayers(playerId); j++){
                 if (playerResults[j] == CoreConstants.GameResult.WIN_GAME)
                     System.out.println("Player " + j + " won");
             }

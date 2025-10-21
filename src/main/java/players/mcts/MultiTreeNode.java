@@ -3,12 +3,8 @@ package players.mcts;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
-import utilities.Pair;
-import utilities.Utils;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * MultiTreeNode is really a wrapper for SingleTreeNode when we are using MultiTree MCTS.
@@ -40,7 +36,8 @@ public class MultiTreeNode extends SingleTreeNode {
         mctsPlayer = player;
         // only root node maintains MAST statistics
         MASTStatistics = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++)
+        int playerId = 0;
+        for (int i = 0; i < state.getNPlayers(playerId); i++)
             MASTStatistics.add(new HashMap<>());
         if (params.useMASTAsActionHeuristic) {
             params.actionHeuristic = new MASTActionHeuristic(params.MASTActionKey, params.MASTDefaultValue);
@@ -48,11 +45,11 @@ public class MultiTreeNode extends SingleTreeNode {
         }
         instantiate(null, null, state);
 
-        roots = new SingleTreeNode[state.getNPlayers()];
+        roots = new SingleTreeNode[state.getNPlayers(playerId)];
         roots[this.decisionPlayer] = SingleTreeNode.createRootNode(player, state, rnd, player.getFactory());
         if (params.paranoid)
             roots[this.decisionPlayer].paranoidPlayer = decisionPlayer;
-        currentLocation = new SingleTreeNode[state.getNPlayers()];
+        currentLocation = new SingleTreeNode[state.getNPlayers(playerId)];
         currentLocation[this.decisionPlayer] = roots[decisionPlayer];
     }
     /**
@@ -129,7 +126,8 @@ public class MultiTreeNode extends SingleTreeNode {
         } while (currentState.isNotTerminal() && !finishRollout(currentState));
 
         // Evaluate final state and return normalised score
-        double[] finalValues = new double[state.getNPlayers()];
+        int playerId = 0;
+        double[] finalValues = new double[state.getNPlayers(playerId)];
 
         for (int i = 0; i < finalValues.length; i++) {
             finalValues[i] = params.heuristic.evaluateState(currentState, i);

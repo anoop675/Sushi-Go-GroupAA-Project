@@ -151,7 +151,8 @@ public class TMAction extends AbstractAction {
     public void postExecute(TMGameState gs) {
         int player = this.player;
         if (player == -1) player = gs.getCurrentPlayer();
-        if (player < 0 || player >= gs.getNPlayers()) return;
+        int playerId = 0;
+        if (player < 0 || player >= gs.getNPlayers(playerId)) return;
         if (!freeActionPoint) {
             ((TMTurnOrder)gs.getTurnOrder()).registerActionTaken(gs, this, player);
         }
@@ -167,7 +168,7 @@ public class TMAction extends AbstractAction {
         }
 
         // Check persisting effects for all players
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             for (Effect e: gs.getPlayerPersistingEffects()[i]) {
                 if (e == null) continue;
                 e.execute(gs, this, i);
@@ -249,8 +250,7 @@ public class TMAction extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMAction)) return false;
-        TMAction tmAction = (TMAction) o;
+        if (!(o instanceof TMAction tmAction)) return false;
         return freeActionPoint == tmAction.freeActionPoint && player == tmAction.player && pass == tmAction.pass &&
                 cost == tmAction.cost && playCardID == tmAction.playCardID && cardID == tmAction.cardID &&
                 Objects.equals(costRequirement, tmAction.costRequirement) &&

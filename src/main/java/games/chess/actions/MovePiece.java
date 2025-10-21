@@ -70,8 +70,7 @@ public class MovePiece extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof MovePiece)) return false;
-        MovePiece other = (MovePiece) obj;
+        if (!(obj instanceof MovePiece other)) return false;
         return startX == other.startX && startY == other.startY && targetX == other.targetX && targetY == other.targetY;
 
     }

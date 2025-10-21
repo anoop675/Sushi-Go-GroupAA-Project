@@ -9,7 +9,6 @@ import games.monopolydeal.actions.ActionState;
 import games.monopolydeal.actions.informationcontainer.ChooseCardFrom;
 import games.monopolydeal.actions.informationcontainer.TargetPlayer;
 import games.monopolydeal.cards.CardType;
-import games.monopolydeal.cards.MonopolyDealCard;
 import games.monopolydeal.cards.PropertySet;
 import games.monopolydeal.cards.SetType;
 
@@ -55,7 +54,7 @@ public class SlyDealAction extends AbstractAction implements IExtendedSequence, 
 
         switch (actionState){
             case Target:
-                for(int i=0;i<MDGS.getNPlayers();i++){
+                for(int i = 0; i<MDGS.getNPlayers(playerId); i++){
                     if(playerID!=i)
                         if(MDGS.checkForFreeProperty(i))
                             availableActions.add(new TargetPlayer(i));

@@ -261,8 +261,7 @@ public class TMCard extends Card {
                 // Card number
                 card.number = Integer.parseInt(((String)ob.get("#text")).replaceAll("[^\\d.]",""));
             } else if (info.contains("content")) {
-                if (ob.get("div") instanceof JSONArray) {
-                    JSONArray div2 = (JSONArray) ob.get("div");
+                if (ob.get("div") instanceof JSONArray div2) {
                     for (Object o2 : div2) {
                         JSONObject ob2 = (JSONObject) o2;
                         String info2 = (String) ob2.get("@class");
@@ -539,9 +538,8 @@ public class TMCard extends Card {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMCard)) return false;
+        if (!(o instanceof TMCard tmCard)) return false;
         if (!super.equals(o)) return false;
-        TMCard tmCard = (TMCard) o;
         return number == tmCard.number && cost == tmCard.cost && firstActionExecuted == tmCard.firstActionExecuted && actionPlayed == tmCard.actionPlayed && mapTileIDTilePlaced == tmCard.mapTileIDTilePlaced && Double.compare(tmCard.nPoints, nPoints) == 0 && pointsTileAdjacent == tmCard.pointsTileAdjacent && nResourcesOnCard == tmCard.nResourcesOnCard && canResourcesBeRemoved == tmCard.canResourcesBeRemoved && Objects.equals(annotation, tmCard.annotation) && cardType == tmCard.cardType && Objects.equals(requirements, tmCard.requirements) && Arrays.equals(tags, tmCard.tags) && Objects.equals(discountEffects, tmCard.discountEffects) && Objects.equals(resourceMappings, tmCard.resourceMappings) && Arrays.equals(persistingEffects, tmCard.persistingEffects) && Objects.equals(firstAction, tmCard.firstAction) && Arrays.equals(actions, tmCard.actions) && Arrays.equals(immediateEffects, tmCard.immediateEffects) && pointsResource == tmCard.pointsResource && Objects.equals(pointsThreshold, tmCard.pointsThreshold) && pointsTag == tmCard.pointsTag && pointsTile == tmCard.pointsTile && resourceOnCard == tmCard.resourceOnCard;
     }
 

@@ -19,7 +19,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
     @Override
     protected void _setup(AbstractGameState firstState) {
         BlackjackGameState bjgs = (BlackjackGameState) firstState;
-        bjgs.dealerPlayer = bjgs.getNPlayers() - 1;  // Dealer player is last
+        bjgs.dealerPlayer = bjgs.getNPlayers(playerId) - 1;  // Dealer player is last
 
         //Create a deck
         bjgs.playerDecks = new ArrayList<>();
@@ -32,9 +32,9 @@ public class BlackjackForwardModel extends StandardForwardModel {
         bjgs.setFirstPlayer(0);
 
         //Create a hand for each player
-        boolean[] visibility = new boolean[firstState.getNPlayers()];
+        boolean[] visibility = new boolean[firstState.getNPlayers(playerId)];
         Arrays.fill(visibility, true);
-        for (int i = 0; i < bjgs.getNPlayers(); i++){
+        for (int i = 0; i < bjgs.getNPlayers(playerId); i++){
             PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
             bjgs.playerDecks.add(playerDeck);
             for (int card = 0; card < ((BlackjackParameters)bjgs.getGameParameters()).nCardsPerPlayer; card++) {
@@ -50,8 +50,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
     @Override
     protected void _afterAction(AbstractGameState gameState, AbstractAction action){
         BlackjackGameState bjgs = (BlackjackGameState) gameState;
-        if (action instanceof Hit) {
-            Hit hit = (Hit)action;
+        if (action instanceof Hit hit) {
             // Check if bust or win score
             int points = bjgs.calculatePoints(hit.playerID);
             if (points > ((BlackjackParameters)gameState.getGameParameters()).winScore) {
@@ -96,14 +95,14 @@ public class BlackjackForwardModel extends StandardForwardModel {
     }
 
     private void _endTurn(BlackjackGameState bjgs) {
-        if (bjgs.getTurnCounter() >= bjgs.getNPlayers()) {
+        if (bjgs.getTurnCounter() >= bjgs.getNPlayers(playerId)) {
             // Everyone finished, game is over, assign results
             bjgs.setGameStatus(GAME_END);
 
             BlackjackParameters params = (BlackjackParameters) bjgs.getGameParameters();
 
-            int[] score = new int[bjgs.getNPlayers()];
-            for (int j = 0; j < bjgs.getNPlayers(); j++){
+            int[] score = new int[bjgs.getNPlayers(playerId)];
+            for (int j = 0; j < bjgs.getNPlayers(playerId); j++){
                 if (bjgs.getPlayerResults()[j] != LOSE_GAME) {
                     score[j] = bjgs.calculatePoints(j);
                 }
@@ -114,7 +113,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
                 bjgs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, bjgs.dealerPlayer);
             }
 
-            for (int i = 0; i < bjgs.getNPlayers()-1; i++) {  // Check all players and compare to dealer
+            for (int i = 0; i < bjgs.getNPlayers(playerId)-1; i++) {  // Check all players and compare to dealer
                 if (bjgs.getPlayerResults()[i] != LOSE_GAME) {
                     if (score[bjgs.dealerPlayer] > params.winScore) {
                         // Dealer went bust, everyone else wins
@@ -129,7 +128,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
                 }
             }
 
-            for (int i = 0; i < bjgs.getNPlayers(); i++) {
+            for (int i = 0; i < bjgs.getNPlayers(playerId); i++) {
                 if (bjgs.getPlayerResults()[i] == GAME_ONGOING) {
                     bjgs.setPlayerResult(LOSE_GAME, i);
                 }

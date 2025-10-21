@@ -33,7 +33,7 @@ public class TagOnCardRequirement implements Requirement<TMCard> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -73,8 +73,7 @@ public class TagOnCardRequirement implements Requirement<TMCard> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TagOnCardRequirement)) return false;
-        TagOnCardRequirement that = (TagOnCardRequirement) o;
+        if (!(o instanceof TagOnCardRequirement that)) return false;
         return Arrays.equals(tags, that.tags);
     }
 

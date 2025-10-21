@@ -36,8 +36,7 @@ public class PlayRoadBuilding extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayRoadBuilding)) return false;
-        PlayRoadBuilding that = (PlayRoadBuilding) o;
+        if (!(o instanceof PlayRoadBuilding that)) return false;
         return playerID == that.playerID && Arrays.equals(roadsToBuild, that.roadsToBuild);
     }
 

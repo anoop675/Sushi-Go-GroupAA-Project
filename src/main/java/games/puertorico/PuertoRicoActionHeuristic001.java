@@ -17,14 +17,12 @@ public class PuertoRicoActionHeuristic001 implements IActionHeuristic {
         int player = gameState.getCurrentPlayer();
         PuertoRicoGameState state = (PuertoRicoGameState) gameState;
 
-        if (action instanceof Build) {
+        if (action instanceof Build buildAction) {
 
-            Build buildAction = (Build) action;
             // more expensive buildings are better
             return buildAction.type.cost + buildAction.type.vp;
-        } else if (action instanceof DrawPlantation) {
+        } else if (action instanceof DrawPlantation plantationAction) {
             // we prefer plantations we have unused capacity for
-            DrawPlantation plantationAction = (DrawPlantation) action;
             Crop PlantationType = plantationAction.crop;
             int numPlantations = (int) state.getPlayerBoard(player).getPlantations().stream()
                     .filter(p -> p.crop == PlantationType).count();
@@ -39,8 +37,7 @@ public class PuertoRicoActionHeuristic001 implements IActionHeuristic {
         } else if (action instanceof BuildQuarry) {
             // this is good early in the game
             return 50 - 5 * state.getRoundCounter();
-        } else if (action instanceof DiscardGoodsExcept) {
-            DiscardGoodsExcept discardAction = (DiscardGoodsExcept) action;
+        } else if (action instanceof DiscardGoodsExcept discardAction) {
             int discardedGoods = 0;
             for (Crop crop : Crop.getTradeableCrops()) {
                 if (crop != discardAction.crop && !state.getPlayerBoard(player).cropsInWarehouses.contains(crop)) {
@@ -48,17 +45,13 @@ public class PuertoRicoActionHeuristic001 implements IActionHeuristic {
                 }
             }
             return -discardedGoods * 5.0;
-        } else if (action instanceof GainCrop) {
-            GainCrop gainCropAction = (GainCrop) action;
+        } else if (action instanceof GainCrop gainCropAction) {
             return gainCropAction.amount * gainCropAction.crop.price;
-        } else if (action instanceof OccupyBuilding) {
-            OccupyBuilding occupyBuildingAction = (OccupyBuilding) action;
+        } else if (action instanceof OccupyBuilding occupyBuildingAction) {
             return occupyBuildingAction.building.cost;
-        } else if (action instanceof OccupyPlantation) {
-            OccupyPlantation occupyPlantationAction = (OccupyPlantation) action;
+        } else if (action instanceof OccupyPlantation occupyPlantationAction) {
             return occupyPlantationAction.crop.price;
-        } else if (action instanceof SelectRole) {
-            SelectRole selectRoleAction = (SelectRole) action;
+        } else if (action instanceof SelectRole selectRoleAction) {
             double cashBonus = state.getMoneyOnRole(selectRoleAction.role) * Math.max(0.0, 5.0 - state.getDoubloons(player));
             switch (selectRoleAction.role) {
                 case BUILDER:
@@ -81,14 +74,11 @@ public class PuertoRicoActionHeuristic001 implements IActionHeuristic {
                 default:
                     return 0;
             }
-        } else if (action instanceof Sell) {
-            Sell sellAction = (Sell) action;
+        } else if (action instanceof Sell sellAction) {
             return sellAction.salesPrice * 5.0;
-        } else if (action instanceof ShipCargo) {
-            ShipCargo shipCargoAction = (ShipCargo) action;
+        } else if (action instanceof ShipCargo shipCargoAction) {
             return shipCargoAction.amountToShip * 3.0;
-        } else if (action instanceof WarehouseStorage) {
-            WarehouseStorage warehouseStorageAction = (WarehouseStorage) action;
+        } else if (action instanceof WarehouseStorage warehouseStorageAction) {
             return warehouseStorageAction.storedCrop.price * state.getPlayerBoard(player).getStoresOf(warehouseStorageAction.storedCrop);
         } else {
             return 0;

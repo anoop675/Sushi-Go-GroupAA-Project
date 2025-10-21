@@ -1,7 +1,6 @@
 package games.sushigo.metrics;
 
 import core.AbstractGameState;
-import core.components.Component;
 import core.components.Deck;
 import core.interfaces.IStateKey;
 import games.sushigo.SGGameState;
@@ -18,7 +17,7 @@ public class AllKnownCardsKey implements IStateKey {
         List<Deck<SGCard>> hands = new ArrayList<>();
 
         // only the ones whose hands are known
-        for(int i = 0; i < sg.getNPlayers(); i++) {
+        for(int i = 0; i < sg.getNPlayers(playerId); i++) {
             played.add(sg.getPlayedCards().get(i));
             if(sg.isHandKnown(playerId,i)) {
                 hands.add(sg.getPlayerHands().get(i));

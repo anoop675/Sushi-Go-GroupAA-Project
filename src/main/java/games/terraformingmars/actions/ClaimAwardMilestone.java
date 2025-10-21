@@ -54,9 +54,8 @@ public class ClaimAwardMilestone extends TMAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClaimAwardMilestone)) return false;
+        if (!(o instanceof ClaimAwardMilestone that)) return false;
         if (!super.equals(o)) return false;
-        ClaimAwardMilestone that = (ClaimAwardMilestone) o;
         return toClaimID == that.toClaimID;
     }
 

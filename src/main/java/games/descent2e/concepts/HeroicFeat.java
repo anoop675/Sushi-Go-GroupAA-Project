@@ -25,7 +25,7 @@ public class HeroicFeat {
         RunAttack,
         StunMonsters,
         Vanish,
-        NONE;
+        NONE
     }
 
     public static List<DescentAction> getHeroicFeatActions(DescentGameState dgs) {

@@ -20,7 +20,7 @@ public class PlayableActionRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -38,8 +38,8 @@ public class PlayableActionRequirement implements Requirement<TMGameState> {
     public String getReasonForFailure(TMGameState gs) {
         String reasons = "";
         for (Requirement<TMGameState> req: action.requirements) {
-            if (req.testCondition(gs)) reasons += "OK: " + req.toString() + "\n";
-            else reasons += "FAIL: " + req.toString() + " \\\\ " + req.getReasonForFailure(gs) + "\n";
+            if (req.testCondition(gs)) reasons += "OK: " + req + "\n";
+            else reasons += "FAIL: " + req + " \\\\ " + req.getReasonForFailure(gs) + "\n";
         }
         return reasons;
     }
@@ -67,8 +67,7 @@ public class PlayableActionRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayableActionRequirement)) return false;
-        PlayableActionRequirement that = (PlayableActionRequirement) o;
+        if (!(o instanceof PlayableActionRequirement that)) return false;
         return Objects.equals(action, that.action);
     }
 

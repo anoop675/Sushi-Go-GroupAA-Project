@@ -59,8 +59,7 @@ public class SkipTurnAction extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SkipTurnAction)) return false;
-        SkipTurnAction that = (SkipTurnAction) o;
+        if (!(o instanceof SkipTurnAction that)) return false;
 
         return Objects.equals(playerFaction, that.playerFaction) &&
                 Objects.equals(unitsID, that.unitsID) &&

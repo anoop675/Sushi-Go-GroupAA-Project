@@ -51,8 +51,7 @@ public class ShipCargo extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ShipCargo) {
-            ShipCargo other = (ShipCargo) obj;
+        if (obj instanceof ShipCargo other) {
             return this.cargo == other.cargo && this.shipNumber == other.shipNumber && this.amountToShip == other.amountToShip;
         }
         return false;

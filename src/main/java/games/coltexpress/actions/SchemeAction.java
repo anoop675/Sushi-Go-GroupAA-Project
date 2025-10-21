@@ -31,7 +31,7 @@ public class SchemeAction extends DrawCard implements IPrintable {
         if (hidden){
             actionList.setVisibilityOfComponent(0, card.playerID, true);
         } else {
-            boolean[] allVisible = new boolean[gs.getNPlayers()];
+            boolean[] allVisible = new boolean[gs.getNPlayers(playerId)];
             Arrays.fill(allVisible, true);
             actionList.setVisibilityOfComponent(0, allVisible);
         }
@@ -42,9 +42,8 @@ public class SchemeAction extends DrawCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SchemeAction)) return false;
+        if (!(o instanceof SchemeAction that)) return false;
         if (!super.equals(o)) return false;
-        SchemeAction that = (SchemeAction) o;
         return hidden == that.hidden;
     }
 

@@ -139,7 +139,7 @@ public class RootGameState extends AbstractGameState {
         for (List<Item> list : craftedItems) {
             l.addAll(list);
         }
-        if (getNPlayers() > 1) {
+        if (getNPlayers(playerId) > 1) {
             l.addAll(eyrieDecree);
             l.add(viziers);
             if (activeRuler != null) {
@@ -147,10 +147,10 @@ public class RootGameState extends AbstractGameState {
             }
             l.add(rulers);
         }
-        if (getNPlayers() > 2) {
+        if (getNPlayers(playerId) > 2) {
             l.add(supporters);
         }
-        if (getNPlayers() > 3) {
+        if (getNPlayers(playerId) > 3) {
             l.addAll(startingItems);
             l.addAll(ruinItems);
             if (vagabondCharacter != null) {
@@ -171,7 +171,7 @@ public class RootGameState extends AbstractGameState {
     //Returns a deep copy of the game state from the viewpoints of a player
     @Override
     protected RootGameState _copy(int playerId) {
-        RootGameState copy = new RootGameState(gameParameters, getNPlayers());
+        RootGameState copy = new RootGameState(gameParameters, getNPlayers(playerId));
         copy.gameMap = gameMap.copy();
         copy.mapType = mapType;
         copy.playerFactions = new ArrayList<>(playerFactions);
@@ -193,7 +193,7 @@ public class RootGameState extends AbstractGameState {
 
         copy.playerDecks = new ArrayList<>();
         copy.playerCraftedCards = new ArrayList<>();
-        for (int e = 0; e < getNPlayers(); e++) {
+        for (int e = 0; e < getNPlayers(playerId); e++) {
             copy.playerCraftedCards.add(playerCraftedCards.get(e).copy());
         }
         copy.craftedItems = new ArrayList<>();
@@ -210,7 +210,7 @@ public class RootGameState extends AbstractGameState {
         copy.Recruiters = Recruiters;
         copy.Wood = Wood;
 
-        if (getNPlayers() > 1) {
+        if (getNPlayers(playerId) > 1) {
             copy.rulers = rulers.copy();
             copy.eyrieWarriors = eyrieWarriors;
             copy.eyrieDecree = new ArrayList<>();
@@ -227,7 +227,7 @@ public class RootGameState extends AbstractGameState {
             copy.roosts = roosts;
         }
 
-        if (getNPlayers() > 2) {
+        if (getNPlayers(playerId) > 2) {
             copy.woodlandWarriors = woodlandWarriors;
             copy.foxBase = foxBase;
             copy.rabbitBase = rabbitBase;
@@ -237,7 +237,7 @@ public class RootGameState extends AbstractGameState {
             copy.supporters = supporters.copy();
         }
 
-        if (getNPlayers() > 3) {
+        if (getNPlayers(playerId) > 3) {
             for (int i = 0; i < ruinItems.size(); i++) {
                 copy.ruinItems.add(ruinItems.get(i).copy());
             }
@@ -289,7 +289,7 @@ public class RootGameState extends AbstractGameState {
 
         if (playerId != -1 && getCoreGameParameters().partialObservable) {
             copy.drawPile.shuffle(redeterminisationRnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (playerDecks.get(i).getOwnerId() == playerId) {
                     //owner of the deck gets a full copy
                     copy.playerDecks.add(playerDecks.get(i).copy());
@@ -311,7 +311,7 @@ public class RootGameState extends AbstractGameState {
                 }
             }
 
-            if (getPlayerFaction(playerId) != RootParameters.Factions.WoodlandAlliance && getNPlayers() > 2) {
+            if (getPlayerFaction(playerId) != RootParameters.Factions.WoodlandAlliance && getNPlayers(playerId) > 2) {
                 int supportersSize = copy.supporters.getSize();
                 copy.drawPile.add(copy.supporters);
                 copy.supporters.clear();
@@ -321,7 +321,7 @@ public class RootGameState extends AbstractGameState {
                 }
             }
         } else {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 copy.playerDecks.add(playerDecks.get(i).copy());
             }
         }
@@ -1058,7 +1058,7 @@ public class RootGameState extends AbstractGameState {
             case MarquiseDeCat:
                 for (RootBoardNodeWithRootEdges clearing : gameMap.getNonForrestBoardNodes()) {
                     if (clearing.getWarrior(RootParameters.Factions.MarquiseDeCat) > 0) {
-                        for (int i = 0; i < getNPlayers(); i++) {
+                        for (int i = 0; i < getNPlayers(playerId); i++) {
                             if (i != playerID && clearing.isAttackable(getPlayerFaction(i))) {
                                 return true;
                             }
@@ -1070,7 +1070,7 @@ public class RootGameState extends AbstractGameState {
                 for (RootParameters.ClearingTypes clearingType : getDecreeSuits(2)) {
                     for (RootBoardNodeWithRootEdges clearing : gameMap.getNonForrestBoardNodes()) {
                         if (clearing.getWarrior(RootParameters.Factions.EyrieDynasties) > 0 && (clearing.getClearingType() == clearingType || clearingType == RootParameters.ClearingTypes.Bird)) {
-                            for (int i = 0; i < getNPlayers(); i++) {
+                            for (int i = 0; i < getNPlayers(playerId); i++) {
                                 if (i != playerID && clearing.isAttackable(getPlayerFaction(i))) {
                                     return true;
                                 }
@@ -1082,7 +1082,7 @@ public class RootGameState extends AbstractGameState {
             case WoodlandAlliance:
                 for (RootBoardNodeWithRootEdges clearing : gameMap.getNonForrestBoardNodes()) {
                     if (clearing.getWarrior(RootParameters.Factions.WoodlandAlliance) > 0) {
-                        for (int i = 0; i < getNPlayers(); i++) {
+                        for (int i = 0; i < getNPlayers(playerId); i++) {
                             if (i != playerID && clearing.isAttackable(getPlayerFaction(i))) {
                                 return true;
                             }
@@ -1093,7 +1093,7 @@ public class RootGameState extends AbstractGameState {
             case Vagabond:
                 RootBoardNodeWithRootEdges vagabondClearing = gameMap.getVagabondClearing();
                 if (vagabondClearing.getClearingType() != RootParameters.ClearingTypes.Forrest) {
-                    for (int i = 0; i < getNPlayers(); i++) {
+                    for (int i = 0; i < getNPlayers(playerId); i++) {
                         if (i != playerID && vagabondClearing.isAttackable(getPlayerFaction(i))) {
                             return true;
                         }
@@ -1106,7 +1106,7 @@ public class RootGameState extends AbstractGameState {
 
     public boolean canSteal(int playerID){
         RootBoardNodeWithRootEdges clearing = gameMap.getVagabondClearing();
-        for (int i = 0; i <getNPlayers(); i++){
+        for (int i = 0; i <getNPlayers(playerId); i++){
             if (i != playerID && clearing.isAttackable(getPlayerFaction(i)) && getPlayerHand(i).getSize()>0){
                 return true;
             }

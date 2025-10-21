@@ -53,8 +53,7 @@ public class MoveUnitsAction extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoveUnitsAction)) return false;
-        MoveUnitsAction that = (MoveUnitsAction) o;
+        if (!(o instanceof MoveUnitsAction that)) return false;
 
         return tileID == that.tileID &&
                 playerFaction == that.playerFaction &&

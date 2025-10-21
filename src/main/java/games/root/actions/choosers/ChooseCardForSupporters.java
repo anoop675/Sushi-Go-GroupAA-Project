@@ -27,12 +27,12 @@ public class ChooseCardForSupporters extends AbstractAction {
         if (currentState.getCurrentPlayer() == playerID && currentState.getPlayerFaction(playerID) == RootParameters.Factions.WoodlandAlliance && playerID != targetPlayerID){
             PartialObservableDeck<RootCard> targetHand = currentState.getPlayerHand(targetPlayerID);
             PartialObservableDeck<RootCard> supporters = currentState.getSupporters();
-            boolean[] visibility = new boolean[currentState.getNPlayers()];
+            boolean[] visibility = new boolean[currentState.getNPlayers(playerId)];
             visibility[playerID] = true;
             visibility[targetPlayerID] = true;
             ArrayList<boolean[]> handVisibility = new ArrayList<>();
             for (int i = 0; i <  targetHand.getSize(); i++){
-                boolean[] cardVisibility = new boolean[currentState.getNPlayers()];
+                boolean[] cardVisibility = new boolean[currentState.getNPlayers(playerId)];
                 cardVisibility[playerID] = true;
                 cardVisibility[targetPlayerID] = true;
                 handVisibility.add(cardVisibility);

@@ -9,7 +9,7 @@ public class LeaderHeuristic implements IStateHeuristic {
     public double evaluateState(AbstractGameState gs, int playerId) {
         double score = gs.getGameScore(playerId);
         double bestOtherScore = Double.NEGATIVE_INFINITY;
-        for (int p = 0; p < gs.getNPlayers(); p++) {
+        for (int p = 0; p < gs.getNPlayers(playerId); p++) {
             if (p != playerId) {
                 double otherScore = gs.getGameScore(p);
                 if (otherScore > bestOtherScore)

@@ -29,15 +29,15 @@ public class GameMetrics implements IMetricsCollection {
             double sum = 0;
             int leaderID = -1;
             int secondID = -1;
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 double score = e.state.getGameScore(i);
                 sum += score;
                 records.put("Player-" + i, score);
                 records.put("PlayerName-" + i, listener.getGame().getPlayers().get(i).toString());
                 if (e.state.getOrdinalPosition(i) == 1) leaderID = i;
-                if (e.state.getNPlayers() > 1 && e.state.getOrdinalPosition(i) == 2) secondID = i;
+                if (e.state.getNPlayers(playerId) > 1 && e.state.getOrdinalPosition(i) == 2) secondID = i;
             }
-            records.put("Average", sum / e.state.getNPlayers());
+            records.put("Average", sum / e.state.getNPlayers(playerId));
             if (secondID != -1) {
                 records.put("LeaderGap", e.state.getGameScore(leaderID) - e.state.getGameScore(secondID));
             } else {
@@ -75,7 +75,7 @@ public class GameMetrics implements IMetricsCollection {
 
         @Override
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 records.put("Player-" + i, e.state.getGameScore(i));
                 records.put("PlayerName-" + i, listener.getGame().getPlayers().get(i).toString());
             }
@@ -144,7 +144,7 @@ public class GameMetrics implements IMetricsCollection {
     public static class PlayerType extends AbstractMetric {
         @Override
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 records.put("PlayerType-" + i, listener.getGame().getPlayers().get(i).toString());
             }
             return true;
@@ -239,7 +239,7 @@ public class GameMetrics implements IMetricsCollection {
 
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 records.put("Player-" + i, e.state.getOrdinalPosition(i));
                 records.put("Player-" + i + " rank", String.valueOf(e.state.getOrdinalPosition(i)));
                 records.put("PlayerName-" + i, listener.getGame().getPlayers().get(i).toString());
@@ -413,7 +413,7 @@ public class GameMetrics implements IMetricsCollection {
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             // iterate through player results in game state and find the winner
             int winner = -1;
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 if (e.state.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME) {
                     winner = i;
                     break;
@@ -445,7 +445,7 @@ public class GameMetrics implements IMetricsCollection {
      * @return The total number of components
      */
     public static Pair<Integer, int[]> countComponents(AbstractGameState state) {
-        int[] hiddenByPlayer = new int[state.getNPlayers()];
+        int[] hiddenByPlayer = new int[state.getNPlayers(playerId)];
         // we do not include containers in the count...just the lowest-level items
         // open to debate on this. But we are consistent across State Size and Hidden Information stats
         int total = (int) state.getAllComponents().stream().filter(c -> !(c instanceof IComponentContainer)).count();

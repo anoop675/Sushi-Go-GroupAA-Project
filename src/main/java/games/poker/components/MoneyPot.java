@@ -86,9 +86,8 @@ public class MoneyPot extends Counter {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoneyPot)) return false;
+        if (!(o instanceof MoneyPot moneyPot)) return false;
         if (!super.equals(o)) return false;
-        MoneyPot moneyPot = (MoneyPot) o;
         return limit == moneyPot.limit && Objects.equals(playerContribution, moneyPot.playerContribution);
     }
 

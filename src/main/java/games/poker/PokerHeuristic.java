@@ -51,8 +51,7 @@ public class PokerHeuristic extends TunableParameters implements IStateHeuristic
      */
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof PokerHeuristic) {
-            PokerHeuristic other = (PokerHeuristic) o;
+        if (o instanceof PokerHeuristic other) {
             return other.FACTOR_MONEY == FACTOR_MONEY && other.FACTOR_HAND == FACTOR_HAND &&
                     other.FACTOR_HAND_OVER_MONEY == FACTOR_HAND_OVER_MONEY;
         }
@@ -77,7 +76,7 @@ public class PokerHeuristic extends TunableParameters implements IStateHeuristic
 
         double maxMoney = params.nWinMoney;
         if (!params.endMinMoney) {
-            maxMoney = gs.getNPlayers() * params.nStartingMoney; // all of the money in the game
+            maxMoney = gs.getNPlayers(playerId) * params.nStartingMoney; // all of the money in the game
         }
 
         if (playerResult != CoreConstants.GameResult.GAME_ONGOING)

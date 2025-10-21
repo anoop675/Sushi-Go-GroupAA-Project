@@ -96,8 +96,7 @@ public class Mine extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Mine) {
-            Mine other = (Mine) obj;
+        if (obj instanceof Mine other) {
             return super.equals(obj)
                     && other.trashValue == trashValue
                     && other.trashedCard == trashedCard

@@ -6,13 +6,7 @@ import core.interfaces.IStateKey;
 
 import java.util.Arrays;
 
-public class StateKeyFromFeatureVector  implements IStateKey {
-
-    public final IStateFeatureVector featureVector;
-
-    public StateKeyFromFeatureVector(IStateFeatureVector featureVector) {
-        this.featureVector = featureVector;
-    }
+public record StateKeyFromFeatureVector(IStateFeatureVector featureVector) implements IStateKey {
 
     @Override
     public String getKey(AbstractGameState state, int playerId) {

@@ -25,8 +25,7 @@ public class ChoosePlayer extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChoosePlayer)) return false;
-        ChoosePlayer that = (ChoosePlayer) o;
+        if (!(o instanceof ChoosePlayer that)) return false;
         return player == that.player;
     }
 

@@ -8,7 +8,7 @@ import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
 
 public class LoveLetterFeatures implements IStateFeatureVector {
-    private int nFeatures = 20;
+    private final int nFeatures = 20;
 
     @Override
     public String[] names() {
@@ -48,7 +48,7 @@ public class LoveLetterFeatures implements IStateFeatureVector {
         }
 
         // Affection Tokens
-        for (int j = 0; j < llgs.getNPlayers(); j++) {
+        for (int j = 0; j < llgs.getNPlayers(playerId); j++) {
             observationSpace[16 + j] = llgs.getGameScore(j);
         }
 

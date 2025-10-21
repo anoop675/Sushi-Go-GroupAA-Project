@@ -80,9 +80,8 @@ public class CompoundAction extends TMAction{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompoundAction)) return false;
+        if (!(o instanceof CompoundAction that)) return false;
         if (!super.equals(o)) return false;
-        CompoundAction that = (CompoundAction) o;
         return Arrays.equals(actions, that.actions);
     }
 

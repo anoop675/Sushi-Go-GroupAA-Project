@@ -114,9 +114,8 @@ public class DuplicateImmediateEffect extends TMAction implements IExtendedSeque
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DuplicateImmediateEffect)) return false;
+        if (!(o instanceof DuplicateImmediateEffect that)) return false;
         if (!super.equals(o)) return false;
-        DuplicateImmediateEffect that = (DuplicateImmediateEffect) o;
         return production == that.production && tagRequirement == that.tagRequirement && Objects.equals(actionClassName, that.actionClassName);
     }
 

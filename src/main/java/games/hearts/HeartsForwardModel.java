@@ -27,14 +27,14 @@ public class HeartsForwardModel extends StandardForwardModel {
     public void _setup(AbstractGameState firstState) {
         HeartsGameState hgs = (HeartsGameState) firstState;
         hgs.playerPoints = new HashMap<>();
-        for (int i = 0; i < hgs.getNPlayers(); i++) {
+        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
             hgs.playerPoints.put(i, 0);
         }
-        hgs.playerTricksTaken = new int[hgs.getNPlayers()];
+        hgs.playerTricksTaken = new int[hgs.getNPlayers(playerId)];
         hgs.trickDecks = new ArrayList<>();
         hgs.playerDecks = new ArrayList<>();
-        hgs.pendingPasses = new ArrayList<>(hgs.getNPlayers());
-        for (int i = 0; i < hgs.getNPlayers(); i++) {
+        hgs.pendingPasses = new ArrayList<>(hgs.getNPlayers(playerId));
+        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
             hgs.pendingPasses.add(new ArrayList<>());
             hgs.trickDecks.add(new Deck<>("Player " + i + " deck", i, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
         }
@@ -47,24 +47,24 @@ public class HeartsForwardModel extends StandardForwardModel {
         hgs.heartsBroken = false;
 
         hgs.setFirstPlayer(0);
-        hgs.pendingPasses = new ArrayList<>(hgs.getNPlayers());
-        for (int i = 0; i < hgs.getNPlayers(); i++) {
+        hgs.pendingPasses = new ArrayList<>(hgs.getNPlayers(playerId));
+        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
             hgs.pendingPasses.add(new ArrayList<>());
         }
 
         hgs.playerDecks = new ArrayList<>();
         hgs.drawDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
-        hgs.playerTricksTaken = new int[hgs.getNPlayers()];
+        hgs.playerTricksTaken = new int[hgs.getNPlayers(playerId)];
 
-        int numOfPlayers = hgs.getNPlayers();
+        int numOfPlayers = hgs.getNPlayers(playerId);
 
         hgs.drawDeck.removeAll(params.cardsToRemove.get(numOfPlayers));
         hgs.drawDeck.shuffle(hgs.getRnd());
 
-        for (int i = 0; i < hgs.getNPlayers(); i++) {
+        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
             Deck<FrenchCard> playerDeck = new Deck<>("Player " + i + " deck", i, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER);
             hgs.playerDecks.add(playerDeck);
-            int numberOfCards = params.numberOfCardsPerPlayer[hgs.getNPlayers()];
+            int numberOfCards = params.numberOfCardsPerPlayer[hgs.getNPlayers(playerId)];
 
             for (int card = 0; card < numberOfCards; card++) {
                 playerDeck.add(hgs.drawDeck.draw());
@@ -94,10 +94,10 @@ public class HeartsForwardModel extends StandardForwardModel {
                                 passDirection = 1;
                                 break;
                             case 1:  // To the right
-                                passDirection = hgs.getNPlayers() - 1;
+                                passDirection = hgs.getNPlayers(playerId) - 1;
                                 break;
                             case 2:  // Across the table (for 4 players)
-                                passDirection = hgs.getNPlayers() / 2;
+                                passDirection = hgs.getNPlayers(playerId) / 2;
                                 break;
                             case 3:  // No passing
                                 passDirection = 0;
@@ -107,15 +107,15 @@ public class HeartsForwardModel extends StandardForwardModel {
                         }
 
                         // Add pending passes to next player's deck
-                        for (int i = 0; i < hgs.getNPlayers(); i++) {
-                            Deck<FrenchCard> nextPlayerDeck = hgs.playerDecks.get((i + passDirection) % hgs.getNPlayers());
+                        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
+                            Deck<FrenchCard> nextPlayerDeck = hgs.playerDecks.get((i + passDirection) % hgs.getNPlayers(playerId));
                             for (FrenchCard card : hgs.pendingPasses.get(i)) {
                                 nextPlayerDeck.add(card);
                             }
                             hgs.pendingPasses.get(i).clear();  // Clear this player's pending passes
                         }
                         // Set the first player of the PLAYING phase to be the player who has the 2 of clubs
-                        for (int i = 0; i < hgs.getNPlayers(); i++) {
+                        for (int i = 0; i < hgs.getNPlayers(playerId); i++) {
                             Deck<FrenchCard> playerDeck1 = hgs.playerDecks.get(i);
                             if (playerDeck1.contains(params.startingCard)) {
                                 hgs.setFirstPlayer(i);
@@ -132,7 +132,7 @@ public class HeartsForwardModel extends StandardForwardModel {
             }
         } else {
             // Check if all players have played a card in this round
-            if (hgs.currentPlayedCards.size() == hgs.getNPlayers()) {
+            if (hgs.currentPlayedCards.size() == hgs.getNPlayers(playerId)) {
                 endTrick(hgs);
                 if (hgs.isNotTerminal()) {
                     startNewTrick(hgs);

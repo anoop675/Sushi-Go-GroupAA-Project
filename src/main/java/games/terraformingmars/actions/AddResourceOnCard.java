@@ -74,10 +74,10 @@ public class AddResourceOnCard extends TMAction implements IExtendedSequence {
         List<AbstractAction> actions = new ArrayList<>();
         TMGameState gs = (TMGameState) state;
         if (chooseAny) {
-            for (int i = 0; i < state.getNPlayers(); i++) {
+            for (int i = 0; i < state.getNPlayers(playerId); i++) {
                 addDeckActions(actions, gs, i);
             }
-            if (state.getNPlayers() == 1) {
+            if (state.getNPlayers(playerId) == 1) {
                 actions.add(new AddResourceOnCard(player, -2, resource, amount, true));
             }
         } else {
@@ -151,9 +151,8 @@ public class AddResourceOnCard extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AddResourceOnCard)) return false;
+        if (!(o instanceof AddResourceOnCard that)) return false;
         if (!super.equals(o)) return false;
-        AddResourceOnCard that = (AddResourceOnCard) o;
         return amount == that.amount && chooseAny == that.chooseAny && minResRequirement == that.minResRequirement && resource == that.resource && tagRequirement == that.tagRequirement && tagTopCardDrawDeck == that.tagTopCardDrawDeck;
     }
 

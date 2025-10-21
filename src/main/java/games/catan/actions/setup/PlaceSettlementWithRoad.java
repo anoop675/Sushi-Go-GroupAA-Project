@@ -74,8 +74,7 @@ public class PlaceSettlementWithRoad extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlaceSettlementWithRoad)) return false;
-        PlaceSettlementWithRoad that = (PlaceSettlementWithRoad) o;
+        if (!(o instanceof PlaceSettlementWithRoad that)) return false;
         return x == that.x && y == that.y && vertex == that.vertex && edge == that.edge && player == that.player;
     }
 

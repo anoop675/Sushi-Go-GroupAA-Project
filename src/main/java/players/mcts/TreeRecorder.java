@@ -29,10 +29,9 @@ public class TreeRecorder {
 
         try {
             fileWriter = new FileWriter(file, false);
-            StringBuilder header = new StringBuilder();
-            header.append("Depth\tName\tValue\tVisits\tParent_Name\tGame_State\tGame_Features\tGame_State_Heuristic\tAction_Name\tBest_Action");
-            header.append(System.lineSeparator());
-            fileWriter.write(header.toString());
+            String header = "Depth\tName\tValue\tVisits\tParent_Name\tGame_State\tGame_Features\tGame_State_Heuristic\tAction_Name\tBest_Action" +
+                    System.lineSeparator();
+            fileWriter.write(header);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

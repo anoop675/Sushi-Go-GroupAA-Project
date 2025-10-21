@@ -49,14 +49,14 @@ public class ColtExpressHeuristic extends TunableParameters implements IStateHeu
 
         // Number of bullets left for all other players
         int nBulletsOthers = 0;
-        for (int i = 0; i < cegs.getNPlayers(); i++) {
+        for (int i = 0; i < cegs.getNPlayers(playerId); i++) {
             if (i != playerId) {
                 nBulletsOthers += cegs.bulletsLeft[i] / cep.nBulletsPerPlayer;
             }
         }
 
         // Number of bullet cards in the player's deck or hand
-        int nMaxBulletCards = cep.nBulletsPerPlayer * (cegs.getNPlayers() - 1);
+        int nMaxBulletCards = cep.nBulletsPerPlayer * (cegs.getNPlayers(playerId) - 1);
         int nBulletCards = 0;
         for (ColtExpressCard c : cegs.playerHandCards.get(playerId).getComponents()) {
             if (c.cardType == ColtExpressCard.CardType.Bullet) {
@@ -97,8 +97,7 @@ public class ColtExpressHeuristic extends TunableParameters implements IStateHeu
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof ColtExpressHeuristic) {
-            ColtExpressHeuristic other = (ColtExpressHeuristic) o;
+        if (o instanceof ColtExpressHeuristic other) {
             return other.FACTOR_BULLET_CARDS == FACTOR_BULLET_CARDS &&
                     other.FACTOR_BULLETS_ENEMY == FACTOR_BULLETS_ENEMY &&
                     other.FACTOR_BULLETS_PLAYER == FACTOR_BULLETS_PLAYER &&

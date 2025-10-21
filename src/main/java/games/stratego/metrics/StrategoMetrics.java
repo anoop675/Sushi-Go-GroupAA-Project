@@ -135,8 +135,7 @@ public class StrategoMetrics implements IMetricsCollection {
 
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            if (e.action instanceof NormalMove) {
-                NormalMove move = (NormalMove) e.action;
+            if (e.action instanceof NormalMove move) {
                 Piece movedPiece = move.getPiece((StrategoGameState) e.state);
                 String player = listener.getGame().getPlayers().get(movedPiece.getOwnerId()).toString();
                 records.put(player + "_move", movedPiece.getPieceType().name());
@@ -155,8 +154,7 @@ public class StrategoMetrics implements IMetricsCollection {
                 }
 
                 return true;
-            } else if (e.action instanceof AttackMove) {
-                AttackMove move = (AttackMove) e.action;
+            } else if (e.action instanceof AttackMove move) {
                 Piece movedPiece = move.getPiece((StrategoGameState) e.state);
                 String player = listener.getGame().getPlayers().get(movedPiece.getOwnerId()).toString();
                 records.put(player + "_attack", movedPiece.getPieceType().name());
@@ -192,8 +190,8 @@ public class StrategoMetrics implements IMetricsCollection {
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             StrategoGameState gs = ((StrategoGameState)e.state);
 
-            int[] sum = new int[e.state.getNPlayers()];
-            int[] n = new int[e.state.getNPlayers()];
+            int[] sum = new int[e.state.getNPlayers(playerId)];
+            int[] n = new int[e.state.getNPlayers(playerId)];
             for (BoardNode bn : gs.getGridBoard().getComponents()) {
                 if (bn == null) continue;
                 Piece p = (Piece) bn;
@@ -205,8 +203,8 @@ public class StrategoMetrics implements IMetricsCollection {
                 String player = listener.getGame().getPlayers().get(i).toString();
                 records.put(player + "_rankSum", sum[i]);
                 records.put(player + "_nPieces", n[i]);
-                records.put(player + "_rankSumOpp", sum[(i+1)%e.state.getNPlayers()]);
-                records.put(player + "_nPiecesOpp", n[(i+1)%e.state.getNPlayers()]);
+                records.put(player + "_rankSumOpp", sum[(i+1)%e.state.getNPlayers(playerId)]);
+                records.put(player + "_nPiecesOpp", n[(i+1)%e.state.getNPlayers(playerId)]);
             }
 
             return true;

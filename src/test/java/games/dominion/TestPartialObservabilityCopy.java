@@ -65,9 +65,9 @@ public class TestPartialObservabilityCopy {
     public void handsOfOtherPlayersAreChanged() {
         DominionGameState myCopy = (DominionGameState) state.copy(0);
         DominionGameState fullCopy = (DominionGameState) state.copy();
-        assertFalse(myCopy.getDeck(DeckType.HAND, 1).equals(state.getDeck(DeckType.HAND, 1)));
-        assertFalse(myCopy.getDeck(DeckType.HAND, 2).equals(state.getDeck(DeckType.HAND, 2)));
-        assertFalse(myCopy.getDeck(DeckType.HAND, 3).equals(state.getDeck(DeckType.HAND, 3)));
+        assertNotEquals(myCopy.getDeck(DeckType.HAND, 1), state.getDeck(DeckType.HAND, 1));
+        assertNotEquals(myCopy.getDeck(DeckType.HAND, 2), state.getDeck(DeckType.HAND, 2));
+        assertNotEquals(myCopy.getDeck(DeckType.HAND, 3), state.getDeck(DeckType.HAND, 3));
 
         assertEquals(fullCopy.getDeck(DeckType.HAND, 1), state.getDeck(DeckType.HAND, 1));
         assertEquals(fullCopy.getDeck(DeckType.HAND, 2), state.getDeck(DeckType.HAND, 2));
@@ -101,7 +101,7 @@ public class TestPartialObservabilityCopy {
     public void ownDrawPileIsShuffled() {
         DominionGameState myCopy = (DominionGameState) state.copy(0);
         DominionGameState fullCopy = (DominionGameState) state.copy();
-        assertFalse(myCopy.getDeck(DeckType.DRAW, 0).equals(state.getDeck(DeckType.DRAW, 0)));
+        assertNotEquals(myCopy.getDeck(DeckType.DRAW, 0), state.getDeck(DeckType.DRAW, 0));
         assertEquals(fullCopy.getDeck(DeckType.DRAW, 0), state.getDeck(DeckType.DRAW, 0));
 
         assertEquals(myCopy.getDeck(DeckType.DRAW, 0).getSize(), state.getDeck(DeckType.DRAW, 0).getSize());
@@ -117,7 +117,7 @@ public class TestPartialObservabilityCopy {
         DominionGameState myCopy = (DominionGameState) state.copy(0);
         DominionGameState fullCopy = (DominionGameState) state.copy();
         for (int playerId = 1; playerId < 4; playerId++) {
-            assertFalse(myCopy.getDeck(DeckType.DRAW, playerId).equals(state.getDeck(DeckType.DRAW, playerId)));
+            assertNotEquals(myCopy.getDeck(DeckType.DRAW, playerId), state.getDeck(DeckType.DRAW, playerId));
             assertEquals(fullCopy.getDeck(DeckType.DRAW, playerId), state.getDeck(DeckType.DRAW, playerId));
             assertEquals(myCopy.getDeck(DeckType.DRAW, playerId).getSize(), state.getDeck(DeckType.DRAW, playerId).getSize());
             assertEquals(state.getDeck(DeckType.HAND, playerId).getSize(), myCopy.getDeck(DeckType.HAND, playerId).getSize());

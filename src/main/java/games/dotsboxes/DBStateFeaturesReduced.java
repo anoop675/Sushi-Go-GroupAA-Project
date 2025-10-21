@@ -7,7 +7,7 @@ public class DBStateFeaturesReduced implements IStateFeatureVector {
 
     String[] names = new String[]{"POINT_ADVANTAGE", "POINTS", "THREE_BOXES", "TWO_BOXES", "ORDINAL", "TURN"};
 
-    private IStateFeatureVector fullFeatureVector = new DBStateFeatures();
+    private final IStateFeatureVector fullFeatureVector = new DBStateFeatures();
 
     @Override
     public double[] doubleVector(AbstractGameState state, int playerID) {

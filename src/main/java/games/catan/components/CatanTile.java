@@ -219,9 +219,8 @@ public class CatanTile extends BoardNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CatanTile)) return false;
+        if (!(o instanceof CatanTile catanTile)) return false;
         if (!super.equals(o)) return false;
-        CatanTile catanTile = (CatanTile) o;
         return x == catanTile.x && y == catanTile.y && number == catanTile.number && robber == catanTile.robber && Arrays.equals(verticesBoardNodeIDs, catanTile.verticesBoardNodeIDs) && Arrays.equals(edgeIDs, catanTile.edgeIDs) && tileType == catanTile.tileType;
     }
 

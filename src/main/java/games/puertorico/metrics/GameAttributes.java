@@ -33,8 +33,8 @@ public class GameAttributes implements IMetricsCollection {
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             PuertoRicoGameState state = (PuertoRicoGameState) e.state;
             for (PuertoRicoConstants.BuildingType building : buildings) {
-                int[] allData = new int[state.getNPlayers()];
-                for (int i = 0; i < state.getNPlayers(); i++) {
+                int[] allData = new int[state.getNPlayers(playerId)];
+                for (int i = 0; i < state.getNPlayers(playerId); i++) {
                     int value = (int) state.getPlayerBoard(i).getBuildings().stream().filter(b -> b.buildingType == building).count();
                     records.put("Player " + i + " " + building, value);
                     allData[i] = value;
@@ -91,7 +91,7 @@ public class GameAttributes implements IMetricsCollection {
         @Override
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             PuertoRicoGameState state = (PuertoRicoGameState) e.state;
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 records.put("Player " + i + " Town Size", state.getPlayerBoard(i).getTownSize());
                 records.put("Player " + i + " Plantation Size", state.getPlayerBoard(i).getPlantationSize());
                 records.put("Player " + i + " Doubloons", state.getPlayerBoard(i).getDoubloons());
@@ -142,7 +142,7 @@ public class GameAttributes implements IMetricsCollection {
             PuertoRicoGameState state = (PuertoRicoGameState) e.state;
             for (PuertoRicoConstants.Crop crop : crops) {
                 int sum = 0;
-                for (int i = 0; i < state.getNPlayers(); i++) {
+                for (int i = 0; i < state.getNPlayers(playerId); i++) {
                     records.put("Player " + i + " " + crop.name(), state.getPlayerBoard(i).getPlantationsOf(crop));
                     sum += state.getPlayerBoard(i).getPlantationsOf(crop);
                 }
@@ -190,7 +190,7 @@ public class GameAttributes implements IMetricsCollection {
             PuertoRicoGameState state = (PuertoRicoGameState) e.state;
             for (PuertoRicoConstants.Crop crop : crops) {
                 int sum = 0;
-                for (int i = 0; i < e.state.getNPlayers(); i++) {
+                for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                     records.put("Player " + i + " " + crop.name(), state.getPlayerBoard(i).getStoresOf(crop));
                     sum += state.getPlayerBoard(i).getStoresOf(crop);
                 }

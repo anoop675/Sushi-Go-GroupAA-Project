@@ -129,8 +129,7 @@ public class DominionCard extends Card {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DominionCard) {
-            DominionCard other = (DominionCard) obj;
+        if (obj instanceof DominionCard other) {
             return other.type == type;
         }
         return false;

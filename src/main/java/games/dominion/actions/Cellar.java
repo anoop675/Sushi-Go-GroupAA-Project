@@ -86,8 +86,7 @@ public class Cellar extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Cellar) {
-            Cellar other = (Cellar) obj;
+        if (obj instanceof Cellar other) {
             return super.equals(obj) && other.cardsDiscarded == cardsDiscarded && other.executed == executed;
         }
         return false;

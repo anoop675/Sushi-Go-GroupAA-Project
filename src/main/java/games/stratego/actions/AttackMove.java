@@ -182,9 +182,8 @@ public class AttackMove extends Move {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AttackMove)) return false;
+        if (!(o instanceof AttackMove that)) return false;
         if (!super.equals(o)) return false;
-        AttackMove that = (AttackMove) o;
         return attackedPieceID == that.attackedPieceID && Objects.equals(attackedPosition, that.attackedPosition);
     }
 

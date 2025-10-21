@@ -73,8 +73,7 @@ public class Hint extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Hint)) return false;
-        Hint hint = (Hint) o;
+        if (!(o instanceof Hint hint)) return false;
         return playerHand == hint.playerHand && number == hint.number && Objects.equals(color, hint.color);
     }
 

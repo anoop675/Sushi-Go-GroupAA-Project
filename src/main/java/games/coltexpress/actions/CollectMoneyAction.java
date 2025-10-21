@@ -56,9 +56,8 @@ public class CollectMoneyAction extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CollectMoneyAction)) return false;
+        if (!(o instanceof CollectMoneyAction that)) return false;
         if (!super.equals(o)) return false;
-        CollectMoneyAction that = (CollectMoneyAction) o;
         return availableLoot == that.availableLoot &&
                 loot == that.loot;
     }

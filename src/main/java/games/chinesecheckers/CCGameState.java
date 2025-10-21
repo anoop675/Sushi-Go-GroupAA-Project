@@ -42,7 +42,7 @@ public class CCGameState extends AbstractGameState {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        CCGameState copy = new CCGameState(gameParameters, getNPlayers());
+        CCGameState copy = new CCGameState(gameParameters, getNPlayers(playerId));
         copy.starBoard = starBoard.copy();
 
         return copy;
@@ -66,9 +66,8 @@ public class CCGameState extends AbstractGameState {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CCGameState)) return false;
+        if (!(o instanceof CCGameState that)) return false;
         if (!super.equals(o)) return false;
-        CCGameState that = (CCGameState) o;
         return Objects.equals(starBoard, that.starBoard);
     }
 
@@ -81,7 +80,7 @@ public class CCGameState extends AbstractGameState {
 
     public Peg.Colour getPlayerColour(int player) {
         CCParameters params = (CCParameters) gameParameters;
-        int nPlayers = getNPlayers();
+        int nPlayers = getNPlayers(playerId);
         return params.playerColours.get(nPlayers)[player];
     }
 }

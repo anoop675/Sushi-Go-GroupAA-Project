@@ -130,8 +130,7 @@ public class DescentDice extends Component {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DescentDice) {
-            DescentDice dice = (DescentDice) obj;
+        if (obj instanceof DescentDice dice) {
             return dice.colour == this.colour && dice.result == this.result && dice.damage == this.damage &&
                     dice.surge == this.surge && dice.range == this.range && dice.shielding == this.shielding &&
                     dice.nSides == this.nSides && dice.sides.equals(this.sides);

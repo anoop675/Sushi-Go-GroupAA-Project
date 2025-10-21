@@ -29,7 +29,7 @@ public class MonsterAbilities {
         AIR,
         EARTH,
         FIRE,
-        WATER;
+        WATER
     }
 
     public enum MonsterPassive {
@@ -39,7 +39,7 @@ public class MonsterAbilities {
         SHAMBLING,
         WEB,
         REACH,
-        SHADOW;
+        SHADOW
     }
 
     public static ArrayList<AbstractAction> getMonsterActions(DescentGameState dgs)

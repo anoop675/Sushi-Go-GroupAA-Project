@@ -7,19 +7,13 @@ import core.interfaces.IGameHeuristic;
 import java.util.DoubleSummaryStatistics;
 import java.util.stream.IntStream;
 
-public class TargetScoreDelta implements IGameHeuristic {
-
-    public final int target;
-
-    public TargetScoreDelta(int target) {
-        this.target = target;
-    }
+public record TargetScoreDelta(int target) implements IGameHeuristic {
 
 
     @Override
     public double evaluateGame(Game game) {
         AbstractGameState state = game.getGameState();
-        DoubleSummaryStatistics stats = IntStream.range(0, state.getNPlayers())
+        DoubleSummaryStatistics stats = IntStream.range(0, state.getNPlayers(playerId))
                 .mapToDouble(state::getGameScore)
                 .summaryStatistics();
         return -Math.abs(stats.getMax() - stats.getMin() - target);

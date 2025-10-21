@@ -73,7 +73,7 @@ public class DiscardPhase extends PuertoRicoRole<DiscardPhase> {
                 ship.unload();
             }
         }
-        for (int p = 0; p < state.getNPlayers(); p++) {
+        for (int p = 0; p < state.getNPlayers(playerId); p++) {
             state.getPlayerBoard(p).clearCropsInWarehouses();
         }
     }

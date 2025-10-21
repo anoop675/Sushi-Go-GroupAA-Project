@@ -10,8 +10,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class ActionController {
 
-    private boolean debug = false;
-    private BlockingQueue<AbstractAction> actionsQueue;
+    private final boolean debug = false;
+    private final BlockingQueue<AbstractAction> actionsQueue;
     private AbstractAction lastActionPlayed;
 
     public ActionController() {

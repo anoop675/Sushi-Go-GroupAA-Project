@@ -9,8 +9,8 @@ public class BattleloreGameParameters extends AbstractParameters {
     public int hexHeight = 9; //1-9
     public int troopCountInSquad = 3;
     public final int WIN_SCORE = 4;
-    private int meleeRange = 1;
-    private int rangedRange = 5;
+    private final int meleeRange = 1;
+    private final int rangedRange = 5;
 
     public BattleloreGameParameters(String dataPath) {
         this.dataPath = dataPath;

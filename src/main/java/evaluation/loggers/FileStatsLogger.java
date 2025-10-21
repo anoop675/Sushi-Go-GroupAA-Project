@@ -110,8 +110,7 @@ public class FileStatsLogger implements IStatisticLogger {
                     continue;
                 }
                 // If this is a summary, then we return the single most common occurrence
-                if (datum instanceof TAGOccurrenceStatSummary) {
-                    TAGOccurrenceStatSummary summary = (TAGOccurrenceStatSummary) datum;
+                if (datum instanceof TAGOccurrenceStatSummary summary) {
                     datum = summary.getHighestOccurrence().a;
                 }
                 if (datum instanceof Integer) {
@@ -139,7 +138,7 @@ public class FileStatsLogger implements IStatisticLogger {
                 writer.write(outputLine);
             }
         } catch (IOException e) {
-            throw new AssertionError("Problem writing to file " + writer.toString() + " : " + e.getMessage());
+            throw new AssertionError("Problem writing to file " + writer + " : " + e.getMessage());
         }
     }
 

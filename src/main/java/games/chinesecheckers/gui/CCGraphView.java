@@ -37,11 +37,7 @@ public class CCGraphView extends ComponentView implements IScreenHighlight {
             int y = node.getY();
             int scale = 30;
             int size = 15;
-            boolean shift = false;
-
-            if (y % 2 != 0) {
-                shift = true;
-            }
+            boolean shift = y % 2 != 0;
 
             x = x * scale;
             y = y * scale;
@@ -59,10 +55,7 @@ public class CCGraphView extends ComponentView implements IScreenHighlight {
                     int neighbourX = neighbour.getX() * scale;
                     int neighbourY = neighbour.getY() * scale;
 
-                    boolean neighbourShift = false;
-                    if (neighbour.getY() % 2 != 0) {
-                        neighbourShift = true;
-                    }
+                    boolean neighbourShift = neighbour.getY() % 2 != 0;
                     if (neighbourShift) {
                         neighbourX += 72;
                         neighbourY += 23;
@@ -98,11 +91,7 @@ public class CCGraphView extends ComponentView implements IScreenHighlight {
                 int y = dots.get(i).y;
                 int scale = 30;
                 int size = 20;
-                boolean shift = false;
-
-                if (y % 2 != 0) {
-                    shift = true;
-                }
+                boolean shift = y % 2 != 0;
 
                 x = x * scale;
                 y = y * scale;
@@ -127,11 +116,7 @@ public class CCGraphView extends ComponentView implements IScreenHighlight {
             int x = dots.get(i).x;
             int y = dots.get(i).y;
             int scale = 30;
-            boolean shift = false;
-
-            if (y % 2 != 0) {
-                shift = true;
-            }
+            boolean shift = y % 2 != 0;
 
             x = x * scale;
             y = y * scale;

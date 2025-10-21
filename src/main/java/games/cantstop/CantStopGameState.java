@@ -24,11 +24,11 @@ public class CantStopGameState extends AbstractGameState implements IPrintable {
 
     private CantStopGameState(CantStopGameState copyFrom) {
         // used by copy method only
-        super(copyFrom.gameParameters.copy(), copyFrom.getNPlayers());
+        super(copyFrom.gameParameters.copy(), copyFrom.getNPlayers(playerId));
         // TurnOrder will be copied later
         completedColumns = copyFrom.completedColumns.clone();
-        playerMarkerPositions = new int[copyFrom.getNPlayers()][];
-        for (int p = 0; p < copyFrom.getNPlayers(); p++)
+        playerMarkerPositions = new int[copyFrom.getNPlayers(playerId)][];
+        for (int p = 0; p < copyFrom.getNPlayers(playerId); p++)
             playerMarkerPositions[p] = copyFrom.playerMarkerPositions[p].clone();
         temporaryMarkerPositions = new HashMap<>();
         temporaryMarkerPositions.putAll(copyFrom.temporaryMarkerPositions);
@@ -134,8 +134,7 @@ public class CantStopGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof CantStopGameState) {
-            CantStopGameState other = (CantStopGameState) o;
+        if (o instanceof CantStopGameState other) {
             return Arrays.equals(completedColumns, other.completedColumns) &&
                     temporaryMarkerPositions.equals(other.temporaryMarkerPositions) &&
                     dice.equals(other.dice) &&
@@ -186,7 +185,7 @@ public class CantStopGameState extends AbstractGameState implements IPrintable {
         CantStopParameters params = (CantStopParameters) gameParameters;
         sb.append("--------------------------------------------------\n");
         sb.append("Scores:\t");
-        for (int p = 0; p < getNPlayers(); p++)
+        for (int p = 0; p < getNPlayers(playerId); p++)
             sb.append(getGameScore(p)).append("\t");
         sb.append("\n");
         sb.append(String.format("Player %d to move. Phase %s%n%n", getCurrentPlayer(), getGamePhase()));
@@ -194,7 +193,7 @@ public class CantStopGameState extends AbstractGameState implements IPrintable {
                 .append(dice.stream().map(d -> String.valueOf(d.getValue())).collect(joining(", ")))
                 .append("\n");
         sb.append("Number\t");
-        for (int p = 0; p < getNPlayers(); p++)
+        for (int p = 0; p < getNPlayers(playerId); p++)
             sb.append("P").append(p).append("\t\t");
         sb.append("Max\n");
         for (int n = 2; n <= 12; n++) {
@@ -202,7 +201,7 @@ public class CantStopGameState extends AbstractGameState implements IPrintable {
             if (isTrackComplete(n))
                 sb.append(" COMPLETED");
             else {
-                for (int p = 0; p < getNPlayers(); p++) {
+                for (int p = 0; p < getNPlayers(playerId); p++) {
                     if (p == getCurrentPlayer() && temporaryMarkerPositions.containsKey(n))
                         sb.append(String.format("%2d/%d\t\t", playerMarkerPositions[p][n], temporaryMarkerPositions.get(n)));
                     else

@@ -61,7 +61,7 @@ public class PokerStateFeatures extends TunableStateFeatures {
         // Own Bid
         data[16] = pgs.getPlayerBet()[playerID].getValue();
         // Opponent Bid
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             if (i != playerID) {
                 data[17] = Math.max(pgs.getPlayerBet()[i].getValue(), data[17]);
             }
@@ -69,7 +69,7 @@ public class PokerStateFeatures extends TunableStateFeatures {
         // Bid difference
         data[18] = data[16] - data[17];
         // Players folded
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             if (pgs.playerFold[i]) {
                 data[19]++;
             }

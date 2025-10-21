@@ -32,8 +32,7 @@ public class ReplaceComponents<T extends Component> extends DrawComponents {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReplaceComponents)) return false;
-        ReplaceComponents<?> that = (ReplaceComponents<?>) o;
+        if (!(o instanceof ReplaceComponents<?> that)) return false;
         return deckDraw == that.deckDraw;
     }
 

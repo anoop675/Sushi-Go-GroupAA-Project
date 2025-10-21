@@ -130,7 +130,7 @@ public class DeepConstructNewOffer extends AbstractAction implements IExtendedSe
         // Fill in the respective choice
         switch(choice) {
             case ChoosePlayerTradeWith:
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     if (i != offeringPlayerID && gs.getNResourcesInHand(i) > 0) {
                         actions.add(new DeepConstructNewOffer(offeringPlayerID, i));
                     }
@@ -214,8 +214,7 @@ public class DeepConstructNewOffer extends AbstractAction implements IExtendedSe
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepConstructNewOffer)) return false;
-        DeepConstructNewOffer that = (DeepConstructNewOffer) o;
+        if (!(o instanceof DeepConstructNewOffer that)) return false;
         return player == that.player && offeringPlayerID == that.offeringPlayerID && execute == that.execute && otherPlayerID == that.otherPlayerID && nOffered == that.nOffered && nRequested == that.nRequested && stage == that.stage && resourceOffered == that.resourceOffered && resourceRequested == that.resourceRequested && choice == that.choice;
     }
 

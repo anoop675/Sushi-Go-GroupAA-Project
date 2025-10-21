@@ -43,8 +43,7 @@ public class HeartsHeuristic extends TunableParameters implements IStateHeuristi
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof HeartsHeuristic) {
-            HeartsHeuristic other = (HeartsHeuristic) o;
+        if (o instanceof HeartsHeuristic other) {
             return other.HIGH_VALUE_THRESHOLD == HIGH_VALUE_THRESHOLD && other.MAX_HIGH_VALUE_CARD_PASS_BONUS == MAX_HIGH_VALUE_CARD_PASS_BONUS
                     && other.maxPossibleScore == maxPossibleScore && other.maxHighValueCards == maxHighValueCards && other.maxPossibleTricks == maxPossibleTricks;
         }

@@ -59,11 +59,11 @@ public class DiamantHeuristic extends TunableParameters implements IStateHeurist
                 .mapToInt(Counter::getValue)
                 .sorted().boxed().collect(Collectors.toList());
 
-        int max_ngens = gemsInOrder.get(dgs.getNPlayers()-1);
+        int max_ngens = gemsInOrder.get(dgs.getNPlayers(playerId)-1);
         int min_ngens = gemsInOrder.get(0);
 
         int player_gems = dgs.treasureChests.get(playerId).getValue();
-        double highestExpectedScore = 139.0 / gs.getNPlayers() * 2.0;
+        double highestExpectedScore = 139.0 / gs.getNPlayers(playerId) * 2.0;
         // 1.0 if a player has every single gem in a 2-player game; 67% of gems in a 3-player; 50% in a 4-player....
         double score = FACTOR_SCORE * player_gems / highestExpectedScore;
 
@@ -91,8 +91,7 @@ public class DiamantHeuristic extends TunableParameters implements IStateHeurist
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof DiamantHeuristic) {
-            DiamantHeuristic other = (DiamantHeuristic) o;
+        if (o instanceof DiamantHeuristic other) {
             return other.FACTOR_IN_CAVE == FACTOR_IN_CAVE && other.FACTOR_SCORE == FACTOR_SCORE &&
                     other.FACTOR_LEADER == FACTOR_LEADER && other.FACTOR_BEHIND == FACTOR_BEHIND &&
                     other.FACTOR_AHEAD == FACTOR_AHEAD;

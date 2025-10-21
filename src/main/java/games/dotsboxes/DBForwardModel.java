@@ -44,7 +44,7 @@ public class DBForwardModel extends StandardForwardModel {
             }
         }
         // Initialise other variables
-        dbgs.nCellsPerPlayer = new int[dbgs.getNPlayers()];
+        dbgs.nCellsPerPlayer = new int[dbgs.getNPlayers(playerId)];
     }
 
     @Override

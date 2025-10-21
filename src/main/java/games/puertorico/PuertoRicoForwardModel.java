@@ -24,7 +24,7 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
         int indigoOnPlayerBoard = 0;
         int cornOnPlayerBoard = 0;
         pgs.playerBoards = new ArrayList<>();
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             PRPlayerBoard pb = new PRPlayerBoard(i);
             pgs.playerBoards.add(pb);
             Plantation p;
@@ -36,7 +36,7 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
                 cornOnPlayerBoard++;
             }
             pb.plantations.add(p);
-            pb.changeDoubloons(params.startingDoubloons[firstState.getNPlayers()][i]);
+            pb.changeDoubloons(params.startingDoubloons[firstState.getNPlayers(playerId)][i]);
         }
 
         pgs.currentRole = null;
@@ -63,7 +63,7 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
 
         pgs.plantationDeck.shuffle(pgs.getRnd());
 
-        for (int i = 0; i < params.extraVisiblePlantations + pgs.getNPlayers(); i++)
+        for (int i = 0; i < params.extraVisiblePlantations + pgs.getNPlayers(playerId); i++)
             pgs.visiblePlantations.add(pgs.plantationDeck.draw());
 
         pgs.cropSupply = new EnumMap<>(PuertoRicoConstants.Crop.class);
@@ -116,12 +116,12 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
             pgs.rolesAvailable.put(r, true);
         }
         pgs.moneyOnRoles = pgs.rolesAvailable.keySet().stream().collect(toMap(r -> r, r -> 0));
-        pgs.colonistsOnShip = pgs.getNPlayers();
-        pgs.colonistsInSupply = params.totalColonists[pgs.getNPlayers()] - pgs.colonistsOnShip;
-        pgs.vpSupply = params.totalVP[pgs.getNPlayers()];
+        pgs.colonistsOnShip = pgs.getNPlayers(playerId);
+        pgs.colonistsInSupply = params.totalColonists[pgs.getNPlayers(playerId)] - pgs.colonistsOnShip;
+        pgs.vpSupply = params.totalVP[pgs.getNPlayers(playerId)];
 
         // Now set up Ships on game state, taking the number from the parameters
-        pgs.ships = Arrays.stream(params.shipCapacities[pgs.getNPlayers()])
+        pgs.ships = Arrays.stream(params.shipCapacities[pgs.getNPlayers(playerId)])
                 .mapToObj(Ship::new).collect(toList());
         pgs.gameEndTriggered = false;
     }
@@ -147,7 +147,7 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
         if (state.isActionInProgress())
             return;  // we always wait for any EAS to finish
 
-        int nextPlayer = (state.getCurrentPlayer() + 1) % state.getNPlayers(); // we increment one more
+        int nextPlayer = (state.getCurrentPlayer() + 1) % state.getNPlayers(playerId); // we increment one more
 
         endPlayerTurn(state, nextPlayer);
         // if it is the end of the round (i.e. the roleSelectionPlayer has moved back to firstPlayer)
@@ -155,7 +155,7 @@ public class PuertoRicoForwardModel extends StandardForwardModel {
             if (state.gameEndTriggered) {
                 endGame(state);
             } else {
-                endRound(state, (state.getTurnOwner() + 1) % state.getNPlayers());
+                endRound(state, (state.getTurnOwner() + 1) % state.getNPlayers(playerId));
                 endRoundProcessing(state);
             }
         }

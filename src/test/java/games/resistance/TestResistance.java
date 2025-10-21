@@ -66,8 +66,8 @@ public class TestResistance {
             assertEquals(state.getGamePhase(), ResGameState.ResGamePhase.LeaderSelectsTeam);
             assertEquals(state.getLeaderID(), state.getCurrentPlayer());
             List<AbstractAction> actions = fm.computeAvailableActions(state);
-            int[] players = new int[state.getNPlayers()];
-            for (int i = 0; i < state.getNPlayers(); i++) {
+            int[] players = new int[state.getNPlayers(playerId)];
+            for (int i = 0; i < state.getNPlayers(playerId); i++) {
                 players[i] = i;
             }
             ArrayList<int[]> choiceOfTeams = Utils.generateCombinations(players, state.gameBoard.getMissionSuccessValues()[state.getRoundCounter()]);
@@ -136,7 +136,7 @@ public class TestResistance {
         IGamePhase previousGamePhase = state.getGamePhase();
 
         assertEquals(state.getGamePhase(), ResGameState.ResGamePhase.TeamSelectionVote);
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             assertTrue(fm.computeAvailableActions(state).stream().allMatch(a -> a instanceof ResVoting));
             fm.next(state, rnd._getAction(state, fm.computeAvailableActions(state)));
         }
@@ -228,7 +228,7 @@ public class TestResistance {
     public void checkingHandInitialisation() {
 
         ResGameState state = (ResGameState) resistance.getGameState();
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             assertEquals(state.getPlayerHandCards().get(i).getSize(), 3);
             if (state.getPlayerHandCards().get(i).get(2).cardType != ResPlayerCards.CardType.RESISTANCE && state.getPlayerHandCards().get(i).get(2).cardType != SPY) {
                 throw new AssertionError("last card isn't SPY or RESISTANCE");
@@ -248,7 +248,7 @@ public class TestResistance {
         ResGameState state = (ResGameState) resistance.getGameState();
         int spyCount = 0;
         int resistanceCount = 0;
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             assertEquals(state.getPlayerHandCards().get(i).getSize(), 3);
             if (state.getPlayerHandCards().get(i).get(2).cardType == ResPlayerCards.CardType.RESISTANCE) {
                 resistanceCount += 1;
@@ -270,7 +270,7 @@ public class TestResistance {
 
         boolean resistanceWon = state.getPlayerHandCards().get(0).get(2).cardType == ResPlayerCards.CardType.RESISTANCE &&
                 state.getPlayerResults()[0] == CoreConstants.GameResult.WIN_GAME;
-        for (int i = 0; i < state.getNPlayers() - 1; i++) {
+        for (int i = 0; i < state.getNPlayers(playerId) - 1; i++) {
             if (resistanceWon) {
                 if (state.getPlayerHandCards().get(i).get(2).cardType == ResPlayerCards.CardType.RESISTANCE) {
                     assertEquals(CoreConstants.GameResult.WIN_GAME, state.getPlayerResults()[i]);
@@ -358,7 +358,7 @@ public class TestResistance {
     public void checkingSpiesKnowEveryonesCards() {
         ResGameState state = (ResGameState) resistance.getGameState();
         List<ResPlayerCards.CardType> listOfIdentityCards = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             listOfIdentityCards.add(state.getPlayerHandCards().get(i).get(2).cardType);
         }
 
@@ -395,7 +395,7 @@ public class TestResistance {
         ResGameState state = (ResGameState) resistance.getGameState();
 
         List<ResPlayerCards.CardType> listOfIdentityCards = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             listOfIdentityCards.add(state.getPlayerHandCards().get(i).get(2).cardType);
         }
 
@@ -430,7 +430,7 @@ public class TestResistance {
     private void checkingSpiesKnowEveryonesCardsMethod(ResGameState state, ResGameState playerState, List<ResPlayerCards.CardType> listOfIdentityCards) {
         if (state.getPlayerHandCards().get(state.getCurrentPlayer()).get(2).cardType == SPY) {
             List<ResPlayerCards.CardType> listOfSpyKnownIdentityCards = new ArrayList<>();
-            for (int j = 0; j < state.getNPlayers(); j++) {
+            for (int j = 0; j < state.getNPlayers(playerId); j++) {
                 listOfSpyKnownIdentityCards.add(playerState.getPlayerHandCards().get(j).get(2).cardType);
             }
             assertEquals(listOfSpyKnownIdentityCards, listOfIdentityCards);
@@ -440,7 +440,7 @@ public class TestResistance {
     private void checkingResistanceDontKnowEveryonesCardsMethod(ResGameState state, ResGameState playerState, List<ResPlayerCards.CardType> listOfIdentityCards) {
         if (state.getPlayerHandCards().get(state.getCurrentPlayer()).get(2).cardType == ResPlayerCards.CardType.RESISTANCE) {
             List<ResPlayerCards.CardType> listOfResistanceKnownIdentityCards = new ArrayList<>();
-            for (int j = 0; j < state.getNPlayers(); j++) {
+            for (int j = 0; j < state.getNPlayers(playerId); j++) {
                 listOfResistanceKnownIdentityCards.add(playerState.getPlayerHandCards().get(j).get(2).cardType);
             }
 

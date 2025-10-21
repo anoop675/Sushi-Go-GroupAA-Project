@@ -61,8 +61,7 @@ public class BuildCity extends AbstractAction {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof BuildCity){
-            BuildCity otherAction = (BuildCity)other;
+        if (other instanceof BuildCity otherAction){
             return row == otherAction.row && col == otherAction.col && vertex == otherAction.vertex && playerID == otherAction.playerID;
         }
         return false;

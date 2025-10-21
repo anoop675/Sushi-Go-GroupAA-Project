@@ -17,7 +17,7 @@ public class CouncilRoom extends DominionAction{
 
     @Override
     boolean _execute(DominionGameState state) {
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (i != player) {
                 state.drawCard(i);
             }

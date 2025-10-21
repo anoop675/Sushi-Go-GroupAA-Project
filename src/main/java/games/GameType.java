@@ -311,7 +311,7 @@ public enum GameType {
             SaboteurGameState.class, SaboteurForwardModel.class, SaboteurGameParameters.class, SaboteurGUIManager.class),
     Chess(2, 2,
             Arrays.asList(Strategy, Abstract),
-            Arrays.asList(GridMovement),
+            List.of(GridMovement),
             ChessGameState.class, ChessForwardModel.class, ChessParameters.class, ChessGUIManager.class),;
 
 

@@ -17,8 +17,8 @@ import static games.pandemic.PandemicConstants.playerDeckDiscardHash;
 
 @SuppressWarnings("unchecked")
 public class CureDisease extends AbstractAction {
-    private String color;
-    private ArrayList<Integer> cardIds;
+    private final String color;
+    private final ArrayList<Integer> cardIds;
 
     public CureDisease(String color, ArrayList<Integer> cardIds) {
         this.color = color;
@@ -58,8 +58,7 @@ public class CureDisease extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CureDisease)) return false;
-        CureDisease that = (CureDisease) o;
+        if (!(o instanceof CureDisease that)) return false;
         return Objects.equals(color, that.color) && cardIds.equals(that.cardIds);
     }
 

@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toMap;
  */
 public abstract class TunableParameters<T> extends AbstractParameters implements ITunableParameters<T> {
 
-    private static boolean debug = false;
+    private static final boolean debug = false;
     private JSONObject rawJSON;
     protected boolean resetOn = true; // if set to false while setting many parameter values, the _reset() method will not be called (for efficiency)
     List<String> staticParameters = new ArrayList<>();
@@ -52,7 +52,7 @@ public abstract class TunableParameters<T> extends AbstractParameters implements
             JSONObject rawData = (JSONObject) jsonParser.parse(reader);
             loadFromJSON(params, rawData);
         } catch (Exception e) {
-            throw new AssertionError(e.getClass().toString() + " : " + e.getMessage() + " : problem loading TunableParameters from file " + filename);
+            throw new AssertionError(e.getClass() + " : " + e.getMessage() + " : problem loading TunableParameters from file " + filename);
         }
     }
 

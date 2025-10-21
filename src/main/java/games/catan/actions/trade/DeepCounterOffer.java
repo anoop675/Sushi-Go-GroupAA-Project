@@ -131,8 +131,7 @@ public class DeepCounterOffer extends AbstractAction implements IExtendedSequenc
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepCounterOffer)) return false;
-        DeepCounterOffer that = (DeepCounterOffer) o;
+        if (!(o instanceof DeepCounterOffer that)) return false;
         return player == that.player && execute == that.execute && nOffered == that.nOffered && nRequested == that.nRequested && stage == that.stage && choice == that.choice;
     }
 

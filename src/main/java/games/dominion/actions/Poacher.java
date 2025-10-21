@@ -74,8 +74,7 @@ public class Poacher extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Poacher) {
-            Poacher other = (Poacher) obj;
+        if(obj instanceof Poacher other) {
             return super.equals(obj) && other.cardsToDiscard == cardsToDiscard &&
                     other.cardsDiscarded == cardsDiscarded;
         }

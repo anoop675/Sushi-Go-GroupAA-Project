@@ -12,7 +12,7 @@ public interface Requirement<T> {
         - minimum N tags on cards played by player
      */
     boolean testCondition(T o);
-    boolean isMax();
+    boolean max();
     boolean appliesWhenAnyPlayer();
     String getDisplayText(TMGameState gs);
     String getReasonForFailure(TMGameState gs);

@@ -44,8 +44,7 @@ public class AddGridCellEdge extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AddGridCellEdge)) return false;
-        AddGridCellEdge that = (AddGridCellEdge) o;
+        if (!(o instanceof AddGridCellEdge that)) return false;
         return Objects.equals(edge, that.edge);
     }
 

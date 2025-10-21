@@ -25,7 +25,7 @@ public class GSPlantations extends JComponent {
         this.gs = gs;
         this.gui = gui;
         ToolTipManager.sharedInstance().registerComponent(this);
-        size = new Dimension((int)(plantationSize * (((PuertoRicoParameters)gs.getGameParameters()).extraVisiblePlantations + gs.getNPlayers() + 3.5)), plantationSize + pad*2);
+        size = new Dimension((int)(plantationSize * (((PuertoRicoParameters)gs.getGameParameters()).extraVisiblePlantations + gs.getNPlayers(playerId) + 3.5)), plantationSize + pad*2);
 
         addMouseListener(new MouseAdapter() {
             @Override

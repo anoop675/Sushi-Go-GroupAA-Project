@@ -17,11 +17,11 @@ import java.util.Random;
 public class RandomTestPlayer extends AbstractPlayer {
 
     // Random generator for action selection
-    private Random random;
+    private final Random random;
     // Record of branching factor
-    private TAGNumericStatSummary bf;
+    private final TAGNumericStatSummary bf;
     // Scores observed during the game
-    private TAGNumericStatSummary scores;
+    private final TAGNumericStatSummary scores;
 
     public RandomTestPlayer() {
         this(new Random());

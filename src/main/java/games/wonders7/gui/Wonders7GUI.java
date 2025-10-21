@@ -109,7 +109,7 @@ public class Wonders7GUI extends AbstractGUIManager {
     protected void _update(AbstractPlayer player, AbstractGameState gameState) {
         if (gameState.isNotTerminal()) {
             ageLabel.setText("Current age: " + ((Wonders7GameState)gameState).getCurrentAge());
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 // Highlight active player
                 if (i == gameState.getCurrentPlayer()) {
                     playerViews[i].setBorder(playerViewBordersHighlight[i]);
@@ -118,7 +118,7 @@ public class Wonders7GUI extends AbstractGUIManager {
                 }
             }
         } else {
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 // Highlight win/lose player
                 if (gameState.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME) {
                     playerViews[i].setBorder(playerViewBordersHighlightWin[i]);

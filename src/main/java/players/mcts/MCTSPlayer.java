@@ -4,7 +4,6 @@ import core.AbstractForwardModel;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
-import core.interfaces.IActionHeuristic;
 import evaluation.listeners.IGameListener;
 import core.interfaces.IStateHeuristic;
 import evaluation.metrics.Event;
@@ -14,8 +13,6 @@ import utilities.Pair;
 import utilities.Utils;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -99,9 +96,10 @@ public class MCTSPlayer extends AbstractPlayer implements IAnyTimePlayer, IHasSt
         // We retain this, but update the root nodes
         // We could have run through the history once...but more robust to do this once per player
         // and reuse the code for SelfOnly
-        SingleTreeNode[] newRoots = new SingleTreeNode[state.getNPlayers()];
+        int playerId = 0;
+        SingleTreeNode[] newRoots = new SingleTreeNode[state.getNPlayers(playerId)];
 
-        for (int p = 0; p < state.getNPlayers(); p++) {
+        for (int p = 0; p < state.getNPlayers(playerId); p++) {
             SingleTreeNode oldRoot = mtRoot.roots[p];
             if (oldRoot == null)
                 continue;

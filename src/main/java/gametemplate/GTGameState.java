@@ -7,8 +7,6 @@ import games.GameType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * <p>The game state encapsulates all game information. It is a data-only class, with game functionality present
@@ -67,7 +65,7 @@ public class GTGameState extends AbstractGameState {
      */
     @Override
     protected GTGameState _copy(int playerId) {
-        GTGameState copy = new GTGameState(gameParameters, getNPlayers());
+        GTGameState copy = new GTGameState(gameParameters, getNPlayers(playerId));
         // TODO: deep copy all variables to the new game state.
         return copy;
     }

@@ -71,8 +71,7 @@ public class VirusGameParameters extends TunableParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof VirusGameParameters)) return false;
-        VirusGameParameters that = (VirusGameParameters) o;
+        if (!(o instanceof VirusGameParameters that)) return false;
         return nCardsPerOrgan == that.nCardsPerOrgan &&
                 nCardsDiscardLatexGlove == that.nCardsDiscardLatexGlove &&
                 nCardsPlayerHand == that.nCardsPlayerHand &&

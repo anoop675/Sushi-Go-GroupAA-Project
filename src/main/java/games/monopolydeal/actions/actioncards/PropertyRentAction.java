@@ -7,7 +7,6 @@ import core.interfaces.IExtendedSequence;
 import games.monopolydeal.MonopolyDealGameState;
 import games.monopolydeal.actions.ActionState;
 import games.monopolydeal.cards.CardType;
-import games.monopolydeal.cards.MonopolyDealCard;
 import games.monopolydeal.cards.PropertySet;
 import games.monopolydeal.cards.SetType;
 
@@ -123,7 +122,7 @@ public class PropertyRentAction extends AbstractAction implements IExtendedSeque
     }
     @Override
     public boolean execute(AbstractGameState gs) {
-        collectedRent = new boolean[gs.getNPlayers()];
+        collectedRent = new boolean[gs.getNPlayers(playerId)];
         collectedRent[playerID] = true;
         // Discard card used
         MonopolyDealGameState MDGS = (MonopolyDealGameState) gs;

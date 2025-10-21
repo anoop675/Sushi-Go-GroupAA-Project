@@ -103,7 +103,7 @@ public class DescentForwardModel extends StandardForwardModel {
         List<Archetype> archetypes = new ArrayList<>(List.of(Archetype.values()));
         Random rnd = dgs.getRnd();
         dgs.heroes = new ArrayList<>();
-        for (int i = 1; i < Math.max(3, dgs.getNPlayers()); i++) {
+        for (int i = 1; i < Math.max(3, dgs.getNPlayers(playerId)); i++) {
 
             Hero figure;
             if (descentParameters.heroesToBePlayed.size() >= i) {
@@ -125,7 +125,7 @@ public class DescentForwardModel extends StandardForwardModel {
             Archetype archetype = Archetype.valueOf(archetypeName);
             archetypes.remove(archetype);
 
-            if (dgs.getNPlayers() == 2) {
+            if (dgs.getNPlayers(playerId) == 2) {
                 // In 2-player games, 1 player controls overlord, the other 2 heroes
                 figure.setOwnerId(1 - dgs.overlordPlayer);
             } else {
@@ -1139,13 +1139,13 @@ public class DescentForwardModel extends StandardForwardModel {
 
         switch (gameResult) {
             case TIMEOUT:
-                for (int i = 0; i < dgs.getNPlayers(); i++) {
+                for (int i = 0; i < dgs.getNPlayers(playerId); i++) {
                     dgs.setPlayerResult(GameResult.TIMEOUT, i);
                 }
                 break;
 
             case WIN_GAME:
-                for (int i = 0; i < dgs.getNPlayers(); i++) {
+                for (int i = 0; i < dgs.getNPlayers(playerId); i++) {
                     if (i == dgs.getOverlordPlayer()) {
                         dgs.setPlayerResult(GameResult.LOSE_GAME, i);
                     } else {
@@ -1155,7 +1155,7 @@ public class DescentForwardModel extends StandardForwardModel {
                 break;
 
             case LOSE_GAME:
-                for (int i = 0; i < dgs.getNPlayers(); i++) {
+                for (int i = 0; i < dgs.getNPlayers(playerId); i++) {
                     if (i != dgs.getOverlordPlayer()) {
                         dgs.setPlayerResult(GameResult.LOSE_GAME, i);
                     } else {
@@ -1166,7 +1166,7 @@ public class DescentForwardModel extends StandardForwardModel {
 
             default:
 //                System.out.println("Game ended in an unknown way! + " + gameResult);
-                for (int i = 0; i < dgs.getNPlayers(); i++) {
+                for (int i = 0; i < dgs.getNPlayers(playerId); i++) {
                     dgs.setPlayerResult(GameResult.DRAW_GAME, i);
                 }
                 break;
@@ -1741,11 +1741,8 @@ public class DescentForwardModel extends StandardForwardModel {
             // If that is the case, we do not spawn a Master
             // Otherwise, there is always 1 Master
 
-            boolean spawnMaster = true;
+            boolean spawnMaster = dgs.getNPlayers(playerId) > 3 || monsterSetup[1] != 0;
 
-            if ((dgs.getNPlayers() <= 3 && monsterSetup[1] == 0)) {
-                spawnMaster = false;
-            }
             Monster master = monsterDef.get(act + "-master").copyNewID();
             master.getNActionsExecuted().setMaximum(nActionsPerFigure);
             master.setProperties(monsterDef.get(act + "-master").getProperties());
@@ -1796,7 +1793,7 @@ public class DescentForwardModel extends StandardForwardModel {
                     nMinions = monsterSetup[monsterSetup.length - 1];
                 } else {
                     // Respect group limits
-                    nMinions = monsterSetup[Math.max(0, dgs.getNPlayers() - 3)];
+                    nMinions = monsterSetup[Math.max(0, dgs.getNPlayers(playerId) - 3)];
                 }
             } else {
                 // Format name:#minions

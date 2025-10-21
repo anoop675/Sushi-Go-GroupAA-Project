@@ -27,8 +27,7 @@ public class WarehouseStorage extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof WarehouseStorage) {
-            WarehouseStorage other = (WarehouseStorage) obj;
+        if (obj instanceof WarehouseStorage other) {
             return this.storedCrop == other.storedCrop;
         }
         return false;

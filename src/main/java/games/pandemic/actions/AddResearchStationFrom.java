@@ -40,9 +40,8 @@ public class AddResearchStationFrom extends AddResearchStation {
     public boolean equals(Object other)
     {
         if (this == other) return true;
-        if(other instanceof AddResearchStationFrom)
+        if(other instanceof AddResearchStationFrom otherAction)
         {
-            AddResearchStationFrom otherAction = (AddResearchStationFrom) other;
             return fromCity.equals(otherAction.fromCity);
 
         }else return false;

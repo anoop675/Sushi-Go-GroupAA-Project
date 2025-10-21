@@ -71,7 +71,7 @@ public abstract class TunableStateFeatures extends TunableParameters implements 
                 if (other.active[i] != active[i])
                     return false;
             }
-            return Arrays.equals(allNames, ((TunableStateFeatures) o).allNames);
+            return Arrays.equals(allNames, other.allNames);
         }
         return false;
     }

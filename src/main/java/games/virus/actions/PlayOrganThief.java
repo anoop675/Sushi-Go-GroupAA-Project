@@ -11,9 +11,9 @@ import games.virus.components.VirusBody;
 import java.util.Objects;
 
 public class PlayOrganThief extends PlayVirusCard implements IPrintable {
-    private int                 otherPlayerId;
-    private int                 otherBodyId;
-    private VirusCard.OrganType organ;
+    private final int                 otherPlayerId;
+    private final int                 otherBodyId;
+    private final VirusCard.OrganType organ;
 
     public PlayOrganThief(int deckFrom, int deckTo, int fromIndex, int bodyId, int otherBodyId, int otherPlayerId, VirusCard.OrganType organ) {
         super(deckFrom, deckTo, fromIndex, bodyId);
@@ -49,9 +49,8 @@ public class PlayOrganThief extends PlayVirusCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayOrganThief)) return false;
+        if (!(o instanceof PlayOrganThief that)) return false;
         if (!super.equals(o)) return false;
-        PlayOrganThief that = (PlayOrganThief) o;
         return otherPlayerId == that.otherPlayerId && otherBodyId == that.otherBodyId && organ == that.organ;
     }
 

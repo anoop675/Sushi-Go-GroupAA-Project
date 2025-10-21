@@ -70,9 +70,8 @@ public class SGParameters extends AbstractParameters {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SGParameters)) return false;
+        if (!(o instanceof SGParameters that)) return false;
         if (!super.equals(o)) return false;
-        SGParameters that = (SGParameters) o;
         return nRounds == that.nRounds && valueMakiMost == that.valueMakiMost && valueMakiSecond == that.valueMakiSecond && valueTempuraPair == that.valueTempuraPair && valueSashimiTriple == that.valueSashimiTriple && valueSquidNigiri == that.valueSquidNigiri && valueSalmonNigiri == that.valueSalmonNigiri && valueEggNigiri == that.valueEggNigiri && multiplierWasabi == that.multiplierWasabi && valuePuddingMost == that.valuePuddingMost && valuePuddingLeast == that.valuePuddingLeast && nCards == that.nCards && Objects.equals(dataPath, that.dataPath) && Objects.equals(nCardsPerType, that.nCardsPerType) && Arrays.equals(valueDumpling, that.valueDumpling);
     }
 

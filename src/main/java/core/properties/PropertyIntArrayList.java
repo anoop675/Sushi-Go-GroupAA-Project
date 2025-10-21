@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PropertyIntArrayList extends Property
 {
-    private ArrayList<Integer> values;
+    private final ArrayList<Integer> values;
 
     public PropertyIntArrayList(String hashString, JSONArray values)
     {

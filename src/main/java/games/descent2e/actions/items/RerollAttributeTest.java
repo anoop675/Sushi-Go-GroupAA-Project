@@ -69,8 +69,7 @@ public class RerollAttributeTest extends DescentAction {
         }
         IExtendedSequence action =  dgs.currentActionInProgress();
         if (action == null) return false;
-        if (action instanceof AttributeTest) {
-            AttributeTest test = (AttributeTest) action;
+        if (action instanceof AttributeTest test) {
             // Reroll should only be available if they failed the test
             // There is no point in exhausting the card if they passed
             return !test.getSkip() && test.getTestingFigure() == figureID && test.getPhase() == AttributeTest.TestPhase.POST_TEST_ROLL && !test.getResult();

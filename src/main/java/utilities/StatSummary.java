@@ -60,7 +60,7 @@ public class StatSummary {
             this.mean = this.sum / (double)this.n;
             double num = this.sumsq - (double)this.n * this.mean * this.mean;
             if (num < (double)0.0F) {
-                num = (double)0.0F;
+                num = 0.0F;
             }
 
             this.sd = Math.sqrt(num / (double)(this.n - 1));
@@ -82,7 +82,7 @@ public class StatSummary {
     }
 
     public double stdErr() {
-        return this.sd() / Math.sqrt((double)this.n);
+        return this.sd() / Math.sqrt(this.n);
     }
 
     public void add(StatSummary ss) {

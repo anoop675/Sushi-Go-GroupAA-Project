@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 
 public class Connect4StateVector implements IStateFeatureVector, IStateKey {
     // assume the grid is 8x8 ... if not, write a new StateVector
-    private final String[] names = (String[]) IntStream.range(0, 8).boxed().flatMap(row ->
+    private final String[] names = IntStream.range(0, 8).boxed().flatMap(row ->
             IntStream.range(0, 3).mapToObj(col -> String.format("%d:%d", row, col))
     ).toArray(String[]::new);
 

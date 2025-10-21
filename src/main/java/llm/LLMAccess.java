@@ -253,7 +253,7 @@ public class LLMAccess {
 
         try {
             String rawStringResponse = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
-            if (!rawStringResponse.substring(0, 1).equals("{")) {
+            if (rawStringResponse.charAt(0) != '{') {
                 System.out.println("Error in response:");
                 System.out.println(rawStringResponse);
             } else {

@@ -60,8 +60,7 @@ public class BuildStage extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BuildStage)) return false;
-        BuildStage that = (BuildStage) o;
+        if (!(o instanceof BuildStage that)) return false;
         return player == that.player && cardType == that.cardType;
     }
 

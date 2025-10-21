@@ -221,7 +221,7 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
     }
 
     public boolean isPlayerStillToAct() {
-        for (int p = 0; p < getNPlayers(); p++) {
+        for (int p = 0; p < getNPlayers(playerId); p++) {
             if (playerFold[p] || playerAllIn[p] || getPlayerResults()[p] == LOSE_GAME)
                 continue;
             if (playerNeedsToCall[p] || !playerActStreet[p])
@@ -232,15 +232,12 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
 
     public boolean isRoundOver() {
         int stillAlive = 0;
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (getPlayerResults()[i] != LOSE_GAME && !playerFold[i] && !playerAllIn[i]) {
                 stillAlive++;
             }
         }
-        if (stillAlive <= 1) {
-            return true;
-        }
-        return false;
+        return stillAlive <= 1;
     }
 
     public int getNextActingPlayer(int fromPlayer, int direction) {
@@ -249,7 +246,7 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
         while ((playerFold[next] || playerAllIn[next] || getPlayerResults()[next] == LOSE_GAME)) {
             next = (nPlayers + next + direction) % nPlayers;
             nTries++;
-            if (nTries > getNPlayers()) {
+            if (nTries > getNPlayers(playerId)) {
                 return -1;
             }
         }
@@ -266,7 +263,7 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
 
     public void getPlayerMustCall(int playerId) {
         // Others can't check
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (i != playerId && !playerFold[i] && !playerAllIn[i] && getPlayerResults()[i] != LOSE_GAME) {
                 playerNeedsToCall[i] = true;
             }
@@ -275,30 +272,30 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        PokerGameState copy = new PokerGameState(gameParameters.copy(), getNPlayers());
+        PokerGameState copy = new PokerGameState(gameParameters.copy(), getNPlayers(playerId));
         copy.communityCards = communityCards.copy();
         copy.moneyPots = new ArrayList<>();
         for (MoneyPot pot : moneyPots) {
             copy.moneyPots.add(pot.copy());
         }
         copy.playerDecks = new ArrayList<>();
-        copy.playerMoney = new Counter[getNPlayers()];
-        copy.playerBet = new Counter[getNPlayers()];
-        for (int i = 0; i < getNPlayers(); i++) {
+        copy.playerMoney = new Counter[getNPlayers(playerId)];
+        copy.playerBet = new Counter[getNPlayers(playerId)];
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             copy.playerDecks.add(playerDecks.get(i).copy());
             copy.playerMoney[i] = playerMoney[i].copy();
             copy.playerBet[i] = playerBet[i].copy();
         }
         copy.drawDeck = drawDeck.copy();
         if (getCoreGameParameters().partialObservable && playerId != -1) {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     copy.drawDeck.add(copy.playerDecks.get(i));
                     copy.playerDecks.get(i).clear();
                 }
             }
             copy.drawDeck.shuffle(redeterminisationRnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     for (int j = 0; j < playerDecks.get(i).getSize(); j++) {
                         copy.playerDecks.get(i).add(copy.drawDeck.draw());
@@ -331,7 +328,7 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
             for (Component c : drawDeck.getComponents()) {
                 add(c.getComponentID());
             }
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     add(playerDecks.get(i).getComponentID());
                     for (Component c : playerDecks.get(i).getComponents()) {
@@ -345,9 +342,8 @@ public class PokerGameState extends AbstractGameState implements IPrintable {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PokerGameState)) return false;
+        if (!(o instanceof PokerGameState that)) return false;
         if (!super.equals(o)) return false;
-        PokerGameState that = (PokerGameState) o;
         return bet == that.bet && Objects.equals(playerDecks, that.playerDecks) &&
                 Arrays.equals(playerMoney, that.playerMoney) &&
                 Arrays.equals(playerBet, that.playerBet) && Objects.equals(drawDeck, that.drawDeck)

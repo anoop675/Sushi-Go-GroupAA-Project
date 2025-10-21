@@ -55,8 +55,7 @@ public class GainCard extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof GainCard) {
-            GainCard other = (GainCard) obj;
+        if (obj instanceof GainCard other) {
             return other.cardType == cardType
                     && other.buyingPlayer == buyingPlayer
                     && other.destinationDeck == destinationDeck;

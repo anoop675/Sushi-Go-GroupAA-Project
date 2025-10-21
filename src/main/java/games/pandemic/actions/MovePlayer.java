@@ -77,9 +77,8 @@ public class MovePlayer extends AbstractAction {
     public boolean equals(Object other)
     {
         if (this == other) return true;
-        if(other instanceof MovePlayer)
+        if(other instanceof MovePlayer otherAction)
         {
-            MovePlayer otherAction = (MovePlayer) other;
             return destination.equals(otherAction.destination) && playerToMove == otherAction.playerToMove;
 
         }else return false;

@@ -157,7 +157,7 @@ public class PandemicForwardModel extends AbstractRuleBasedForwardModel {
 
         // For each player, initialize their own areas: they get a player hand and a player card
         int capacity = pp.maxCardsPerPlayer;
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             Area playerArea = new Area(i, "Player Area");
             Deck<Card> playerHand = new Deck<>("Player Hand", VISIBLE_TO_ALL);
             playerHand.setOwnerId(i);
@@ -245,12 +245,12 @@ public class PandemicForwardModel extends AbstractRuleBasedForwardModel {
         }
 
         // Give players cards
-        int nCardsPlayer = pp.nCardsPerPlayer.get(state.getNPlayers());
+        int nCardsPlayer = pp.nCardsPerPlayer.get(state.getNPlayers(playerId));
         playerRoles.shuffle(firstState.getRnd());
         long maxPop = 0;
         int startingPlayer = -1;
 
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             // Draw a player card
             Card c = null;
             // Ugly code, but easier for setting parameters and optimisation
@@ -375,7 +375,7 @@ public class PandemicForwardModel extends AbstractRuleBasedForwardModel {
 
     @Override
     protected void endGame(AbstractGameState gameState) {
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             gameState.setPlayerResult(gameState.getGameStatus(), i);
         }
         if (gameState.getCoreGameParameters().verbose) {

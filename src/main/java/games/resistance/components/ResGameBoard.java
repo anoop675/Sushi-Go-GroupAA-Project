@@ -38,9 +38,8 @@ public class ResGameBoard extends Component {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResGameBoard)) return false;
+        if (!(o instanceof ResGameBoard other)) return false;
         if (!super.equals(o)) return false;
-        ResGameBoard other = (ResGameBoard) o;
         return Arrays.equals(missionSuccessValues, other.missionSuccessValues);
     }
 

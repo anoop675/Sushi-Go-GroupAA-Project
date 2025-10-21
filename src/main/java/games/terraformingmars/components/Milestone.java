@@ -33,9 +33,8 @@ public class Milestone extends Award {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Milestone)) return false;
+        if (!(o instanceof Milestone milestone)) return false;
         if (!super.equals(o)) return false;
-        Milestone milestone = (Milestone) o;
         return min == milestone.min;
     }
 

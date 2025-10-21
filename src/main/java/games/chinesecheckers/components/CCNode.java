@@ -18,9 +18,9 @@ public class CCNode extends Component {
     private int x;
     private int y;
 
-    private List<CCNode> neighbours;  // Neighbours of this board node
-    private int maxNeighbours = 6;  // Maximum number of neighbours for this board node
-    private int[] neighboursBySide;// Neighbours by side
+    private final List<CCNode> neighbours;  // Neighbours of this board node
+    private final int maxNeighbours = 6;  // Maximum number of neighbours for this board node
+    private final int[] neighboursBySide;// Neighbours by side
 
 
     public CCNode() {
@@ -148,7 +148,7 @@ public class CCNode extends Component {
         sb.append("{id: " + componentID + "; maxNeighbours: " + maxNeighbours + "; ");
         for (int prop_key : properties.keySet()) {
             Property prop = properties.get(prop_key);
-            sb.append(prop.getHashString() + ": " + prop.toString() + "; ");
+            sb.append(prop.getHashString() + ": " + prop + "; ");
         }
         return sb.toString();
     }

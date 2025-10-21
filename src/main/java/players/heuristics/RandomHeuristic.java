@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class RandomHeuristic implements IActionHeuristic {
 
-    private Random rnd;
+    private final Random rnd;
 
     public RandomHeuristic(int seed) {
         rnd = new Random(seed);

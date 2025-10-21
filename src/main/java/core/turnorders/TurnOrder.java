@@ -259,8 +259,9 @@ public abstract class TurnOrder {
     public final void endGame(AbstractGameState gs) {
         gs.setGameStatus(CoreConstants.GameResult.GAME_END);
         // If we have more than one person in Ordinal position of 1, then this is a draw
-        boolean drawn = IntStream.range(0, gs.getNPlayers()).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
-        for (int p = 0; p < gs.getNPlayers(); p++) {
+        int playerId = 0;
+        boolean drawn = IntStream.range(0, gs.getNPlayers(playerId)).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
+        for (int p = 0; p < gs.getNPlayers(playerId); p++) {
             int o = gs.getOrdinalPosition(p);
             if (o == 1 && drawn)
                 gs.setPlayerResult(DRAW_GAME, p);

@@ -21,7 +21,7 @@ public class Raise extends AbstractAction implements IPrintable {
     public boolean execute(AbstractGameState gameState) {
         PokerGameState pgs = (PokerGameState) gameState;
         int biggestBet = 0;
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             if (pgs.getPlayerBet()[i].getValue() > biggestBet) biggestBet = pgs.getPlayerBet()[i].getValue();
         }
 
@@ -49,8 +49,7 @@ public class Raise extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Raise)) return false;
-        Raise raise = (Raise) o;
+        if (!(o instanceof Raise raise)) return false;
         return playerId == raise.playerId && multiplier == raise.multiplier;
     }
 

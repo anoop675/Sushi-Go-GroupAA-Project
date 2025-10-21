@@ -332,8 +332,7 @@ public class PuertoRicoGameState extends AbstractGameState {
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof PuertoRicoGameState) {
-            PuertoRicoGameState other = (PuertoRicoGameState) o;
+        if (o instanceof PuertoRicoGameState other) {
             return ships.equals(other.ships) &&
                     plantationDeck.equals(other.plantationDeck) &&
                     visiblePlantations.equals(other.visiblePlantations) &&
@@ -362,20 +361,19 @@ public class PuertoRicoGameState extends AbstractGameState {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ships.hashCode()).append("|");
-        sb.append(Objects.hash(plantationDiscards, plantationDeck)).append("|");
-        sb.append(playerBoards.hashCode()).append("|");
-        sb.append(visiblePlantations.hashCode()).append("|");
-        sb.append(currentRole).append("|");
-        sb.append(rolesAvailable.hashCode()).append("|");
-        sb.append(cropSupply.hashCode()).append("|");
-        sb.append(Objects.hash(colonistsInSupply, colonistsOnShip, gameEndTriggered, vpSupply)).append("|");
-        sb.append(super.hashCode()).append("|");
-        sb.append(moneyOnRoles.hashCode()).append("|");
-        sb.append(soldInMarket.hashCode()).append("|");
-        sb.append(quarries.hashCode()).append("|");
-        sb.append(buildingsAvailable.hashCode()).append("|");
-        return sb.toString();
+        String sb = ships.hashCode() + "|" +
+                Objects.hash(plantationDiscards, plantationDeck) + "|" +
+                playerBoards.hashCode() + "|" +
+                visiblePlantations.hashCode() + "|" +
+                currentRole + "|" +
+                rolesAvailable.hashCode() + "|" +
+                cropSupply.hashCode() + "|" +
+                Objects.hash(colonistsInSupply, colonistsOnShip, gameEndTriggered, vpSupply) + "|" +
+                super.hashCode() + "|" +
+                moneyOnRoles.hashCode() + "|" +
+                soldInMarket.hashCode() + "|" +
+                quarries.hashCode() + "|" +
+                buildingsAvailable.hashCode() + "|";
+        return sb;
     }
 }

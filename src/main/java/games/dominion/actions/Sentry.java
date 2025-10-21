@@ -154,8 +154,7 @@ public class Sentry extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Sentry) {
-            Sentry other = (Sentry) obj;
+        if (obj instanceof Sentry other) {
             return super.equals(obj) && other.completedStage == completedStage && other.topCards[0] == topCards[0] && other.topCards[1] == topCards[1] &&
                     other.decisions[0] == decisions[0] && other.decisions[1] == decisions[1];
         }

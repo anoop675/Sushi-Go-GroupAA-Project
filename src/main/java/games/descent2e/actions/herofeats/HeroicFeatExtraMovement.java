@@ -29,7 +29,7 @@ public class HeroicFeatExtraMovement extends DescentAction implements IExtendedS
         POST_HERO_MOVE,
         PRE_ALLY_MOVE,
         POST_ALLY_MOVE,
-        ALL_DONE;
+        ALL_DONE
     }
 
     HeroicFeatExtraMovement.ExtraMovePhase phase = NOT_STARTED;
@@ -220,8 +220,7 @@ public class HeroicFeatExtraMovement extends DescentAction implements IExtendedS
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof HeroicFeatExtraMovement) {
-            HeroicFeatExtraMovement other = (HeroicFeatExtraMovement) obj;
+        if (obj instanceof HeroicFeatExtraMovement other) {
             return other.heroID == heroID && other.allyID == allyID &&
                     other.phase == phase &&
                     other.heroPlayer == heroPlayer && other.allyPlayer == allyPlayer &&

@@ -141,8 +141,7 @@ public class DominionHeuristic extends TunableParameters implements IStateHeuris
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof DominionHeuristic) {
-            DominionHeuristic other = (DominionHeuristic) o;
+        if (o instanceof DominionHeuristic other) {
             return other.victoryPoints == victoryPoints && other.buysLeft == buysLeft && other.actionCards == actionCards &&
                     other.treasureInHand == treasureInHand && other.treasureValue == other.treasureValue &&
                     other.actionCardsInHand == actionCardsInHand && other.actionsLeft == actionsLeft &&

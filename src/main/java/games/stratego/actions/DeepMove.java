@@ -85,8 +85,7 @@ public class DeepMove extends AbstractAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepMove)) return false;
-        DeepMove deepMove = (DeepMove) o;
+        if (!(o instanceof DeepMove deepMove)) return false;
         return pieceID == deepMove.pieceID && playerID == deepMove.playerID && executed == deepMove.executed && Objects.equals(position, deepMove.position) && Objects.equals(actionSpace, deepMove.actionSpace);
     }
 

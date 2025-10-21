@@ -225,9 +225,8 @@ public class ColtExpressTurnOrder extends TurnOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ColtExpressTurnOrder)) return false;
+        if (!(o instanceof ColtExpressTurnOrder that)) return false;
         if (!super.equals(o)) return false;
-        ColtExpressTurnOrder that = (ColtExpressTurnOrder) o;
         return firstPlayerOfRound == that.firstPlayerOfRound &&
                 direction == that.direction &&
                 firstAction == that.firstAction &&

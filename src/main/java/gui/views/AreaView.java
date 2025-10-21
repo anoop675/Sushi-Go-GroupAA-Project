@@ -15,16 +15,16 @@ import static gui.GUI.*;
 // TODO: snap component to deck (add component to deck + dependency) + remove on extract
 // Long press move deck/area, short press move component in deck/area
 public class AreaView extends ComponentView {
-    private HashMap<Integer, Rectangle> drawMap;  // Holds references to all the rectangles to be drawn, from position (0,0)
-    private HashMap<Integer, Integer> dependencies;  // Dependencies of components to other components (ID -> ID mapping), e.g. cards to parent decks
+    private final HashMap<Integer, Rectangle> drawMap;  // Holds references to all the rectangles to be drawn, from position (0,0)
+    private final HashMap<Integer, Integer> dependencies;  // Dependencies of components to other components (ID -> ID mapping), e.g. cards to parent decks
 
     private Deck<? extends Component> deckHighlight;  // Top deck being highlighted, contents can be displayed in GUI
 
-    private ArrayList<Map.Entry<Integer, Rectangle>> dragging;  // A list of non-dependent rectangles currently getting dragged on the screen
-    private ArrayList<Map.Entry<Integer, Rectangle>> draggingDependent;  // A list of dependent rectangles currently getting dragged on the screen
+    private final ArrayList<Map.Entry<Integer, Rectangle>> dragging;  // A list of non-dependent rectangles currently getting dragged on the screen
+    private final ArrayList<Map.Entry<Integer, Rectangle>> draggingDependent;  // A list of dependent rectangles currently getting dragged on the screen
     private Point selectionStart, selectionEnd;  // If selecting an area on the screen, these define the points where the selection started, and where it ends
     private Point initialClick;  // Initial point clicked in a drag motion
-    private HashMap<Integer, Point> translation;  // Translations applied to rectangles after dragging motions
+    private final HashMap<Integer, Point> translation;  // Translations applied to rectangles after dragging motions
 
     AbstractGameState gs;
 

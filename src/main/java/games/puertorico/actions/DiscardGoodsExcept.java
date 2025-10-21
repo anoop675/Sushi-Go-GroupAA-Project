@@ -38,8 +38,7 @@ public class DiscardGoodsExcept extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof DiscardGoodsExcept) {
-            DiscardGoodsExcept other = (DiscardGoodsExcept) obj;
+        if (obj instanceof DiscardGoodsExcept other) {
             return crop == other.crop;
         }
         return false;

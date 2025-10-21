@@ -83,7 +83,7 @@ public class PokerGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 3.5;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -275,7 +275,7 @@ public class PokerGUIManager extends AbstractGUIManager {
             if (pgs.getRoundCounter() != gameState.getRoundCounter()) {
                 // New round
                 // Paint final state of previous round, showing all hands
-                for (int i = 0; i < pgs.getNPlayers(); i++) {
+                for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                     playerHands[i].setFront(true);
                     // Highlight fold and eliminated players
                     if (pgs.getPlayerResults()[i] == CoreConstants.GameResult.LOSE_GAME) {
@@ -317,7 +317,7 @@ public class PokerGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             pgs = (PokerGameState)gameState.copy();
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update(pgs);
                 if (i == gameState.getCurrentPlayer() && coreParameters.alwaysDisplayCurrentPlayer
                         || humanPlayerIds.contains(i)

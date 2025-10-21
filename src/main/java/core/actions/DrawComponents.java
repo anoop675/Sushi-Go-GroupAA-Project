@@ -89,10 +89,9 @@ public class DrawComponents<T extends Component> extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DrawComponents)) {
+        if (!(o instanceof DrawComponents<?> that)) {
             return false;
         }
-        DrawComponents<?> that = (DrawComponents<?>) o;
         return deckFrom == that.deckFrom &&
                 deckTo == that.deckTo &&
                 nComponents == that.nComponents &&
@@ -148,6 +147,6 @@ public class DrawComponents<T extends Component> extends AbstractAction {
 
     @Override
     public void printToConsole() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 }

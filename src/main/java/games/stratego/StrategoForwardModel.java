@@ -75,9 +75,9 @@ public class StrategoForwardModel extends StandardForwardModel implements ITreeA
 
                     List<AbstractAction> pieceActions = piece.calculateMoves(state, actionSpace);
                     if (pieceActions.size() == 0) continue;
-                    if (actionSpace.structure == ActionSpace.Structure.Deep) {
+                    if (actionSpace.structure() == ActionSpace.Structure.Deep) {
                         // Single action to choose the piece, then move for piece is selected sequentially
-                        if (actionSpace.context == ActionSpace.Context.Dependent) {
+                        if (actionSpace.context() == ActionSpace.Context.Dependent) {
                             actions.add(new DeepMove(player, piece.getPiecePosition(), actionSpace));
                         } else {
                             actions.add(new DeepMove(player, piece.getComponentID(), actionSpace));

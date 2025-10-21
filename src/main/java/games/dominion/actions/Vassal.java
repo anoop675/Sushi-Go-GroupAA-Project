@@ -100,8 +100,7 @@ public class Vassal extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Vassal) {
-            Vassal other = (Vassal) obj;
+        if (obj instanceof Vassal other) {
             return super.equals(obj) && other.executed == executed
                                      && other.cardType == cardType;
         }

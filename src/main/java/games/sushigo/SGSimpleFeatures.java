@@ -39,11 +39,11 @@ public class SGSimpleFeatures extends TunableStateFeatures {
         features[5] = sggs.getPlayedCardTypes(SGCard.SGCardType.Wasabi, playerID).getValue();
         features[6] = sggs.getPlayedCardTypes(SGCard.SGCardType.Chopsticks, playerID).getValue();
         if (active[7]) {
-            features[7] = IntStream.range(0, sggs.getNPlayers()).filter(i -> i != playerID)
+            features[7] = IntStream.range(0, sggs.getNPlayers(playerId)).filter(i -> i != playerID)
                     .mapToDouble(i -> sggs.getPlayedCardTypes(SGCard.SGCardType.Maki, i).getValue()).sum();
         }
         if (active[8]) {
-            features[8] = IntStream.range(0, sggs.getNPlayers()).filter(i -> i != playerID)
+            features[8] = IntStream.range(0, sggs.getNPlayers(playerId)).filter(i -> i != playerID)
                     .mapToDouble(i -> sggs.getPlayedCardTypes(SGCard.SGCardType.Pudding, i).getValue()).sum();
         }
         features[9] = sggs.getPlayerHands().get(playerID).getSize();

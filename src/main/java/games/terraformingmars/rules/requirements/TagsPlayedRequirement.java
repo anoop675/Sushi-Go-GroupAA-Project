@@ -36,7 +36,7 @@ public class TagsPlayedRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -104,8 +104,7 @@ public class TagsPlayedRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TagsPlayedRequirement)) return false;
-        TagsPlayedRequirement that = (TagsPlayedRequirement) o;
+        if (!(o instanceof TagsPlayedRequirement that)) return false;
         return nTags == that.nTags && Arrays.equals(tags, that.tags) && Arrays.equals(nMin, that.nMin);
     }
 

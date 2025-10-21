@@ -183,7 +183,7 @@ public class BattleloreGameState extends AbstractGameState {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        BattleloreGameState state = new BattleloreGameState(gameParameters.copy(), getNPlayers());
+        BattleloreGameState state = new BattleloreGameState(gameParameters.copy(), getNPlayers(playerId));
 
         state.gameBoard = gameBoard.copy();
 

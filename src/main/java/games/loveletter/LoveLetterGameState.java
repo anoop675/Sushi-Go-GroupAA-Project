@@ -2,7 +2,6 @@ package games.loveletter;
 
 import core.AbstractParameters;
 import core.AbstractGameState;
-import core.CoreConstants;
 import core.components.Component;
 import core.components.Deck;
 import core.components.PartialObservableDeck;
@@ -70,13 +69,13 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        LoveLetterGameState llgs = new LoveLetterGameState(gameParameters.copy(), getNPlayers());
+        LoveLetterGameState llgs = new LoveLetterGameState(gameParameters.copy(), getNPlayers(playerId));
         llgs.drawPile = drawPile.copy();
         llgs.reserveCards = reserveCards.copy();
         llgs.removedCard = removedCard.copy();
         llgs.playerHandCards = new ArrayList<>();
         llgs.playerDiscardCards = new ArrayList<>();
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             llgs.playerHandCards.add(playerHandCards.get(i).copy());
             llgs.playerDiscardCards.add(playerDiscardCards.get(i).copy());
         }
@@ -86,7 +85,7 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
 
         if (getCoreGameParameters().partialObservable && playerId != -1) {
             // Draw pile, some reserve cards and other player's hand is possibly hidden. Mix all together and draw randoms
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     PartialObservableDeck<LoveLetterCard> deck = llgs.playerHandCards.get(i);
                     for (int j = 0; j < deck.getSize(); j++) {
@@ -98,7 +97,7 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
                 }
             }
             llgs.drawPile.shuffle(redeterminisationRnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     // New random cards
                     PartialObservableDeck<LoveLetterCard> deck = llgs.playerHandCards.get(i);
@@ -128,9 +127,8 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LoveLetterGameState)) return false;
+        if (!(o instanceof LoveLetterGameState that)) return false;
         if (!super.equals(o)) return false;
-        LoveLetterGameState that = (LoveLetterGameState) o;
         return Objects.equals(playerHandCards, that.playerHandCards) &&
                 Objects.equals(playerDiscardCards, that.playerDiscardCards) &&
                 Objects.equals(drawPile, that.drawPile) &&
@@ -250,7 +248,7 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
         // Highest number in hand wins the round
         List<Integer> bestPlayers = new ArrayList<>();
         int bestValue = 0;
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (isCurrentlyActive(i)) {
                 int points = playerHandCards.get(i).peek().cardType.getValue();
                 if (points > bestValue) {

@@ -105,9 +105,8 @@ public class TopCardDecision extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TopCardDecision)) return false;
+        if (!(o instanceof TopCardDecision that)) return false;
         if (!super.equals(o)) return false;
-        TopCardDecision that = (TopCardDecision) o;
         return stage == that.stage && nCardsKept == that.nCardsKept && nCardsLook == that.nCardsLook && nCardsKeep == that.nCardsKeep && buy == that.buy;
     }
 

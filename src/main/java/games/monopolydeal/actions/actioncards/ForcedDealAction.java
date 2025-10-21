@@ -55,7 +55,7 @@ public class ForcedDealAction extends AbstractAction implements IExtendedSequenc
 
         switch (actionState){
             case Target:
-                for(int i=0;i<MDGS.getNPlayers();i++){
+                for(int i = 0; i<MDGS.getNPlayers(playerId); i++){
                     if(playerID!=i)
                         if(MDGS.checkForFreeProperty(i))
                             availableActions.add(new TargetPlayer(i));

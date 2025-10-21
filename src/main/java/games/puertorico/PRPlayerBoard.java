@@ -130,8 +130,7 @@ public class PRPlayerBoard extends Component {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof PRPlayerBoard) {
-            PRPlayerBoard p = (PRPlayerBoard) obj;
+        if (obj instanceof PRPlayerBoard p) {
             return this.plantations.equals(p.plantations) && this.stores.equals(p.stores) && this.vp == p.vp &&
                     buildings.equals(p.buildings) && ownerId == p.ownerId && this.colonistsInSupply == p.colonistsInSupply &&
                     this.doubloons == p.doubloons && this.cropsInWarehouses.equals(p.cropsInWarehouses);

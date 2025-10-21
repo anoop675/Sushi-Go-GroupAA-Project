@@ -96,13 +96,13 @@ public class MonopolyDealGameState extends AbstractGameState {
      */
     @Override
     protected MonopolyDealGameState _copy(int playerId) {
-        MonopolyDealGameState retValue = new MonopolyDealGameState(gameParameters.copy(), getNPlayers());
+        MonopolyDealGameState retValue = new MonopolyDealGameState(gameParameters.copy(), getNPlayers(playerId));
 
         // Placeholder to know how many cards each player had for redrawing cards
-        int[] playerHandSize = new int[getNPlayers()];
+        int[] playerHandSize = new int[getNPlayers(playerId)];
         retValue.drawPile = drawPile.copy();
         // Hidden values
-        for (int p = 0; p < getNPlayers(); p++) {
+        for (int p = 0; p < getNPlayers(playerId); p++) {
             retValue.playerHands.add(playerHands.get(p).copy());
             if (playerId != -1 && getCoreGameParameters().partialObservable && p != playerId) {
                 playerHandSize[p] = retValue.playerHands.get(p).getSize();
@@ -115,14 +115,14 @@ public class MonopolyDealGameState extends AbstractGameState {
         if(playerId != -1 && getCoreGameParameters().partialObservable) {
             retValue.drawPile.shuffle(rnd);
             // Redrawing hidden cards into hands
-            for (int p = 0; p < getNPlayers(); p++) {
+            for (int p = 0; p < getNPlayers(playerId); p++) {
                 if (p != playerId) {
                     retValue.drawCard(p, playerHandSize[p]);
                 }
             }
         }
         // Completely visible values
-        for(int i=0;i<getNPlayers();i++){
+        for(int i = 0; i<getNPlayers(playerId); i++){
             retValue.playerBanks.add(playerBanks.get(i).copy());
             for(int j=0;j<SetType.values().length;j++) {
                 retValue.playerPropertySets.get(i)[j] = playerPropertySets.get(i)[j].copy();
@@ -240,7 +240,8 @@ public class MonopolyDealGameState extends AbstractGameState {
         return false;
     }
     public boolean checkForSlyDeal(int playerID){
-        for(int i=0;i<getNPlayers();i++){
+        int playerId = 0;
+        for(int i = 0; i<getNPlayers(playerId); i++){
             if(i!=playerID && checkForFreeProperty(i))
                 return true;
         }
@@ -264,7 +265,8 @@ public class MonopolyDealGameState extends AbstractGameState {
         return false;
     }
     public boolean checkForDealBreaker(int playerID){
-        for(int i = 0;i <getNPlayers();i++){
+        int playerId = 0;
+        for(int i = 0; i <getNPlayers(playerId); i++){
             if(i!=playerID && playerDealBreaker(i)) return true;
         }
         return false;
@@ -335,7 +337,8 @@ public class MonopolyDealGameState extends AbstractGameState {
 
     public boolean checkForGameEnd() {
         if(deckEmpty) return true;
-        for(int i=0;i<getNPlayers();i++){
+        int playerId = 0;
+        for(int i = 0; i<getNPlayers(playerId); i++){
             if(getGameScore(i)==1.0d) return true;
         }
         return false;

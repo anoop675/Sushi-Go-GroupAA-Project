@@ -24,7 +24,7 @@ public class TakeRandomCard extends AbstractAction {
         if (playerID == gs.getCurrentPlayer()){
             PartialObservableDeck<RootCard> targetHand = currentState.getPlayerHand(targetPlayerID);
             PartialObservableDeck<RootCard> hand = currentState.getPlayerHand(playerID);
-            boolean[] visibility = new boolean[currentState.getNPlayers()];
+            boolean[] visibility = new boolean[currentState.getNPlayers(playerId)];
             visibility[playerID] = true;
             visibility[targetPlayerID] = true;
             if (targetHand.getSize() > 0){

@@ -65,7 +65,7 @@ public class SaboteurGameState extends AbstractGameState {
 
     @Override
     protected SaboteurGameState _copy(int playerId) {
-        SaboteurGameState copy = new SaboteurGameState(gameParameters, getNPlayers());
+        SaboteurGameState copy = new SaboteurGameState(gameParameters, getNPlayers(playerId));
 
         //copying brokenToolsDeck
         copy.toolDeck = new ArrayList<>();
@@ -131,7 +131,7 @@ public class SaboteurGameState extends AbstractGameState {
             }
             // Add known discards back to discard pile (retaining visibility)
             copy.discardDeck.clear();
-            boolean[] visibility = new boolean[getNPlayers()];
+            boolean[] visibility = new boolean[getNPlayers(playerId)];
             visibility[playerId] = true;
             for (SaboteurCard c : knownDiscards) {
                 copy.discardDeck.add(c, visibility);

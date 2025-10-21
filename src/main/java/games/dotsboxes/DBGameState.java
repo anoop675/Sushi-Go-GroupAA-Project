@@ -49,7 +49,7 @@ public class DBGameState extends AbstractGameState {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        DBGameState dbgs = new DBGameState(gameParameters, getNPlayers());
+        DBGameState dbgs = new DBGameState(gameParameters, getNPlayers(playerId));
         dbgs.edges = edges;
         dbgs.cells = cells;
         dbgs.edgeToCellMap = edgeToCellMap;
@@ -87,9 +87,8 @@ public class DBGameState extends AbstractGameState {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DBGameState)) return false;
+        if (!(o instanceof DBGameState that)) return false;
         if (!super.equals(o)) return false;
-        DBGameState that = (DBGameState) o;
         return lastActionDidNotScore == that.lastActionDidNotScore && Objects.equals(heuristic, that.heuristic)
                 && Objects.equals(edges, that.edges) && Objects.equals(cells, that.cells) &&
                 Objects.equals(edgeToCellMap, that.edgeToCellMap) &&

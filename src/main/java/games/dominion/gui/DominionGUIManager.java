@@ -41,7 +41,8 @@ public class DominionGUIManager extends AbstractGUIManager {
             activePlayer = gameState.getCurrentPlayer();
 
             // Find required size of window
-            int nPlayers = gameState.getNPlayers();
+            int playerId = 0;
+            int nPlayers = gameState.getNPlayers(playerId);
             int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : 3);
             double nVertAreas = 3.5;
             this.width = playerAreaWidth * nHorizAreas;
@@ -131,7 +132,8 @@ public class DominionGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             DominionGameState state = (DominionGameState) gameState;
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            int playerId = 0;
+            for (int i = 0; i < gameState.getNPlayers(  playerId); i++) {
                 playerViews[i].update(state);
                 if (i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
                         || i == humanId

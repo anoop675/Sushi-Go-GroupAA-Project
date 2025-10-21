@@ -39,7 +39,7 @@ public class LLStateFeaturesReduced implements IStateFeatureVector {
         }
 
         double maxCardValue = 1 + llgs.getPlayerHandCards().get(playerId).getSize() * getMaxCardValue();
-        double nRequiredTokens = (llgs.getNPlayers() == 2 ? llp.nTokensWin2 : llgs.getNPlayers() == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
+        double nRequiredTokens = (llgs.getNPlayers(playerId) == 2 ? llp.nTokensWin2 : llgs.getNPlayers(playerId) == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
         if (nRequiredTokens < llgs.getGameScore(playerId)) nRequiredTokens = llgs.getGameScore(playerId);
 
         retValue[0] = cardValues / maxCardValue;
@@ -55,15 +55,15 @@ public class LLStateFeaturesReduced implements IStateFeatureVector {
         if (cardTypes.contains(Princess)) retValue[9] = 1.0;
 
         int visibleCards = 0;
-        for (int player = 0; player < llgs.getNPlayers(); player++) {
+        for (int player = 0; player < llgs.getNPlayers(playerId); player++) {
             if (player != playerId) {
                 PartialObservableDeck<LoveLetterCard> deck = llgs.getPlayerHandCards().get(player);
                 visibleCards += (int) IntStream.range(0, deck.getSize()).filter(i -> deck.getVisibilityForPlayer(i, playerId)).count();
             }
         }
-        retValue[10] = visibleCards / (llgs.getNPlayers() - 1.0);
+        retValue[10] = visibleCards / (llgs.getNPlayers(playerId) - 1.0);
 
-        int maxOtherScore = IntStream.range(0, llgs.getNPlayers())
+        int maxOtherScore = IntStream.range(0, llgs.getNPlayers(playerId))
                 .filter(p -> p != playerId)
                 .map(p -> (int) llgs.getGameScore(p)).max().orElseThrow(() -> new AssertionError("??"));
         retValue[11] = (llgs.getGameScore(playerId) - maxOtherScore) / nRequiredTokens;

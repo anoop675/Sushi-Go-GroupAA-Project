@@ -67,18 +67,16 @@ public class RuleBasedPlayer extends AbstractPlayer
 
         AbstractAction selectedAction;
             for (AbstractAction action : actions) {
-                if (action instanceof AttackUnitsAction) {
+                if (action instanceof AttackUnitsAction act) {
                     //Aggressive Gameplay
                     if (playerUnitPower > enemyUnitPower)  {
-                        AttackUnitsAction act = (AttackUnitsAction) action;
                         if (act.GetAttacker(observation).GetUnits().get(0).getTotalStrength() > act.GetDefender(observation).GetUnits().get(0).getTotalStrength()) {
                             return action;
                         }
                     }
                 }
 
-                if (action instanceof PlayCommandCardAction) {
-                    PlayCommandCardAction act = (PlayCommandCardAction) action;
+                if (action instanceof PlayCommandCardAction act) {
                     if (leftAreaPower >= rightAreaPower && leftAreaPower >= middleAreaPower && act.GetCommandType() == CommandCard.CommandType.PatrolLeft) {
                         return action;
                     }

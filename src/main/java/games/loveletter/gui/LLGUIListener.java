@@ -1,6 +1,5 @@
 package games.loveletter.gui;
 
-import core.CoreConstants;
 import core.Game;
 import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
@@ -9,9 +8,7 @@ import games.loveletter.LoveLetterGameState;
 import gui.GamePanel;
 
 import javax.swing.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class LLGUIListener implements IGameListener {
     final LoveLetterForwardModel fm;
@@ -33,7 +30,7 @@ public class LLGUIListener implements IGameListener {
             List<Integer> winners = llgs.getRoundWinners();
 
             // Show all hands
-            for (int i = 0; i < llgs.getNPlayers(); i++) {
+            for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
                 if (llgs.isCurrentlyActive(i))
                     playerHands[i].update(llgs, true);
             }

@@ -50,9 +50,8 @@ public class ReplaceOneCard extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReplaceOneCard)) return false;
+        if (!(o instanceof ReplaceOneCard that)) return false;
         if (!super.equals(o)) return false;
-        ReplaceOneCard that = (ReplaceOneCard) o;
         return deckDraw == that.deckDraw;
     }
 

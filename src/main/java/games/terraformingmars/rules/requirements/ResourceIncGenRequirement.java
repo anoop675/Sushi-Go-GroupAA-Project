@@ -21,7 +21,7 @@ public class ResourceIncGenRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -48,8 +48,7 @@ public class ResourceIncGenRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResourceIncGenRequirement)) return false;
-        ResourceIncGenRequirement that = (ResourceIncGenRequirement) o;
+        if (!(o instanceof ResourceIncGenRequirement that)) return false;
         return resource == that.resource;
     }
 

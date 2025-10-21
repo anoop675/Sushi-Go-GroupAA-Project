@@ -45,9 +45,8 @@ public class ResGameState extends AbstractGameState {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResGameState)) return false;
+        if (!(o instanceof ResGameState that)) return false;
         if (!super.equals(o)) return false;
-        ResGameState that = (ResGameState) o;
         return
                 leaderID == that.leaderID &&
                         Objects.equals(playerHandCards, that.playerHandCards) &&
@@ -111,14 +110,14 @@ public class ResGameState extends AbstractGameState {
 
     @Override
     protected ResGameState _copy(int playerId) {
-        ResGameState copy = new ResGameState(gameParameters.copy(), getNPlayers());
+        ResGameState copy = new ResGameState(gameParameters.copy(), getNPlayers(playerId));
         copy.gameBoard = gameBoard;
         copy.factions = factions;
 
         copy.voteSuccess = voteSuccess;
         copy.failedVoteCounter = failedVoteCounter;
         copy.teamChoice = new ArrayList<>();
-        copy.votingChoice = new ResPlayerCards.CardType[getNPlayers()];
+        copy.votingChoice = new ResPlayerCards.CardType[getNPlayers(playerId)];
         copy.playerHandCards = new ArrayList<>();
         copy.finalTeamChoice = new ArrayList<>();
         copy.gameBoardValues = new ArrayList<>(gameBoardValues);
@@ -129,12 +128,11 @@ public class ResGameState extends AbstractGameState {
         copy.finalTeamChoice = new ArrayList<>(finalTeamChoice);
 
         if (playerId == -1) {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 copy.playerHandCards.add(playerHandCards.get(i));
             }
-            for (int i = 0; i < getNPlayers(); i++) {
-                copy.votingChoice[i] = votingChoice[i];
-            }
+            if (getNPlayers(playerId) >= 0)
+                System.arraycopy(votingChoice, 0, copy.votingChoice, 0, getNPlayers(playerId));
         } else {
             boolean isSpy = playerHandCards.get(playerId).get(2).cardType == ResPlayerCards.CardType.SPY;
             // If the player is a spy, then they know everyone's identity
@@ -143,7 +141,7 @@ public class ResGameState extends AbstractGameState {
             if (!isSpy) {
                 spyAllocation = new LinkedList<>(ResForwardModel.randomiseSpies(factions[1], this, playerId, redeterminisationRnd));
             }
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 //Knowledge of Own Hand/Votes
                 if (i == playerId) {
                     copy.playerHandCards.add(playerHandCards.get(i));
@@ -173,7 +171,7 @@ public class ResGameState extends AbstractGameState {
     }
 
     public void clearVoteChoices() {
-        votingChoice = new ResPlayerCards.CardType[getNPlayers()];
+        votingChoice = new ResPlayerCards.CardType[getNPlayers(playerId)];
     }
     public void addVoteChoice(ResVoting ResVoting, int playerId) {
         votingChoice[playerId] = ResVoting.cardType;

@@ -43,9 +43,8 @@ public class AddResearchStation extends AbstractAction {
     public boolean equals(Object other)
     {
         if (this == other) return true;
-        if(other instanceof AddResearchStation)
+        if(other instanceof AddResearchStation otherAction)
         {
-            AddResearchStation otherAction = (AddResearchStation) other;
             return city.equals(otherAction.city);
 
         }else return false;

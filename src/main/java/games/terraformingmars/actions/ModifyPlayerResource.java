@@ -120,7 +120,7 @@ public class ModifyPlayerResource extends TMModifyCounter implements IExtendedSe
             if (tagToCount != null) {
                 if (any || opponents) {
                     int count = 0;
-                    for (int i = 0; i < gs.getNPlayers(); i++) {
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                         if (opponents && i == player) continue;
                         count += gs.getPlayerCardsPlayedTags()[i].get(tagToCount).getValue();
                     }
@@ -144,7 +144,7 @@ public class ModifyPlayerResource extends TMModifyCounter implements IExtendedSe
                 } else {
                     if (any || opponents) {
                         int count = 0;
-                        for (int i = 0; i < gs.getNPlayers(); i++) {
+                        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                             if (opponents && i == player) continue;
                             count += gs.getPlayerTilesPlaced()[i].get(tileToCount).getValue();
                         }
@@ -177,9 +177,8 @@ public class ModifyPlayerResource extends TMModifyCounter implements IExtendedSe
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModifyPlayerResource)) return false;
+        if (!(o instanceof ModifyPlayerResource that)) return false;
         if (!super.equals(o)) return false;
-        ModifyPlayerResource that = (ModifyPlayerResource) o;
         return production == that.production && targetPlayer == that.targetPlayer && counterResourceProduction == that.counterResourceProduction && any == that.any && opponents == that.opponents && onMars == that.onMars && complete == that.complete && resource == that.resource && Objects.equals(targetPlayerOptions, that.targetPlayerOptions) && counterResource == that.counterResource && tagToCount == that.tagToCount && tileToCount == that.tileToCount;
     }
 
@@ -259,7 +258,7 @@ public class ModifyPlayerResource extends TMModifyCounter implements IExtendedSe
                     }
                 }
             } else {
-                for (int i = 0; i < state.getNPlayers(); i++) {
+                for (int i = 0; i < state.getNPlayers(playerId); i++) {
                     if (!production && change < 0) {
                         for (double k = max; k < 0; k++) {
                             createActions((TMGameState) state, actions, i, k);
@@ -268,7 +267,7 @@ public class ModifyPlayerResource extends TMModifyCounter implements IExtendedSe
                         createActions((TMGameState) state, actions, i, change);
                     }
                 }
-                if (state.getNPlayers() == 1) {
+                if (state.getNPlayers(playerId) == 1) {
                     if (!production && change < 0) {
                         for (double k = max; k < 0; k++) {
                             createActions((TMGameState) state, actions, -3, k);

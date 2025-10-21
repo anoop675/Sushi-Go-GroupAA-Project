@@ -31,7 +31,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         wgs.direction = 1;
 
         // Then fills every player's hashmaps, so each player has 0 of each resource
-        for (int i = 0; i < wgs.getNPlayers(); i++) { // For each
+        for (int i = 0; i < wgs.getNPlayers(playerId); i++) { // For each
             for (Wonders7Constants.Resource type : Wonders7Constants.Resource.values()) {
                 wgs.playerResources.get(i).put(type, 0);
             }
@@ -40,12 +40,12 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         //System.out.println("THE GAME HAS STARTED");
         wgs.playerHands = new ArrayList<>();
         wgs.playedCards = new ArrayList<>();
-        wgs.turnActions = new AbstractAction[wgs.getNPlayers()];
-        wgs.playerWonderBoard = new Wonder7Board[wgs.getNPlayers()];
+        wgs.turnActions = new AbstractAction[wgs.getNPlayers(playerId)];
+        wgs.playerWonderBoard = new Wonder7Board[wgs.getNPlayers(playerId)];
         wgs.ageDeck = new Deck<>("Age Deck", CoreConstants.VisibilityMode.MIXED_VISIBILITY);
         wgs.wonderBoardDeck = new Deck<>("Wonder Board Deck", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
 
-        for (int i = 0; i < wgs.getNPlayers(); i++) {
+        for (int i = 0; i < wgs.getNPlayers(playerId); i++) {
             wgs.playerHands.add(new Deck<>("Player hand" + i, i, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
             wgs.playedCards.add(new Deck<>("Played Cards", CoreConstants.VisibilityMode.VISIBLE_TO_ALL));
         }
@@ -57,7 +57,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         createWonderDeck(wgs, params.wonderShuffleSeed == -1 ? state.getRnd() : new Random(params.wonderShuffleSeed)); // Adds Wonders into game
 
         // Gives each player wonder board and manufactured goods from the wonder
-        for (int player = 0; player < wgs.getNPlayers(); player++) {
+        for (int player = 0; player < wgs.getNPlayers(playerId); player++) {
             wgs.setPlayerWonderBoard(player, wgs.wonderBoardDeck.draw());// Each player has one designated Wonder board
 
             // Players get their wonder board manufacturedGoods added to their resources
@@ -78,7 +78,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         wgs.ageDeck.shuffle(wgs.cardRnd);
         //System.out.println("ALL THE CARDS IN THE GAME: "+wgs.AgeDeck.getSize());
         // Give each player their 7 cards, wonderBoard and the manufactured goods from the wonder-board
-        for (int player = 0; player < wgs.getNPlayers(); player++) {
+        for (int player = 0; player < wgs.getNPlayers(playerId); player++) {
             for (int card = 0; card < ((Wonders7GameParameters) wgs.getGameParameters()).nWonderCardsPerPlayer; card++) {
                 wgs.getPlayerHand(player).add(wgs.ageDeck.draw());
             }
@@ -99,7 +99,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
             // this ensures that one round is one turn per player
 
             // then if Halicarnassus triggers, put that functionality on the stack
-            for (int p = 0; p < wgs.getNPlayers(); p++) {
+            for (int p = 0; p < wgs.getNPlayers(playerId); p++) {
                 Wonder7Board wonderBoard = wgs.getPlayerWonderBoard(p);
                 if (wonderBoard.wonderType() == TheMausoleumOfHalicarnassus &&
                         !wonderBoard.effectUsed &&
@@ -118,7 +118,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         }
         // We now check that all players have the same number of cards in hand
         int cardsExpected = wgs.getPlayerHand(0).getSize();
-        for (int p = 1; p < wgs.getNPlayers(); p++) {
+        for (int p = 1; p < wgs.getNPlayers(playerId); p++) {
             if (wgs.getPlayerHand(p).getSize() != cardsExpected) {
                 throw new AssertionError("Player " + p + " has " + wgs.getPlayerHand(p).getSize() + " cards in hand, but player 0 has " + cardsExpected);
             }
@@ -127,7 +127,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         // the next player is whoever still has something to choose
         if (wgs.isNotTerminal()) {
             boolean playerStillToChoose = true;
-            for (int p = 0; p < wgs.getNPlayers(); p++) {
+            for (int p = 0; p < wgs.getNPlayers(playerId); p++) {
                 if (wgs.getTurnAction(p) == null) {
                     endPlayerTurn(wgs, p);
                     playerStillToChoose = false;
@@ -142,7 +142,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
     }
 
     private void executeAllActions(Wonders7GameState wgs) {
-        for (int i = 0; i < wgs.getNPlayers(); i++) {
+        for (int i = 0; i < wgs.getNPlayers(playerId); i++) {
             wgs.setTurnOwner(i); // PLAYER i DOES THE ACTION THEY SELECTED, NOT ANOTHER PLAYERS ACTION
             wgs.getTurnAction(i).execute(wgs); // EXECUTE THE ACTION
             wgs.setTurnAction(i, null); // REMOVE EXECUTED ACTION
@@ -153,8 +153,8 @@ public class Wonders7ForwardModel extends StandardForwardModel {
     public void rotateHands(Wonders7GameState wgs) {
         Deck<Wonder7Card> temp = wgs.getPlayerHands().get(0);
         if (wgs.direction == 1) {
-            for (int i = 0; i < wgs.getNPlayers(); i++) {
-                if (i == wgs.getNPlayers() - 1) {
+            for (int i = 0; i < wgs.getNPlayers(playerId); i++) {
+                if (i == wgs.getNPlayers(playerId) - 1) {
                     wgs.getPlayerHands().set(i, temp);
                 } // makes sure the last player receives first players original hand
                 else {
@@ -162,9 +162,9 @@ public class Wonders7ForwardModel extends StandardForwardModel {
                 } // Rotates hands clockwise
             }
         } else {
-            temp = wgs.getPlayerHand((wgs.getNPlayers() - 1) % wgs.getNPlayers());
-            for (int i = (wgs.getNPlayers() - 1) % wgs.getNPlayers(); i > -1; i--) {
-                if (i % wgs.getNPlayers() == 0) {
+            temp = wgs.getPlayerHand((wgs.getNPlayers(playerId) - 1) % wgs.getNPlayers(playerId));
+            for (int i = (wgs.getNPlayers(playerId) - 1) % wgs.getNPlayers(playerId); i > -1; i--) {
+                if (i % wgs.getNPlayers(playerId) == 0) {
                     wgs.getPlayerHands().set(i, temp);
                 } // makes sure the last player receives first players original hand
                 else {
@@ -176,7 +176,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
 
     protected boolean checkActionRound(AbstractGameState gameState) {
         Wonders7GameState wgs = (Wonders7GameState) gameState;
-        for (int i = 0; i < wgs.getNPlayers(); i++) {
+        for (int i = 0; i < wgs.getNPlayers(playerId); i++) {
             if (wgs.turnActions[i] == null) return false;
         }
         return true;
@@ -229,7 +229,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         if (wgs.getPlayerHand(wgs.getCurrentPlayer()).getSize() == 1) {  // If all players hands are empty
 
             // if the relevant stage of Babylon is built, then auto-build the last card in hand
-            for (int p = 0; p < wgs.getNPlayers(); p++) {
+            for (int p = 0; p < wgs.getNPlayers(playerId); p++) {
                 Wonder7Board wonderBoard = wgs.getPlayerWonderBoard(p);
                 if (wonderBoard.wonderType() == Wonder7Board.Wonder.TheHangingGardensOfBabylon &&
                         wonderBoard.getSide() == 1 &&
@@ -243,7 +243,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
                 }
             }
 
-            for (int i = 0; i < wgs.getNPlayers(); i++) {
+            for (int i = 0; i < wgs.getNPlayers(playerId); i++) {
                 if (wgs.getPlayerHand(i).getSize() > 0) {
                     wgs.getDiscardPile().add(wgs.getPlayerHand(i).get(0));
                     wgs.getPlayerHand(i).remove(0);
@@ -272,7 +272,7 @@ public class Wonders7ForwardModel extends StandardForwardModel {
         switch (wgs.currentAge) {
             // ALL THE CARDS IN DECK 1
             case 1:
-                switch (wgs.getNPlayers()) {
+                switch (wgs.getNPlayers(playerId)) {
                     case 7:
                         wgs.ageDeck.add(Wonder7Card.factory(Well, wgs.getParams()));
                         wgs.ageDeck.add(Wonder7Card.factory(Baths, wgs.getParams()));
@@ -329,11 +329,11 @@ public class Wonders7ForwardModel extends StandardForwardModel {
                         wgs.ageDeck.add(Wonder7Card.factory(Scriptorium, wgs.getParams()));
                         break;
                     default:
-                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers());
+                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers(playerId));
                 }
                 break;
             case 2:
-                switch (wgs.getNPlayers()) {
+                switch (wgs.getNPlayers(playerId)) {
                     case 7:
                         wgs.ageDeck.add(Wonder7Card.factory(Statue, wgs.getParams()));
                         wgs.ageDeck.add(Wonder7Card.factory(Aqueduct, wgs.getParams()));
@@ -390,11 +390,11 @@ public class Wonders7ForwardModel extends StandardForwardModel {
                         wgs.ageDeck.add(Wonder7Card.factory(Vineyard, wgs.getParams()));
                         break;
                     default:
-                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers());
+                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers(playerId));
                 }
                 break;
             case 3:
-                switch (wgs.getNPlayers()) {
+                switch (wgs.getNPlayers(playerId)) {
                     case 7:
                         wgs.ageDeck.add(Wonder7Card.factory(Palace, wgs.getParams()));
                         wgs.ageDeck.add(Wonder7Card.factory(Castrum, wgs.getParams()));
@@ -454,12 +454,12 @@ public class Wonders7ForwardModel extends StandardForwardModel {
                         allGuilds.add(Wonder7Card.factory(MagistratesGuild, wgs.getParams()));
                         allGuilds.add(Wonder7Card.factory(ScientistsGuild, wgs.getParams()));
                         Collections.shuffle(allGuilds, wgs.getRnd());
-                        for (int i = 0; i < wgs.getNPlayers() + 2; i++) {
+                        for (int i = 0; i < wgs.getNPlayers(playerId) + 2; i++) {
                             wgs.ageDeck.add(allGuilds.get(i));
                         }
                         break;
                     default:
-                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers());
+                        throw new AssertionError("Number of players not supported: " + wgs.getNPlayers(playerId));
                 }
                 break;
             default:

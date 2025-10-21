@@ -71,8 +71,7 @@ public class Workshop extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Workshop) {
-            Workshop other = (Workshop) obj;
+        if (obj instanceof Workshop other) {
             return executed == other.executed && super.equals(obj);
         }
         return false;

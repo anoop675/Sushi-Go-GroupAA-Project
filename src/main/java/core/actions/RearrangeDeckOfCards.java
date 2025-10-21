@@ -66,9 +66,8 @@ public class RearrangeDeckOfCards extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RearrangeDeckOfCards)) return false;
+        if (!(o instanceof RearrangeDeckOfCards that)) return false;
         if (!super.equals(o)) return false;
-        RearrangeDeckOfCards that = (RearrangeDeckOfCards) o;
         return rearrangeDeck == that.rearrangeDeck &&
                 Arrays.equals(newCardOrder, that.newCardOrder);
     }

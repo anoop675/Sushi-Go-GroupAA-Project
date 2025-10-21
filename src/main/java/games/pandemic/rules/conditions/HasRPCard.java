@@ -28,7 +28,7 @@ public class HasRPCard extends ConditionNode {
 
     @Override
     protected boolean test(AbstractGameState gs) {
-        int nPlayers = gs.getNPlayers();
+        int nPlayers = gs.getNPlayers(playerId);
         for (int i = 0; i < nPlayers; i++) {
             Deck<Card> ph = (Deck<Card>) ((PandemicGameState)gs).getComponent(playerHandHash, i);
             int nCards = ph.getSize();

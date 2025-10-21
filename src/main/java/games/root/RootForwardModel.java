@@ -72,8 +72,8 @@ public class RootForwardModel extends StandardForwardModel {
                 state.craftableItems.add(new Item(CoreConstants.ComponentType.TOKEN, itemType));
             }
         }
-        for (int counter = 0; counter < state.getNPlayers(); counter++) {
-            boolean[] visibility = new boolean[state.getNPlayers()];
+        for (int counter = 0; counter < state.getNPlayers(playerId); counter++) {
+            boolean[] visibility = new boolean[state.getNPlayers(playerId)];
             visibility[counter] = true;
             PartialObservableDeck<RootCard> playerCards = new PartialObservableDeck<>("Player " + counter + " Hand", counter, visibility);
             for (int e = 0; e < rp.handSize; e++) {
@@ -85,7 +85,7 @@ public class RootForwardModel extends StandardForwardModel {
             state.craftedItems.add(new ArrayList<>());
         }
         //Create player pieces
-        for (int counter = 0; counter < state.getNPlayers(); counter++) {
+        for (int counter = 0; counter < state.getNPlayers(playerId); counter++) {
             RootParameters.Factions playerRole = state.getPlayerFaction(counter);
             if (playerRole.equals(RootParameters.Factions.MarquiseDeCat)) {
                 createCatPieces(state, rp);
@@ -295,7 +295,7 @@ public class RootForwardModel extends StandardForwardModel {
         state.eyrieDecree = new ArrayList<>();
         state.playedSuits = new ArrayList<>();
         for (int e = 0; e < 4; e++) {
-            state.eyrieDecree.add(new Deck<>(rp.decreeInitializer.get((Integer) e).toString() + "decree", playerID, CoreConstants.VisibilityMode.VISIBLE_TO_ALL));
+            state.eyrieDecree.add(new Deck<>(rp.decreeInitializer.get(e).toString() + "decree", playerID, CoreConstants.VisibilityMode.VISIBLE_TO_ALL));
         }
         state.roosts = rp.buildingCount.get(RootParameters.BuildingType.Roost);
         state.rulers = new Deck<>("Player " + playerID + "Rulers", playerID, CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
@@ -318,7 +318,7 @@ public class RootForwardModel extends StandardForwardModel {
         state.rabbitBase = 1;
         state.officers = 0;
         state.sympathyTokens = rp.sympathyTokens;
-        boolean[] visibility = new boolean[state.getNPlayers()];
+        boolean[] visibility = new boolean[state.getNPlayers(playerId)];
         visibility[playerID] = true;
         state.supporters = new PartialObservableDeck<>("Player " + playerID + " Supporters", playerID, visibility);
     }
@@ -406,12 +406,12 @@ public class RootForwardModel extends StandardForwardModel {
         }
         //For End turn action -> handle GamePhase changes and current player changes
         if (action instanceof EndTurn) {
-            int nextPlayerID = (state.getCurrentPlayer() + 1) % state.getNPlayers();
+            int nextPlayerID = (state.getCurrentPlayer() + 1) % state.getNPlayers(playerId);
             RootGameState.RootGamePhase phase = (RootGameState.RootGamePhase) state.getGamePhase();
             //System.out.println(phase.toString());
             switch (phase) {
                 case Setup:
-                    if (state.playersSetUp == state.getNPlayers()) {
+                    if (state.playersSetUp == state.getNPlayers(playerId)) {
                         state.setGamePhase(RootGameState.RootGamePhase.Birdsong);
                     }
                     break;
@@ -443,7 +443,7 @@ public class RootForwardModel extends StandardForwardModel {
                 if (ruledFoxClearings >= 3){
                     gs.setGameStatus(CoreConstants.GameResult.GAME_END);
                     gs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, playerID);
-                    for (int i = 0 ; i < gs.getNPlayers(); i++){
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++){
                         if (i!= playerID){
                             gs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, i);
                         }
@@ -460,7 +460,7 @@ public class RootForwardModel extends StandardForwardModel {
                 if (ruledMouseClearings >= 3){
                     gs.setGameStatus(CoreConstants.GameResult.GAME_END);
                     gs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, playerID);
-                    for (int i = 0 ; i < gs.getNPlayers(); i++){
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++){
                         if (i!= playerID){
                             gs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, i);
                         }
@@ -477,7 +477,7 @@ public class RootForwardModel extends StandardForwardModel {
                 if (ruledRabbitClearings >= 3){
                     gs.setGameStatus(CoreConstants.GameResult.GAME_END);
                     gs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, playerID);
-                    for (int i = 0 ; i < gs.getNPlayers(); i++){
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++){
                         if (i!= playerID){
                             gs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, i);
                         }
@@ -502,7 +502,7 @@ public class RootForwardModel extends StandardForwardModel {
                 if (rulesTOPLEFTANDBOTTOMRIGHT || rulesTOPRIGHTANDBOTTOMLEFT){
                     gs.setGameStatus(CoreConstants.GameResult.GAME_END);
                     gs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, playerID);
-                    for (int i = 0 ; i < gs.getNPlayers(); i++){
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++){
                         if (i!= playerID){
                             gs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, i);
                         }
@@ -520,8 +520,8 @@ public class RootForwardModel extends StandardForwardModel {
         }
         gs.setGameStatus(CoreConstants.GameResult.GAME_END);
         // If we have more than one person in Ordinal position of 1, then this is a draw
-        boolean drawn = IntStream.range(0, gs.getNPlayers()).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
-        for (int p = 0; p < gs.getNPlayers(); p++) {
+        boolean drawn = IntStream.range(0, gs.getNPlayers(playerId)).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
+        for (int p = 0; p < gs.getNPlayers(playerId); p++) {
             int o = gs.getOrdinalPosition(p);
             if (o == 1 && drawn)
                 gs.setPlayerResult(DRAW_GAME, p);

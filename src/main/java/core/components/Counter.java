@@ -226,9 +226,8 @@ public class Counter extends Component {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Counter)) return false;
+        if (!(o instanceof Counter counter)) return false;
         if (!super.equals(o)) return false;
-        Counter counter = (Counter) o;
         return valueIdx == counter.valueIdx && minimum == counter.minimum && maximum == counter.maximum && Arrays.equals(values, counter.values);
     }
 

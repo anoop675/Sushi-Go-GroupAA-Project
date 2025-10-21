@@ -4,13 +4,7 @@ import core.CoreConstants;
 import core.Game;
 import core.interfaces.IGameHeuristic;
 
-public class TargetWinner implements IGameHeuristic {
-
-    public final String winnerName;
-
-    public TargetWinner(String winnerName) {
-        this.winnerName = winnerName;
-    }
+public record TargetWinner(String winnerName) implements IGameHeuristic {
 
     @Override
     public double evaluateGame(Game game) {

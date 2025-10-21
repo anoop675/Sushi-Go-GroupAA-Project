@@ -57,8 +57,7 @@ public class Ship extends Component {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Ship) {
-            Ship s = (Ship) obj;
+        if (obj instanceof Ship s) {
             return this.capacity == s.capacity && this.spacesFilled == s.spacesFilled && this.cargo.equals(s.cargo);
         }
         return false;

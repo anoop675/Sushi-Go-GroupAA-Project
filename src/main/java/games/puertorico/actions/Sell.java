@@ -32,8 +32,7 @@ public class Sell extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Sell) {
-            Sell other = (Sell) obj;
+        if (obj instanceof Sell other) {
             return other.goodSold == goodSold && other.salesPrice == salesPrice;
         }
         return false;

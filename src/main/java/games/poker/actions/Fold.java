@@ -37,8 +37,7 @@ public class Fold extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Fold)) return false;
-        Fold fold = (Fold) o;
+        if (!(o instanceof Fold fold)) return false;
         return playerId == fold.playerId;
     }
 

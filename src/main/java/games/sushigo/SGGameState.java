@@ -49,7 +49,7 @@ public class SGGameState extends AbstractGameState {
             add(drawPile);
             add(discardPile);
             addAll(playedCards);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 add(playerScore[i]);
                 addAll(playedCardTypes[i].values());
             }
@@ -58,14 +58,14 @@ public class SGGameState extends AbstractGameState {
 
     @Override
     protected SGGameState _copy(int playerId) {
-        SGGameState copy = new SGGameState(gameParameters.copy(), getNPlayers());
+        SGGameState copy = new SGGameState(gameParameters.copy(), getNPlayers(playerId));
 
-        copy.playerScore = new Counter[getNPlayers()];
-        copy.playedCardTypes = new HashMap[getNPlayers()];
-        copy.playedCardTypesAllGame = new HashMap[getNPlayers()];
-        copy.pointsPerCardType = new HashMap[getNPlayers()];
+        copy.playerScore = new Counter[getNPlayers(playerId)];
+        copy.playedCardTypes = new HashMap[getNPlayers(playerId)];
+        copy.playedCardTypesAllGame = new HashMap[getNPlayers(playerId)];
+        copy.pointsPerCardType = new HashMap[getNPlayers(playerId)];
         copy.playedCards = new ArrayList<>();
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             copy.playedCards.add(playedCards.get(i).copy());
             copy.playerScore[i] = playerScore[i].copy();
             copy.playedCardTypes[i] = new HashMap<>();
@@ -93,7 +93,7 @@ public class SGGameState extends AbstractGameState {
         copy.cardChoices = new ArrayList<>();
 
         if (playerId == -1) {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 List<ChooseCard> copiedItems = new ArrayList<>();
                 for (ChooseCard cc : cardChoices.get(i)) {
                     copiedItems.add(cc.copy());
@@ -126,7 +126,7 @@ public class SGGameState extends AbstractGameState {
 
             // We don't know what other players have chosen for this round, hide card choices
             turnOwner = playerId;
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 copy.cardChoices.add(new ArrayList<>());
                 if (i == playerId) {
                     for (ChooseCard cc : cardChoices.get(i)) {
@@ -145,7 +145,7 @@ public class SGGameState extends AbstractGameState {
      */
     public boolean isHandKnown(int playerId, int opponentId) {
         // Player 0 is one space to the 'Left' of player 1
-        int opponentSpacesToLeft = (playerId - opponentId + getNPlayers()) % getNPlayers();
+        int opponentSpacesToLeft = (playerId - opponentId + getNPlayers(playerId)) % getNPlayers(playerId);
         return opponentSpacesToLeft <= deckRotations;
     }
 
@@ -166,7 +166,7 @@ public class SGGameState extends AbstractGameState {
     }
 
     public void clearCardChoices() {
-        for (int i = 0; i < getNPlayers(); i++) cardChoices.get(i).clear();
+        for (int i = 0; i < getNPlayers(playerId); i++) cardChoices.get(i).clear();
     }
 
     public void addCardChoice(ChooseCard chooseCard, int playerId) {
@@ -236,7 +236,7 @@ public class SGGameState extends AbstractGameState {
     @Override
     protected ArrayList<Integer> _getUnknownComponentsIds(int playerId) {
         return new ArrayList<Integer>() {{
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     add(playerHands.get(i).getComponentID());
                     for (Component c : playerHands.get(i).getComponents()) {
@@ -252,9 +252,8 @@ public class SGGameState extends AbstractGameState {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SGGameState)) return false;
+        if (!(o instanceof SGGameState that)) return false;
         if (!super.equals(o)) return false;
-        SGGameState that = (SGGameState) o;
         return nCardsInHand == that.nCardsInHand && deckRotations == that.deckRotations &&
                 Objects.equals(playerHands, that.playerHands) && Objects.equals(drawPile, that.drawPile) &&
                 Objects.equals(discardPile, that.discardPile) && Objects.equals(cardChoices, that.cardChoices) &&

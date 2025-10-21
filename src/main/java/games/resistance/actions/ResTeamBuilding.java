@@ -37,8 +37,7 @@ public class ResTeamBuilding extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResTeamBuilding)) return false;
-        ResTeamBuilding that = (ResTeamBuilding) o;
+        if (!(o instanceof ResTeamBuilding that)) return false;
         return playerId == that.playerId && Arrays.equals(team, that.team);
     }
 

@@ -7,21 +7,14 @@ import core.interfaces.IPrintable;
 import core.turnorders.ReactiveTurnOrder;
 import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
-import evaluation.summarisers.TAGNumericStatSummary;
 import games.GameType;
 import games.pandemic.PandemicForwardModel;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
-import players.basicMCTS.BasicMCTSPlayer;
 import players.human.ActionController;
 import players.human.HumanConsolePlayer;
 import players.human.HumanGUIPlayer;
-import players.mcts.MCTSParams;
-import players.mcts.MCTSPlayer;
-import players.rmhc.RMHCParams;
-import players.rmhc.RMHCPlayer;
-import players.simple.OSLAPlayer;
 import players.simple.RandomPlayer;
 import utilities.Pair;
 import utilities.Utils;
@@ -46,7 +39,7 @@ public class Game {
     // Real game state and forward model
     protected AbstractGameState gameState;
     protected AbstractForwardModel forwardModel;
-    private List<IGameListener> listeners = new ArrayList<>();
+    private final List<IGameListener> listeners = new ArrayList<>();
 
     /* Game Statistics */
     private int lastPlayer; // used to track actions per 'turn'
@@ -60,10 +53,10 @@ public class Game {
     // Number of actions taken in a turn by a player
     private int nActionsPerTurn, nActionsPerTurnSum, nActionsPerTurnCount;
     private boolean pause, stop;
-    private boolean debug = false;
+    private final boolean debug = false;
     // Video recording
     private Rectangle areaBounds;
-    private boolean recordingVideo = false;
+    private final boolean recordingVideo = false;
     String fileName = "output.mp4";
     String formatName = "mp4";
     String codecName = null;
@@ -220,7 +213,8 @@ public class Game {
                 player.setForwardModel(this.forwardModel);
         }
 
-        if (players.size() == gameState.getNPlayers()) {
+        int playerId = 0;
+        if (players.size() == gameState.getNPlayers(playerId)) {
             this.players = players;
         } else if (players.isEmpty()) {
             // keep existing players
@@ -228,7 +222,7 @@ public class Game {
             this.players = new ArrayList<>();
             // In this case we use (copies of) each agent for all players on the team
             // loop over each player; find out what team they are in; and add an agent copy
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 int team = gameState.getTeam(i);
                 AbstractPlayer player = players.get(team);
                 this.players.add(player.copy());
@@ -508,7 +502,8 @@ public class Game {
         listeners.forEach(l -> l.onEvent(Event.createEvent(Event.GameEvent.GAME_OVER, gameState)));
         if (gameState.coreGameParameters.recordEventHistory) {
             gameState.recordHistory(Event.GameEvent.GAME_OVER.name());
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            int playerId = 0;
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 gameState.recordHistory(String.format("Player %d finishes at position %d with score: %.0f", i, gameState.getOrdinalPosition(i), gameState.getGameScore(i)));
             }
         }

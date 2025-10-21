@@ -19,7 +19,7 @@ public class STNRollout extends SingleTreeNode {
 
         int expectedRolloutLength = params.rolloutLength;
         if (params.rolloutLengthPerPlayer) {
-            expectedRolloutLength *= openLoopState.getNPlayers();
+            expectedRolloutLength *= openLoopState.getNPlayers(playerId);
         }
 
         // Now we can run some tests on this

@@ -93,8 +93,7 @@ public class Play extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Play)) return false;
-        Play play = (Play) o;
+        if (!(o instanceof Play play)) return false;
         return playerId == play.playerId && fromIndex == play.fromIndex;
     }
 

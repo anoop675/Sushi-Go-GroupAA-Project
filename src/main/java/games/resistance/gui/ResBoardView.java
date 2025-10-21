@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ResBoardView extends JPanel {
 
-    private Image backgroundImage;
+    private final Image backgroundImage;
 
     public ResBoardView(Image backgroundImage) {
         this.backgroundImage = backgroundImage;

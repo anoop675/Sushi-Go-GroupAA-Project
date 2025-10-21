@@ -111,7 +111,7 @@ public class TMBoardView extends ComponentView implements IScreenHighlight {
         // Draw TR for all players
         int offsetY = (int)(height + spacing);
         int trWidth = 0;
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             Rectangle r = drawImage(g, tr, offsetX + i*defaultItemSize*3, offsetY, defaultItemSize);
             drawShadowStringCentered(g, "p" + i + ": " +gs.getPlayerResources()[i].get(TMTypes.Resource.TR).getValue(),
                     new Rectangle(offsetX + i*defaultItemSize*3 + defaultItemSize, offsetY, defaultItemSize*2, r.height),
@@ -254,7 +254,7 @@ public class TMBoardView extends ComponentView implements IScreenHighlight {
             if (p == TMTypes.GlobalParameter.OceanTiles) {
                 // Draw symbol and value
                 drawImage(g, p.getImagePath(), x, y, counterWidth, counterWidth);
-                String text = "" + c.getValue() + "/" + c.getMaximum();
+                String text = c.getValue() + "/" + c.getMaximum();
                 drawShadowStringCentered(g, text, new Rectangle(x, y, counterWidth, counterWidth), Color.yellow, Color.black);
                 rect.setRect(x, y, counterWidth, counterWidth);
             } else {

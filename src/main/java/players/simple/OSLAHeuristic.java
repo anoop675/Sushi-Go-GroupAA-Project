@@ -38,9 +38,8 @@ public class OSLAHeuristic extends TunableParameters {
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof OSLAHeuristic) {
-           OSLAHeuristic other = (OSLAHeuristic) o;
-           return other.plyDepth == plyDepth && other.heuristic.equals(heuristic);
+        if (o instanceof OSLAHeuristic other) {
+            return other.plyDepth == plyDepth && other.heuristic.equals(heuristic);
         }
         return false;
     }

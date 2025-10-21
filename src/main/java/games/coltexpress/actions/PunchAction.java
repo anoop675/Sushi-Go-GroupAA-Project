@@ -94,9 +94,8 @@ public class PunchAction  extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PunchAction)) return false;
+        if (!(o instanceof PunchAction that)) return false;
         if (!super.equals(o)) return false;
-        PunchAction that = (PunchAction) o;
         return opponentID == that.opponentID &&
                 sourceCompartment == that.sourceCompartment &&
                 targetCompartment == that.targetCompartment &&

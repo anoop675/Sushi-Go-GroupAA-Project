@@ -107,7 +107,7 @@ public class PandemicBoardView extends JComponent {
         height = (int)(background.getHeight(null) * scale);
 
         boardNodeLocations = new HashMap<>();
-        playerLocations = new Rectangle[gs.getNPlayers()];
+        playerLocations = new Rectangle[gs.getNPlayers(playerId)];
         highlights = new HashMap<>();
 
         Collection<BoardNode> bList = graphBoard.getBoardNodes();
@@ -253,7 +253,7 @@ public class PandemicBoardView extends JComponent {
         int fSize = g.getFont().getSize();
         int fontSize = (int)(scale * fSize);
         g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, fontSize));
-        int nPlayers = gameState.getNPlayers();
+        int nPlayers = gameState.getNPlayers(playerId);
 
         // Draw board background
         drawImage(g, background, panX, panY);
@@ -415,7 +415,7 @@ public class PandemicBoardView extends JComponent {
             if (i == outbreakCounter.getMaximum()) {
                 drawCenteredImage(g, outbreakImgLast, pos.getX(), pos.getY());
             } else {
-                g.drawString("" + i, (int)(pos.getX()), (int)(pos.getY() + 4*scale));
+                g.drawString("" + i, pos.getX(), (int)(pos.getY() + 4*scale));
             }
         }
         g.setFont(f);

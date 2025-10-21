@@ -30,7 +30,7 @@ public class ForceDiscardReaction extends RuleNode {
     protected boolean run(AbstractGameStateWithTurnOrder gs) {
         PandemicGameState pgs = (PandemicGameState)gs;
         // player needs to discard cards (doing 1 at a time)
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             if (((Deck<Card>)pgs.getComponent(playerHandHash, i)).isOverCapacity()) {
                 ((PandemicTurnOrder) pgs.getTurnOrder()).addReactivePlayer(i);
                 break;

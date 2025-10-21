@@ -60,8 +60,7 @@ public class TrashCard extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof TrashCard) {
-            TrashCard other = (TrashCard) obj;
+        if (obj instanceof TrashCard other) {
             return other.player == player && other.trashedCard == trashedCard && other.fromDeck == fromDeck;
         }
         return false;

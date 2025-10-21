@@ -29,14 +29,14 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
     protected void _setup(AbstractGameState firstState) {
         LoveLetterGameState llgs = (LoveLetterGameState) firstState;
 
-        llgs.effectProtection = new boolean[llgs.getNPlayers()];
-        llgs.currentlyActive = new boolean[llgs.getNPlayers()];
+        llgs.effectProtection = new boolean[llgs.getNPlayers(playerId)];
+        llgs.currentlyActive = new boolean[llgs.getNPlayers(playerId)];
         // Set up all variables
-        llgs.drawPile = new PartialObservableDeck<>("drawPile", -1, llgs.getNPlayers(), VisibilityMode.HIDDEN_TO_ALL);
+        llgs.drawPile = new PartialObservableDeck<>("drawPile", -1, llgs.getNPlayers(playerId), VisibilityMode.HIDDEN_TO_ALL);
         llgs.reserveCards = new Deck<>("reserveCards", VisibilityMode.VISIBLE_TO_ALL);
-        llgs.affectionTokens = new int[llgs.getNPlayers()];
-        llgs.playerHandCards = new ArrayList<>(llgs.getNPlayers());
-        llgs.playerDiscardCards = new ArrayList<>(llgs.getNPlayers());
+        llgs.affectionTokens = new int[llgs.getNPlayers(playerId)];
+        llgs.playerHandCards = new ArrayList<>(llgs.getNPlayers(playerId));
+        llgs.playerDiscardCards = new ArrayList<>(llgs.getNPlayers(playerId));
 
         // Set up first round
         setupRound(llgs, new ArrayList<>());
@@ -71,7 +71,7 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 
         // In min-player game, N more cards are on the side, but visible to all players at all times
         llgs.reserveCards.clear();
-        if (llgs.getNPlayers() == GameType.LoveLetter.getMinPlayers()) {
+        if (llgs.getNPlayers(playerId) == GameType.LoveLetter.getMinPlayers()) {
             for (int i = 0; i < llp.nCardsVisibleReserve; i++) {
                 llgs.reserveCards.add(llgs.drawPile.draw());
             }
@@ -80,8 +80,8 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
         // Set up player hands and discards
         if (llgs.getPlayerHandCards().isEmpty()) {
             // new game set up
-            for (int i = 0; i < llgs.getNPlayers(); i++) {
-                boolean[] visible = new boolean[llgs.getNPlayers()];
+            for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
+                boolean[] visible = new boolean[llgs.getNPlayers(playerId)];
                 if (llgs.getCoreGameParameters().partialObservable) {
                     visible[i] = true;
                 } else {
@@ -102,7 +102,7 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
         } else {
             llgs.playerHandCards.forEach(PartialObservableDeck::clear);
             llgs.playerDiscardCards.forEach(Deck::clear);
-            for (int i = 0; i < llgs.getNPlayers(); i++) {
+            for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
                 // add random cards to the player's hand
                 for (int j = 0; j < llp.nCardsPerPlayer; j++) {
                     llgs.playerHandCards.get(i).add(llgs.drawPile.draw());
@@ -112,8 +112,8 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 
         if (!previousWinners.isEmpty()) {
             // Next winner in turn order starts
-            for (int i = 0; i < llgs.getNPlayers(); i++) {
-                int p = (i + 1) % llgs.getNPlayers();
+            for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
+                int p = (i + 1) % llgs.getNPlayers(playerId);
                 if (previousWinners.contains(p)) {
                     llgs.setTurnOwner(p);
                     break;
@@ -142,7 +142,7 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             // move turn to the next player who has not already lost the round
             int nextPlayer = gameState.getCurrentPlayer();
             do {
-                nextPlayer = (nextPlayer + 1) % llgs.getNPlayers();
+                nextPlayer = (nextPlayer + 1) % llgs.getNPlayers(playerId);
             } while (!llgs.isCurrentlyActive(nextPlayer));
             endPlayerTurn(llgs, nextPlayer);
 
@@ -161,7 +161,7 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
     public boolean checkEndOfRound(LoveLetterGameState llgs, AbstractAction actionPlayed) {
         // Count the number of active players
         int playersAlive = 0;
-        for (int i = 0; i < llgs.getNPlayers(); i++) {
+        for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
             if (llgs.isCurrentlyActive(i) && llgs.playerHandCards.get(i).getSize() > 0) {
                 playersAlive += 1;
             }
@@ -207,12 +207,12 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
         LoveLetterParameters llp = (LoveLetterParameters) llgs.getGameParameters();
 
         // Required tokens from parameters; if more players in the game, use the last value in the array
-        double nRequiredTokens = (llgs.getNPlayers() == 2 ? llp.nTokensWin2 : llgs.getNPlayers() == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
+        double nRequiredTokens = (llgs.getNPlayers(playerId) == 2 ? llp.nTokensWin2 : llgs.getNPlayers(playerId) == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
 
         // Find players with the highest number of tokens above the required number
         HashSet<Integer> bestPlayers = new HashSet<>();
         int bestValue = 0;
-        for (int i = 0; i < llgs.getNPlayers(); i++) {
+        for (int i = 0; i < llgs.getNPlayers(playerId); i++) {
             if (llgs.affectionTokens[i] >= nRequiredTokens && llgs.affectionTokens[i] > bestValue) {
                 bestValue = llgs.affectionTokens[i];
                 bestPlayers.clear();
@@ -277,11 +277,11 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             CardType cardType = playerDeck.getComponents().get(card).cardType;
             if (cardType != CardType.Countess && cardTypeForceCountess != null) continue;
             int cardIdx;
-            if (actionSpace.context == ActionSpace.Context.Dependent) cardIdx = card;
+            if (actionSpace.context() == ActionSpace.Context.Dependent) cardIdx = card;
             else cardIdx = -1;  // Independent and default
-            if (actionSpace.structure == ActionSpace.Structure.Flat || actionSpace.structure == ActionSpace.Structure.Default) {
+            if (actionSpace.structure() == ActionSpace.Structure.Flat || actionSpace.structure() == ActionSpace.Structure.Default) {
                 actions.addAll(cardType.flatActions(llgs, cardIdx, playerID, true));
-            } else if (actionSpace.structure == ActionSpace.Structure.Deep) {
+            } else if (actionSpace.structure() == ActionSpace.Structure.Deep) {
                 actions.addAll(cardType.deepActions(llgs, cardIdx, playerID, true));
             }
 

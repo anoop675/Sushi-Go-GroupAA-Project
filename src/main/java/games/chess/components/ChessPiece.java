@@ -74,8 +74,7 @@ public class ChessPiece extends Token {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ChessPiece)) return false;
-        ChessPiece other = (ChessPiece) o;
+        if (!(o instanceof ChessPiece other)) return false;
         return this.type == other.type && this.getOwnerId() == other.getOwnerId() &&
                 this.movedState == other.movedState && this.x == other.x && this.y == other.y &&
                 this.enPassant == other.enPassant;

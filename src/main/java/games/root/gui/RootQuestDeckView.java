@@ -19,7 +19,7 @@ public class RootQuestDeckView extends DeckView<RootQuestCard> {
         super(player, d, visible, cardWidth, cardHeight, rect);
         this.dataPath = dataPath;
         this.front = visible;
-        backOfCard = ImageIO.GetInstance().getImage(dataPath + "back.png");;
+        backOfCard = ImageIO.GetInstance().getImage(dataPath + "back.png");
     }
 
     @Override

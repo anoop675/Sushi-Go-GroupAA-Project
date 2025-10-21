@@ -1,6 +1,5 @@
 package games.loveletter.cards;
 
-import core.CoreConstants;
 import core.actions.AbstractAction;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.LoveLetterParameters;
@@ -56,7 +55,7 @@ public enum CardType {
             int p = play.getPlayerID();
             boolean discard = play.isDiscard();
             List<AbstractAction> cardActions = new ArrayList<>();
-            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                 if (targetPlayer == p || !gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                     continue;
                 cardActions.add(new PriestAction(play.getCardIdx(), p, targetPlayer, true, discard));
@@ -69,7 +68,7 @@ public enum CardType {
             int p = play.getPlayerID();
             boolean discard = play.isDiscard();
             List<AbstractAction> cardActions = new ArrayList<>();
-            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                 if (targetPlayer == p || !gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                     continue;
                 cardActions.add(new KingAction(play.getCardIdx(), p, targetPlayer, true, discard));
@@ -82,7 +81,7 @@ public enum CardType {
             int p = play.getPlayerID();
             boolean discard = play.isDiscard();
             List<AbstractAction> cardActions = new ArrayList<>();
-            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                 if (targetPlayer == p || !gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                     continue;
                 cardActions.add(new BaronAction(play.getCardIdx(), p, targetPlayer, true, discard));
@@ -95,7 +94,7 @@ public enum CardType {
             int p = play.getPlayerID();
             boolean discard = play.isDiscard();
             List<AbstractAction> cardActions = new ArrayList<>();
-            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                 if (!gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                     continue;
                 cardActions.add(new PrinceAction(play.getCardIdx(), p, targetPlayer, true, discard));
@@ -110,7 +109,7 @@ public enum CardType {
 
             List<AbstractAction> cardActions = new ArrayList<>();
             if (target == -1) {
-                for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+                for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                     if (targetPlayer == p || !gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                         continue;
                     for (CardType type : CardType.values()) {

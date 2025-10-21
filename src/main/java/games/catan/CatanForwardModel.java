@@ -40,10 +40,10 @@ public class CatanForwardModel extends StandardForwardModel {
         state.setBoard(generateBoard(params, state.getRnd()));
         state.setGraph(extractGraphFromBoard(state.getBoard(), params, state.getRnd()));
 
-        state.scores = new int[state.getNPlayers()];
-        state.victoryPoints = new int[state.getNPlayers()];
-        state.knights = new int[state.getNPlayers()];
-        state.roadLengths = new int[state.getNPlayers()];
+        state.scores = new int[state.getNPlayers(playerId)];
+        state.victoryPoints = new int[state.getNPlayers(playerId)];
+        state.knights = new int[state.getNPlayers(playerId)];
+        state.roadLengths = new int[state.getNPlayers(playerId)];
         state.largestArmyOwner = -1;
         state.longestRoadOwner = -1;
         state.largestArmySize = 0;
@@ -61,7 +61,7 @@ public class CatanForwardModel extends StandardForwardModel {
         state.playerResources = new ArrayList<>();
 
         // Setup areas
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             state.playerDevCards.add(new Deck<>("Player Development Deck", i, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
             HashMap<BuyAction.BuyType, Counter> tokens = new HashMap<>();
             for (Map.Entry<BuyAction.BuyType, Integer> type: params.tokenCounts.entrySet()) {
@@ -112,13 +112,13 @@ public class CatanForwardModel extends StandardForwardModel {
 
         if (gs.getGamePhase() == Setup) {
             if (gs.getRoundCounter() == 0) {
-                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers()-1) == 0) {
+                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers(playerId)-1) == 0) {
                     endRound(gs, gs.getCurrentPlayer());
                 } else {
                     endCatanPlayerTurn(gs);
                 }
             } else {
-                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers()-1) == 0) {
+                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers(playerId)-1) == 0) {
                     // Finished setup
                     gs.logEvent(CatanMetrics.CatanEvent.SetupComplete);
 
@@ -146,7 +146,7 @@ public class CatanForwardModel extends StandardForwardModel {
 
             if (action instanceof DoNothing) {
                 // end player's turn; roll dice and allocate resources
-                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers()-1) == 0) {
+                if (gs.getTurnCounter() > 0 && gs.getTurnCounter() % (gs.getNPlayers(playerId)-1) == 0) {
                     endRound(gs, 0);
                 } else {
                     endCatanPlayerTurn(gs);
@@ -205,7 +205,7 @@ public class CatanForwardModel extends StandardForwardModel {
         if (rollValue == cp.robber_die_roll) {
             // Dice roll was 7, so we change the phase
             // Check if anyone needs to discard cards
-            for (int p = 0; p < gs.getNPlayers(); p++) {
+            for (int p = 0; p < gs.getNPlayers(playerId); p++) {
                 int nResInHand = gs.getNResourcesInHand(p);
                 if (nResInHand > cp.max_cards_without_discard) {
                     gs.logEvent(SevenOut, String.valueOf(p));

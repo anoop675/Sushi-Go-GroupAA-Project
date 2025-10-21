@@ -42,8 +42,7 @@ public class Bet extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bet)) return false;
-        Bet bet = (Bet) o;
+        if (!(o instanceof Bet bet)) return false;
         return playerId == bet.playerId && amount == bet.amount;
     }
 

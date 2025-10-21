@@ -39,7 +39,7 @@ public class RootHeuristic extends TunableParameters implements IStateHeuristic 
         stateValue += this.HandQualityWeight * calculateHandQuality(playerId, gameState);
         stateValue += this.FactionSpecificPlayerWeight * calculateFactionSpecific(gameState.getPlayerFaction(playerId), gameState);
 
-        for (int i = 0; i < gs.getNPlayers(); i++){
+        for (int i = 0; i < gs.getNPlayers(playerId); i++){
             if (i != playerId){
                 stateValue -= this.ScoreOpponentWeight * calculateWinConditionHeuristic(i, gameState);
                 stateValue -= this.MapPresenceOpponentWeight * calculateMapPresence(gameState.getPlayerFaction(i), gameState);
@@ -128,7 +128,7 @@ public class RootHeuristic extends TunableParameters implements IStateHeuristic 
             case MarquiseDeCat -> ret += 3.75 *(8 - gameState.Wood);
             case EyrieDynasties -> ret += Math.min((gameState.eyrieDecree.get(0).getSize() + gameState.eyrieDecree.get(1).getSize() + gameState.eyrieDecree.get(2).getSize() + gameState.eyrieDecree.get(3).getSize()), 30.0);
             case WoodlandAlliance -> ret += Math.min(3.0 * gameState.supporters.getSize(), 30.0);
-            case Vagabond -> ret += Math.min(gameState.foxQuests + gameState.rabbitQuests + gameState.mouseQuests + gameState.craftedItems.stream().mapToInt(List<Item>::size).sum(), 30.0);
+            case Vagabond -> ret += Math.min(gameState.foxQuests + gameState.rabbitQuests + gameState.mouseQuests + gameState.craftedItems.stream().mapToInt(List::size).sum(), 30.0);
         }
         return ret;
     }

@@ -26,7 +26,7 @@ public class AddCardToSupporters extends AbstractAction {
         if (currentState.getCurrentPlayer() == playerID && currentState.getPlayerFaction(playerID)!= RootParameters.Factions.WoodlandAlliance){
             PartialObservableDeck<RootCard> hand = currentState.getPlayerHand(playerID);
             RootCard card = hand.pick(cardIdx);
-            boolean[] visibility = new boolean[currentState.getNPlayers()];
+            boolean[] visibility = new boolean[currentState.getNPlayers(playerId)];
             visibility[playerID] = true;
             visibility[currentState.getFactionPlayerID(RootParameters.Factions.WoodlandAlliance)] = true;
             currentState.getSupporters().add(card, visibility);

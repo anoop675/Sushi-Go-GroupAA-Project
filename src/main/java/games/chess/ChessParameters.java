@@ -40,8 +40,7 @@ public class ChessParameters extends TunableParameters {
 
     @Override
     protected boolean _equals(Object o) {
-        if (!(o instanceof ChessParameters)) return false;
-        ChessParameters that = (ChessParameters) o;
+        if (!(o instanceof ChessParameters that)) return false;
         return getMaxRounds() == that.getMaxRounds() && drawByRepetition == that.drawByRepetition;
     }
 

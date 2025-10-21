@@ -64,7 +64,7 @@ public class ToadGameState extends AbstractGameState {
     @Override
     protected ToadGameState _copy(int playerId) {
         ToadParameters params = (ToadParameters) this.gameParameters;
-        ToadGameState copy = new ToadGameState(params.shallowCopy(), getNPlayers());
+        ToadGameState copy = new ToadGameState(params.shallowCopy(), getNPlayers(playerId));
         copy.playerDecks = new ArrayList<>();
         for (PartialObservableDeck<ToadCard> deck : playerDecks) {
             copy.playerDecks.add(deck.copy());
@@ -89,9 +89,7 @@ public class ToadGameState extends AbstractGameState {
         // battlesWon tracks the win/loss rates over all 8 Battles
         copy.roundWinners = new int[8][2];
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 2; j++) {
-                copy.roundWinners[i][j] = roundWinners[i][j];
-            }
+            System.arraycopy(roundWinners[i], 0, copy.roundWinners[i], 0, 2);
         }
 
         copy.hiddenFlankCards = new ToadCard[hiddenFlankCards.length];

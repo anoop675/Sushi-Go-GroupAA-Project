@@ -11,7 +11,7 @@ public class PuertoRicoFeaturesBuildings implements IStateFeatureVector {
 
     @Override
     public String[] names() {
-        String base[] = baseFeatures.names();
+        String[] base = baseFeatures.names();
         String[] buildings = Arrays.stream(PuertoRicoConstants.BuildingType.values()).map(PuertoRicoConstants.BuildingType::toString).toArray(String[]::new);
         String[] retValue = new String[base.length + buildings.length];
         System.arraycopy(base, 0, retValue, 0, base.length);

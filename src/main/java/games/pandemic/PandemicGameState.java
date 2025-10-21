@@ -131,9 +131,8 @@ public class PandemicGameState extends AbstractGameStateWithTurnOrder implements
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PandemicGameState)) return false;
+        if (!(o instanceof PandemicGameState that)) return false;
         if (!super.equals(o)) return false;
-        PandemicGameState that = (PandemicGameState) o;
         return quietNight == that.quietNight &&
                 epidemic == that.epidemic &&
                 nCardsDrawn == that.nCardsDrawn &&
@@ -222,7 +221,7 @@ public class PandemicGameState extends AbstractGameStateWithTurnOrder implements
 
     @Override
     protected AbstractGameStateWithTurnOrder __copy(int playerId) {
-        PandemicGameState gs = new PandemicGameState(gameParameters.copy(), getNPlayers());
+        PandemicGameState gs = new PandemicGameState(gameParameters.copy(), getNPlayers(playerId));
 
         gs.areas = new HashMap<>();
         for(int key : areas.keySet())

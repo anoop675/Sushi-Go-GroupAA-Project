@@ -23,8 +23,8 @@ public class RevealHand extends AbstractAction {
         DominionGameState state = (DominionGameState) gs;
         PartialObservableDeck<DominionCard> hand = (PartialObservableDeck<DominionCard>) state.getDeck(DeckType.HAND, player);
         for (int i = 0; i < hand.getSize(); i++) {
-            boolean[] allTrue = new boolean[state.getNPlayers()];
-            for (int j = 0; j < state.getNPlayers(); j++) allTrue[j] = true;
+            boolean[] allTrue = new boolean[state.getNPlayers(playerId)];
+            for (int j = 0; j < state.getNPlayers(playerId); j++) allTrue[j] = true;
             hand.setVisibilityOfComponent(i, allTrue);
         }
         return true;
@@ -38,8 +38,7 @@ public class RevealHand extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof RevealHand) {
-            RevealHand other = (RevealHand) obj;
+        if (obj instanceof RevealHand other) {
             return other.player == player;
         }
         return false;

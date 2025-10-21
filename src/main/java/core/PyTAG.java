@@ -66,16 +66,16 @@ enum FeatureExtractors {
 }
 
 public class PyTAG {
-    private Game game;
+    private final Game game;
     // root of the action tree
     private ActionTreeNode root;
     // list of leaf nodes
     private List<ActionTreeNode> leaves;
     private AbstractGameState gameState;
     private AbstractForwardModel forwardModel;
-    private IStateFeatureVector stateVectoriser;
-    private IStateFeatureJSON stateJSONiser;
-    private List<AbstractPlayer> players;
+    private final IStateFeatureVector stateVectoriser;
+    private final IStateFeatureJSON stateJSONiser;
+    private final List<AbstractPlayer> players;
     private int turnPause = 0;
     private int tick;
     private int lastPlayer; // used to track actions per 'turn'
@@ -83,7 +83,7 @@ public class PyTAG {
 
     boolean isNormalized; // Bool for whether you want observations to be normalized
 
-    private Random seedRandom; // Random used for setting the seed for each episode
+    private final Random seedRandom; // Random used for setting the seed for each episode
     private long lastSeed;
 
     public static String getSupportedGames(){

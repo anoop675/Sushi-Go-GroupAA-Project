@@ -43,22 +43,22 @@ public class ResForwardModel extends StandardForwardModel {
     protected void _setup(AbstractGameState firstState) {
         ResGameState resgs = (ResGameState) firstState;
         ResParameters resp = (ResParameters) firstState.getGameParameters();
-        resgs.votingChoice = new ResPlayerCards.CardType[firstState.getNPlayers()];
+        resgs.votingChoice = new ResPlayerCards.CardType[firstState.getNPlayers(playerId)];
         resgs.gameBoardValues = new ArrayList<>(5);
         resgs.failedVoteCounter = 0;
-        resgs.playerHandCards = new ArrayList<>(firstState.getNPlayers());
-        resgs.gameBoard = resp.getPlayerBoard(firstState.getNPlayers());
+        resgs.playerHandCards = new ArrayList<>(firstState.getNPlayers(playerId));
+        resgs.gameBoard = resp.getPlayerBoard(firstState.getNPlayers(playerId));
         resgs.historicTeams = new ArrayList<>();
         resgs.noVotesPerMission = new ArrayList<>();
         resgs.teamChoice = new ArrayList<>();
         if (resgs.gameBoard == null) {
             throw new AssertionError("GameBoard shouldn't be null");
         }
-        resgs.factions = resp.getFactions(firstState.getNPlayers());
+        resgs.factions = resp.getFactions(firstState.getNPlayers(playerId));
 
         List<Boolean> spies = ResForwardModel.randomiseSpies(resgs.factions[1], resgs, -1, firstState.getRnd());
-        for (int i = 0; i < firstState.getNPlayers(); i++) {
-            boolean[] visible = new boolean[firstState.getNPlayers()];
+        for (int i = 0; i < firstState.getNPlayers(playerId); i++) {
+            boolean[] visible = new boolean[firstState.getNPlayers(playerId)];
             visible[i] = false;
             PartialObservableDeck<ResPlayerCards> playerCards = new PartialObservableDeck<>("Player Cards", i, visible);
             if (spies.get(i)) {
@@ -105,8 +105,8 @@ public class ResForwardModel extends StandardForwardModel {
 
             //Leader Creates Team
             if (currentPlayer == resgs.leaderID) {
-                int[] players = new int[resgs.getNPlayers()];
-                for (int i = 0; i < resgs.getNPlayers(); i++) {
+                int[] players = new int[resgs.getNPlayers(playerId)];
+                for (int i = 0; i < resgs.getNPlayers(playerId); i++) {
                     players[i] = i;
                 }
                 ArrayList<int[]> choiceOfTeams = Utils.generateCombinations(players, resgs.gameBoard.getMissionSuccessValues()[resgs.getRoundCounter()]);
@@ -155,7 +155,7 @@ public class ResForwardModel extends StandardForwardModel {
                 throw new AssertionError("Team Choice Size is Zero");
             }
             // Now we have to check if all players have voted
-            for (int i = 0; i < resgs.getNPlayers(); i++) {
+            for (int i = 0; i < resgs.getNPlayers(playerId); i++) {
                 if (resgs.votingChoice[i] == null) {
                     endPlayerTurn(resgs, i);
                     return;
@@ -176,7 +176,6 @@ public class ResForwardModel extends StandardForwardModel {
                 resgs.setGamePhase(MissionVote);
                 endPlayerTurn(resgs, resgs.finalTeamChoice.get(0));
             } else {
-;
                 resgs.clearTeamChoices();
 
                 // CHANGE LEADER
@@ -224,7 +223,7 @@ public class ResForwardModel extends StandardForwardModel {
     }
 
     void endGame(ResGameState resgs, ResPlayerCards.CardType winnerType) {
-        for (int i = 0; i < resgs.getNPlayers(); i++) {
+        for (int i = 0; i < resgs.getNPlayers(playerId); i++) {
             PartialObservableDeck<ResPlayerCards> hand = resgs.playerHandCards.get(i);
             if (hand.get(2).cardType == winnerType) {
                 resgs.setPlayerResult(WIN_GAME, i);
@@ -238,7 +237,7 @@ public class ResForwardModel extends StandardForwardModel {
     void revealCards(ResGameState resgs) {
         if (resgs.getGamePhase() == TeamSelectionVote) {
             int occurrenceCount = (int) Arrays.stream(resgs.votingChoice).filter(c -> c == ResPlayerCards.CardType.Yes).count();
-            if (occurrenceCount > resgs.getNPlayers() / 2) {
+            if (occurrenceCount > resgs.getNPlayers(playerId) / 2) {
                 resgs.voteSuccess = true;
             } else {
                 resgs.voteSuccess = false;
@@ -267,7 +266,7 @@ public class ResForwardModel extends StandardForwardModel {
     }
 
     public void changeLeader(ResGameState resgs) {
-        resgs.leaderID = (resgs.leaderID + 1) % resgs.getNPlayers();
+        resgs.leaderID = (resgs.leaderID + 1) % resgs.getNPlayers(playerId);
     }
 
     public static List<Boolean> randomiseSpies(int spies, ResGameState state, int playerID, Random rnd) {
@@ -275,11 +274,11 @@ public class ResForwardModel extends StandardForwardModel {
         // and return a boolean[] with length of total, and spies number of true values
         // we also need to ensure that there is at least one spy per historically failed mission
         boolean valid = true;
-        int total = state.getNPlayers();
+        int total = state.getNPlayers(playerId);
         boolean[] retValue;
         int count = 0;
         do {
-            retValue = new boolean[state.getNPlayers()];
+            retValue = new boolean[state.getNPlayers(playerId)];
             for (int i = 0; i < spies; i++) {
                 boolean done = false;
 

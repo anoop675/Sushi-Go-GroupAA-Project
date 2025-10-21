@@ -41,7 +41,7 @@ public class GainResourceEffect implements CardEffect {
         }
         if (neighbours) {
             for (int i = -1; i < 2; i += 2) {
-                count += state.cardsOfType(type, (player + i + state.getNPlayers()) % state.getNPlayers());
+                count += state.cardsOfType(type, (player + i + state.getNPlayers(playerId)) % state.getNPlayers(playerId));
             }
         }
         count *= multiplier;

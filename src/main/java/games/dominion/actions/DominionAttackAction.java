@@ -33,10 +33,10 @@ public abstract class DominionAttackAction extends DominionAction implements IEx
         // then what we need to do is the cycling through each of the other players to allow them
         // to play Reaction cards, and then suffer the direct attack effects of the card.
         state.setActionInProgress(this);
-        currentTarget = (player + 1) % state.getNPlayers();
-        reactionsInitiated = new boolean[state.getNPlayers()];
-        attacksComplete = new boolean[state.getNPlayers()];
-        attacksInitiated = new boolean[state.getNPlayers()];
+        currentTarget = (player + 1) % state.getNPlayers(playerId);
+        reactionsInitiated = new boolean[state.getNPlayers(playerId)];
+        attacksComplete = new boolean[state.getNPlayers(playerId)];
+        attacksInitiated = new boolean[state.getNPlayers(playerId)];
         reactionsInitiated[player] = true;
         attacksComplete[player] = true;
         nextPhaseOfReactionAttackCycle(state);
@@ -74,7 +74,7 @@ public abstract class DominionAttackAction extends DominionAction implements IEx
                     }
                 }
             }
-            currentTarget = (currentTarget + 1) % state.getNPlayers();
+            currentTarget = (currentTarget + 1) % state.getNPlayers(playerId);
             loopCount++;
             if (loopCount > 100) {
                 throw new AssertionError("WTF?");

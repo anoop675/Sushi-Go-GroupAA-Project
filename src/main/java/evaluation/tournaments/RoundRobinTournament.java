@@ -24,12 +24,12 @@ import static java.lang.Math.sqrt;
 import static java.util.stream.Collectors.toList;
 
 public class RoundRobinTournament extends AbstractTournament {
-    private static boolean debug = false;
+    private static final boolean debug = false;
     public TournamentMode tournamentMode;
     final int totalGameBudget;
     int gamesPerMatchup;
     protected List<IGameListener> listeners = new ArrayList<>();
-    private boolean verbose;
+    private final boolean verbose;
     public boolean alphaRankDetails = true;
     double[] pointsPerPlayer, winsPerPlayer, scorePerPlayer;
     int[] nGamesPlayed;
@@ -374,7 +374,7 @@ public class RoundRobinTournament extends AbstractTournament {
 
                 // now we need to be careful if we have a team game, as the agents are indexed by Team, not player
                 if (byTeam) {
-                    for (int player = 0; player < game.getGameState().getNPlayers(); player++) {
+                    for (int player = 0; player < game.getGameState().getNPlayers(playerId); player++) {
                         if (game.getGameState().getTeam(player) == j) {
                             numDraws += updatePoints(results, agentIDsInThisGame, agentIDsInThisGame.get(j), player);
                             break; // we stop after one player on the team to avoid double counting
@@ -398,7 +398,7 @@ public class RoundRobinTournament extends AbstractTournament {
                 StringBuffer sb = new StringBuffer();
                 sb.append("[");
                 for (int j = 0; j < matchUpPlayers.size(); j++) {
-                    for (int player = 0; player < game.getGameState().getNPlayers(); player++) {
+                    for (int player = 0; player < game.getGameState().getNPlayers(playerId); player++) {
                         if (game.getGameState().getTeam(player) == j) {
                             sb.append(results[player]).append(",");
                             break; // we stop after one player on the team to avoid double counting
@@ -419,7 +419,7 @@ public class RoundRobinTournament extends AbstractTournament {
         rankPerPlayer[j] += ordinalPos;
         rankPerPlayerSquared[j] += ordinalPos * ordinalPos;
 
-        for (int playerPos = 0; playerPos < game.getGameState().getNPlayers(); playerPos++) {
+        for (int playerPos = 0; playerPos < game.getGameState().getNPlayers(playerId); playerPos++) {
             if (playerPos != player) {
                 int ordinalOther = game.getGameState().getOrdinalPosition(playerPos);
                 ordinalDeltaPerOpponent[j][matchUpPlayers.get(playerPos)] += ordinalOther - ordinalPos;
@@ -474,7 +474,7 @@ public class RoundRobinTournament extends AbstractTournament {
         List<String> dataDump = new ArrayList<>();
         dataDump.add(name + "\n");
 
-        if (agents.size() > game.getGameState().getNPlayers()) {
+        if (agents.size() > game.getGameState().getNPlayers(playerId)) {
             // We only calculate alpha-rank if we have more agents than players
             // otherwise the Transition matrix is singular
             dataDump.add("Alpha calculations using Delta Ordinal\n");
@@ -541,7 +541,7 @@ public class RoundRobinTournament extends AbstractTournament {
             if (verbose) System.out.print(str);
         }
 
-        if (agents.size() > game.getGameState().getNPlayers()) {
+        if (agents.size() > game.getGameState().getNPlayers(playerId)) {
             // now report alpha-rank as long as we have more agents than players
             // otherwise the Transition matrix is singular and we get no additional information
             // compared the the simple win rates

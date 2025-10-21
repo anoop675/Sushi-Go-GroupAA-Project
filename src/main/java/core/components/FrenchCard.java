@@ -85,8 +85,7 @@ public class FrenchCard extends Card {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof FrenchCard) {
-            FrenchCard other = (FrenchCard) o;
+        if (o instanceof FrenchCard other) {
             return this.suite == other.suite && this.type == other.type && this.number == other.number;
         }
         return false;

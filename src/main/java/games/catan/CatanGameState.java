@@ -106,9 +106,8 @@ public class CatanGameState extends AbstractGameState {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CatanGameState)) return false;
+        if (!(o instanceof CatanGameState that)) return false;
         if (!super.equals(o)) return false;
-        CatanGameState that = (CatanGameState) o;
         return largestArmyOwner == that.largestArmyOwner && longestRoadOwner == that.longestRoadOwner && longestRoadLength == that.longestRoadLength && largestArmySize == that.largestArmySize && rollValue == that.rollValue && developmentCardPlayed == that.developmentCardPlayed && negotiationStepsCount == that.negotiationStepsCount && nTradesThisTurn == that.nTradesThisTurn && Arrays.deepEquals(board, that.board) && Objects.equals(catanGraph, that.catanGraph) && Arrays.equals(scores, that.scores) && Arrays.equals(victoryPoints, that.victoryPoints) && Arrays.equals(knights, that.knights) && Arrays.equals(roadLengths, that.roadLengths) && Objects.equals(exchangeRates, that.exchangeRates) && Objects.equals(playerResources, that.playerResources) && Objects.equals(playerTokens, that.playerTokens) && Objects.equals(playerDevCards, that.playerDevCards) && Objects.equals(resourcePool, that.resourcePool) && Objects.equals(devCards, that.devCards) && Objects.equals(tradeOffer, that.tradeOffer);
     }
 
@@ -401,7 +400,7 @@ public class CatanGameState extends AbstractGameState {
 
     @Override
     protected CatanGameState _copy(int playerId) {
-        CatanGameState copy = new CatanGameState(getGameParameters().copy(), getNPlayers());
+        CatanGameState copy = new CatanGameState(getGameParameters().copy(), getNPlayers(playerId));
         copy.gamePhase = gamePhase;
         copy.board = copyBoard();
         copy.catanGraph = catanGraph.copy();
@@ -440,7 +439,7 @@ public class CatanGameState extends AbstractGameState {
 //            }
 //        }
 
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             Map<CatanParameters.Resource, Counter> exchangeRate = new HashMap<>();
             for (Map.Entry<CatanParameters.Resource, Counter> e: exchangeRates.get(i).entrySet()) {
                 exchangeRate.put(e.getKey(), e.getValue().copy());
@@ -539,7 +538,7 @@ public class CatanGameState extends AbstractGameState {
     private void shuffleDevelopmentCards(int playerId) {
         // Dev cards in hand are hidden and shuffled with the main deck
         int[][] turnCardsWereBoughtIn = new int[nPlayers][];
-        for (int p = 0; p < getNPlayers(); p++) {
+        for (int p = 0; p < getNPlayers(playerId); p++) {
             if (p == playerId)
                 continue;
             devCards.add(playerDevCards.get(p));
@@ -551,7 +550,7 @@ public class CatanGameState extends AbstractGameState {
             playerDevCards.get(p).clear();
         }
         devCards.shuffle(redeterminisationRnd);
-        for (int p = 0; p < getNPlayers(); p++) {
+        for (int p = 0; p < getNPlayers(playerId); p++) {
             if (p == playerId)
                 continue;
             for (int i = 0; i < turnCardsWereBoughtIn[p].length; i++) {

@@ -27,7 +27,8 @@ public class GTGUIManager extends AbstractGUIManager {
 
     public GTGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> human) {
         super(parent, game, ac, human);
-        if (game == null) return;
+        if (game == null) {
+        }
 
         // TODO: set up GUI components and add to `parent`
     }

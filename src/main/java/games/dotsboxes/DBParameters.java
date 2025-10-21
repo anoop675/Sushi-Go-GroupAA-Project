@@ -35,8 +35,7 @@ public class DBParameters extends TunableParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DBParameters)) return false;
-        DBParameters that = (DBParameters) o;
+        if (!(o instanceof DBParameters that)) return false;
         return gridWidth == that.gridWidth &&
                 gridHeight == that.gridHeight &&
                 disallowThreeBoxCreationUntilMove == that.disallowThreeBoxCreationUntilMove;

@@ -26,7 +26,7 @@ public class GiveCard extends AbstractAction {
         if (currentState.getCurrentPlayer() == playerID){
             PartialObservableDeck<RootCard> playerHand = currentState.getPlayerHand(playerID);
             PartialObservableDeck<RootCard> targetHand = currentState.getPlayerHand(targetID);
-            boolean[] visibility = new boolean[currentState.getNPlayers()];
+            boolean[] visibility = new boolean[currentState.getNPlayers(playerId)];
             visibility[playerID] = true;
             visibility[targetID] = true;
             RootCard card = playerHand.pick(cardIdx);

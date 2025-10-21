@@ -68,7 +68,7 @@ public class ReactiveTurnOrder extends TurnOrder {
     }
 
     public void addAllReactivePlayers(AbstractGameState gameState) {
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             if (gameState.getPlayerResults()[i] == GAME_ONGOING) {
                 reactivePlayers.add(i);
             }
@@ -77,7 +77,7 @@ public class ReactiveTurnOrder extends TurnOrder {
 
     public void addAllReactivePlayersButCurrent(AbstractGameState gameState) {
         int currentPlayer = getCurrentPlayer(gameState);
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             if (i != currentPlayer && gameState.getPlayerResults()[i] == GAME_ONGOING) {
                 reactivePlayers.add(i);
             }
@@ -87,9 +87,8 @@ public class ReactiveTurnOrder extends TurnOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReactiveTurnOrder)) return false;
+        if (!(o instanceof ReactiveTurnOrder that)) return false;
         if (!super.equals(o)) return false;
-        ReactiveTurnOrder that = (ReactiveTurnOrder) o;
         return Objects.equals(reactivePlayers, that.reactivePlayers);
     }
 

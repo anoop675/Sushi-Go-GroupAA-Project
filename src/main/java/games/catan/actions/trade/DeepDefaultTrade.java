@@ -71,8 +71,7 @@ public class DeepDefaultTrade extends AbstractAction implements IExtendedSequenc
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepDefaultTrade)) return false;
-        DeepDefaultTrade that = (DeepDefaultTrade) o;
+        if (!(o instanceof DeepDefaultTrade that)) return false;
         return exchangeRate == that.exchangeRate && player == that.player && executed == that.executed && resourceOffer == that.resourceOffer;
     }
 

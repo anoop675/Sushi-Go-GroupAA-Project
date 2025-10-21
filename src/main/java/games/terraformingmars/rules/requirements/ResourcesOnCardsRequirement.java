@@ -41,7 +41,7 @@ public class ResourcesOnCardsRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -113,8 +113,7 @@ public class ResourcesOnCardsRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResourcesOnCardsRequirement)) return false;
-        ResourcesOnCardsRequirement that = (ResourcesOnCardsRequirement) o;
+        if (!(o instanceof ResourcesOnCardsRequirement that)) return false;
         return nResources == that.nResources && Arrays.equals(resources, that.resources) && Arrays.equals(nMin, that.nMin);
     }
 

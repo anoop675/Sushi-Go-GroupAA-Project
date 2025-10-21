@@ -42,9 +42,8 @@ public class MoveVerticalAction extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoveVerticalAction)) return false;
+        if (!(o instanceof MoveVerticalAction that)) return false;
         if (!super.equals(o)) return false;
-        MoveVerticalAction that = (MoveVerticalAction) o;
         return compartment == that.compartment &&
                 climbRoof == that.climbRoof;
     }

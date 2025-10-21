@@ -155,8 +155,7 @@ public abstract class Component {
             String key = (String)o;
             if (ignoreKeys.contains(key)) continue;
 
-            if(obj.get(key) instanceof JSONArray) {
-                JSONArray value = (JSONArray) obj.get(key);
+            if(obj.get(key) instanceof JSONArray value) {
                 String type = (String) value.get(0);
 
                 Property prop = null;

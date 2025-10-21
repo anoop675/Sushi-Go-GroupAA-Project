@@ -32,7 +32,7 @@ public class ForceRPReaction extends RuleNode {
     @Override
     protected boolean run(AbstractGameStateWithTurnOrder gs) {
         PandemicGameState pgs = (PandemicGameState)gs;
-        int nPlayers = gs.getNPlayers();
+        int nPlayers = gs.getNPlayers(playerId);
 
         for (int i = 0; i < nPlayers; i++) {
             Deck<Card> ph = (Deck<Card>) pgs.getComponent(playerHandHash, i);
@@ -52,7 +52,7 @@ public class ForceRPReaction extends RuleNode {
             Card card = plannerDeck.get(0);
             if (((PropertyString)card.getProperty(nameHash)).value.equals("Resilient Population")) {
                 // Find planner player
-                for (int p = 0; p < pgs.getNPlayers(); p++) {
+                for (int p = 0; p < pgs.getNPlayers(playerId); p++) {
                     if (pgs.getPlayerRole(p).equals("Contingency Planner")) {
                         ((PandemicTurnOrder)pgs.getTurnOrder()).addReactivePlayer(p);
                         pgs.setGamePhase(RPReaction);

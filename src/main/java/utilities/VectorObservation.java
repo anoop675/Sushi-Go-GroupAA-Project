@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class VectorObservation<T> implements IPrintable {
 
-    private T[] values;
+    private final T[] values;
 
     public VectorObservation(T[] arrayValues){
         this.values = arrayValues;

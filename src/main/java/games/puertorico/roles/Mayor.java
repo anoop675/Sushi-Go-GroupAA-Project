@@ -28,7 +28,8 @@ public class Mayor extends PuertoRicoRole<Mayor> {
         // Here we add calculate how many colonists each player gets, and add them to their colonist pool
         int colonists = state.getColonistsOnShip();
         state.changeColonistsOnShip(-colonists);
-        int nPlayers = state.getNPlayers();
+        int playerId = 0;
+        int nPlayers = state.getNPlayers(playerId);
         int[] colonistsPerPlayer = new int[nPlayers];
         for (int i = 0; i < colonists; i++) {
             colonistsPerPlayer[(i + roleOwner) % nPlayers]++;
@@ -87,8 +88,9 @@ public class Mayor extends PuertoRicoRole<Mayor> {
         if (state.getColonistsOnShip() > 0) {
             throw new AssertionError("We should not have any colonists on the ship at this point! ");
         }
-        int totalVacancies = IntStream.range(0, state.getNPlayers()).map(i -> state.getPlayerBoard(i).getTownVacancies()).sum();
-        int colonists = Math.max(state.getNPlayers(), totalVacancies);
+        int playerId = 0;
+        int totalVacancies = IntStream.range(0, state.getNPlayers(playerId)).map(i -> state.getPlayerBoard(i).getTownVacancies()).sum();
+        int colonists = Math.max(state.getNPlayers(playerId), totalVacancies);
         if (colonists > state.getColonistsInSupply()) {
             colonists = state.getColonistsInSupply();
             state.setGameEndTriggered();

@@ -30,7 +30,8 @@ public class Craftsman extends PuertoRicoRole<Craftsman> {
         // and then the only action to take is for the roleSelection player to
         // pick an extra good
         producedByRoleOwner = new ArrayList<>();
-        for (int player = 0; player < prgs.getNPlayers(); player++) {
+        int playerId = 0;
+        for (int player = 0; player < prgs.getNPlayers(playerId); player++) {
             PRPlayerBoard pb = prgs.getPlayerBoard(player);
             Map<PuertoRicoConstants.Crop, Long> production = pb.getPlantations().stream()
                     .filter(Plantation::isOccupied)

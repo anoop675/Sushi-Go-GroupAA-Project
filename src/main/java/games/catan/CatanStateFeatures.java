@@ -80,7 +80,7 @@ public class CatanStateFeatures implements IStateFeatureVector {
         retValue[1] = catanState.getRoundCounter();
         retValue[2] = catanState.getGameScore(playerID);
         double otherScore = 0.0;
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (i != playerID && catanState.getGameScore(i) > otherScore) {
                 otherScore = catanState.getGameScore(i);
                 break;
@@ -187,7 +187,7 @@ public class CatanStateFeatures implements IStateFeatureVector {
         retValue[30] = catanState.getPlayerDevCards(playerID).getSize();
         retValue[31] = catanState.getKnights()[playerID];
         int otherKnights = 0;
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (i != playerID) {
                 otherKnights = Math.max(otherKnights, catanState.getKnights()[i]);
             }
@@ -200,7 +200,7 @@ public class CatanStateFeatures implements IStateFeatureVector {
                 .collect(groupingBy(Component::getOwnerId, counting()));
         int maxSettlements = settlementsPerPlayer.values().stream().max(Long::compareTo).orElse(0L).intValue();
 
-        double maxScore = IntStream.range(0, state.getNPlayers())
+        double maxScore = IntStream.range(0, state.getNPlayers(playerId))
                 .mapToDouble(catanState::getGameScore)
                 .max().orElse(0);
 
@@ -244,7 +244,7 @@ public class CatanStateFeatures implements IStateFeatureVector {
                         catanState.getPlayerResources(playerID).get(ORE).getValue()));
 
         // four players flag
-        retValue[51] = state.getNPlayers() == 4 ? 1.0 : 0.0;
+        retValue[51] = state.getNPlayers(playerId) == 4 ? 1.0 : 0.0;
 
         return retValue;
     }

@@ -10,7 +10,6 @@ import evaluation.optimisation.TunableParameters;
 import games.catan.components.Building;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static games.catan.components.Building.Type.Settlement;
@@ -64,7 +63,7 @@ public class CatanHeuristic extends TunableParameters implements IStateHeuristic
             for(int i = 0; i < scores.length; i++){
                 if (i != playerId){
                     stateValue += opponentsScore * ((((scores[i] + state.getVictoryPoints()[i]))
-                            / (double)((CatanParameters)state.getGameParameters()).points_to_win)/(double) state.getNPlayers());
+                            / (double)((CatanParameters)state.getGameParameters()).points_to_win)/(double) state.getNPlayers(playerId));
                 } else {
                     stateValue += playerScore * (((scores[i]))
                             / (double)((CatanParameters)state.getGameParameters()).points_to_win);
@@ -125,8 +124,7 @@ public class CatanHeuristic extends TunableParameters implements IStateHeuristic
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof CatanHeuristic) {
-            CatanHeuristic other = (CatanHeuristic) o;
+        if (o instanceof CatanHeuristic other) {
             return other.playerScore == playerScore
                     && other.playerResources == playerResources
                     && other.playerDevelopmentCards == playerDevelopmentCards

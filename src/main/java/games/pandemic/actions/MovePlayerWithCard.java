@@ -50,9 +50,8 @@ public class MovePlayerWithCard extends MovePlayer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MovePlayerWithCard)) return false;
+        if (!(o instanceof MovePlayerWithCard that)) return false;
         if (!super.equals(o)) return false;
-        MovePlayerWithCard that = (MovePlayerWithCard) o;
         return cardIdx == that.cardIdx;
     }
 

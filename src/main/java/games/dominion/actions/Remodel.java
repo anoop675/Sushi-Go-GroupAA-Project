@@ -70,13 +70,11 @@ public class Remodel extends DominionAction implements IExtendedSequence {
 
     @Override
     public void _afterAction(AbstractGameState state, AbstractAction action) {
-        if (action instanceof TrashCard) {
-            TrashCard tc = (TrashCard) action;
+        if (action instanceof TrashCard tc) {
             if (tc.player == player)
                 cardTrashed = tc.trashedCard;
         }
-        if (action instanceof GainCard) {
-            GainCard bc = (GainCard) action;
+        if (action instanceof GainCard bc) {
             if (bc.buyingPlayer == player)
                 cardGained = bc.cardType;
         }
@@ -111,8 +109,7 @@ public class Remodel extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Remodel) {
-            Remodel other = (Remodel) obj;
+        if (obj instanceof Remodel other) {
             return super.equals(obj) && other.cardTrashed == cardGained && other.cardGained == cardGained;
         }
         return false;

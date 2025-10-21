@@ -159,7 +159,7 @@ public class SushiGoMetrics implements IMetricsCollection {
             for (SGCard.SGCardType type: types) {
                 SGGameState gs = (SGGameState) e.state;
                 records.put(type + " Count", 0);
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     if (gs.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME) {
                         records.put(type + " Count", gs.getPlayedCardTypesAllGame()[i].get(type).getValue());
                         break;
@@ -195,15 +195,15 @@ public class SushiGoMetrics implements IMetricsCollection {
             for (SGCard.SGCardType type: types) {
                 SGGameState gs = (SGGameState) e.state;
                 double sum = 0, sumPercentage = 0, sumDiff = 0;
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     sum += gs.getPointsPerCardType()[i].get(type).getValue();
                     sumPercentage += gs.getPointsPerCardType()[i].get(type).getValue() * 1.0 / gs.getPlayerScore()[i].getValue();
-                    if (i < gs.getNPlayers() - 1)
+                    if (i < gs.getNPlayers(playerId) - 1)
                         sumDiff += Math.abs(gs.getPointsPerCardType()[i].get(type).getValue() - gs.getPointsPerCardType()[i + 1].get(type).getValue());
                 }
-                records.put(type + " Average Points", sum / gs.getNPlayers());
-                records.put(type + " Average Points (%)", sumPercentage / gs.getNPlayers());
-                records.put(type + " Average Points (Diff)", sumDiff / (gs.getNPlayers() - 1));
+                records.put(type + " Average Points", sum / gs.getNPlayers(playerId));
+                records.put(type + " Average Points (%)", sumPercentage / gs.getNPlayers(playerId));
+                records.put(type + " Average Points (Diff)", sumDiff / (gs.getNPlayers(playerId) - 1));
             }
             return true;
         }

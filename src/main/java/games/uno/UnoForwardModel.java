@@ -24,10 +24,10 @@ public class UnoForwardModel extends StandardForwardModel {
         UnoGameState ugs = (UnoGameState) firstState;
 
         // Set up scores for all players, initially 0
-        ugs.playerScore = new int[firstState.getNPlayers()];
-        ugs.expulsionRound = new int[firstState.getNPlayers()];
+        ugs.playerScore = new int[firstState.getNPlayers(playerId)];
+        ugs.expulsionRound = new int[firstState.getNPlayers(playerId)];
         ugs.playerDecks = new ArrayList<>();
-        for (int i = 0; i < ugs.getNPlayers(); i++) {
+        for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
             ugs.playerDecks.add(new Deck<>("Player " + i + " deck", i, VISIBLE_TO_OWNER));
         }
 
@@ -54,7 +54,7 @@ public class UnoForwardModel extends StandardForwardModel {
      */
     private void createCards(UnoGameState ugs) {
         UnoGameParameters ugp = (UnoGameParameters) ugs.getGameParameters();
-        for (String color : ugp.colors) {
+        for (String color : UnoGameParameters.colors) {
             if (!color.equals("Wild")) {
 
                 // Create the number cards
@@ -88,7 +88,7 @@ public class UnoForwardModel extends StandardForwardModel {
     }
 
     private void drawCardsToPlayers(UnoGameState ugs) {
-        for (int player = 0; player < ugs.getNPlayers(); player++) {
+        for (int player = 0; player < ugs.getNPlayers(playerId); player++) {
             if (ugs.isNotTerminalForPlayer(player))
                 for (int card = 0; card < ((UnoGameParameters) ugs.getGameParameters()).nCardsPerPlayer; card++) {
                     ugs.playerDecks.get(player).add(ugs.drawDeck.draw());
@@ -103,7 +103,7 @@ public class UnoForwardModel extends StandardForwardModel {
      */
     private void setupRound(UnoGameState ugs) {
         // Refresh player decks
-        for (int i = 0; i < ugs.getNPlayers(); i++) {
+        for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
             ugs.drawDeck.add(ugs.playerDecks.get(i));
             ugs.playerDecks.get(i).clear();
         }
@@ -176,7 +176,7 @@ public class UnoForwardModel extends StandardForwardModel {
         // Did any player run out of cards?
         boolean roundEnd = false;
         int roundWinner = -1;
-        for (int playerID = 0; playerID < ugs.getNPlayers(); playerID++) {
+        for (int playerID = 0; playerID < ugs.getNPlayers(playerId); playerID++) {
             if (ugs.getPlayerResults()[playerID] == GAME_ONGOING) {
                 if (ugs.playerDecks.get(playerID).getComponents().size() == 0) {
                     roundEnd = true;
@@ -187,7 +187,7 @@ public class UnoForwardModel extends StandardForwardModel {
             UnoGameParameters params = (UnoGameParameters) ugs.getGameParameters();
             if (ugs.getTurnCounter() > params.maxTurnsPerRound) {
                 roundEnd = true;
-                roundWinner = IntStream.range(0, ugs.getNPlayers())
+                roundWinner = IntStream.range(0, ugs.getNPlayers(playerId))
                         .mapToObj(i -> new Pair<>(i, ugs.playerDecks.get(i).getSize()))
                         .min(Comparator.comparingInt(p -> p.b))
                         .orElseThrow(() -> new AssertionError("No min card count found")).a;
@@ -204,7 +204,7 @@ public class UnoForwardModel extends StandardForwardModel {
                     break;
                 case INCREMENTAL:
                 case CHALLENGE:
-                    for (int i = 0; i < ugs.getNPlayers(); i++) {
+                    for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
                         if (ugs.getPlayerResults()[i] == GAME_ONGOING) {
                             ugs.playerScore[i] += ugs.calculatePlayerPoints(i, true);
                         } else {
@@ -241,7 +241,7 @@ public class UnoForwardModel extends StandardForwardModel {
 
         List<Integer> breachers = new ArrayList<>();
 
-        for (int playerID = 0; playerID < ugs.getNPlayers(); playerID++) {
+        for (int playerID = 0; playerID < ugs.getNPlayers(playerId); playerID++) {
             if (ugs.getPlayerResults()[playerID] != GAME_ONGOING)
                 continue; // player is already knocked out
             // A winner!
@@ -258,7 +258,7 @@ public class UnoForwardModel extends StandardForwardModel {
                     int maxScore = Arrays.stream(ugs.playerScore).max().orElseThrow(
                             () -> new AssertionError("Unexpected: no players have scores?")
                     );
-                    for (int i = 0; i < ugs.getNPlayers(); i++) {
+                    for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
                         if (playerScores[i] == maxScore) {
                             ugs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, i);
                         } else {
@@ -273,7 +273,7 @@ public class UnoForwardModel extends StandardForwardModel {
                     int minScore = Arrays.stream(ugs.playerScore).min().orElseThrow(
                             () -> new AssertionError("Unexpected: no players have scores?")
                     );
-                    for (int i = 0; i < ugs.getNPlayers(); i++) {
+                    for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
                         if (playerScores[i] == minScore) {
                             ugs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, i);
                         } else {
@@ -287,7 +287,7 @@ public class UnoForwardModel extends StandardForwardModel {
                     // as we need to knock out players who breach the threshold
                     int remainingPlayers = 0;
                     int lowScore = ugp.nWinPoints * 10;
-                    for (int i = 0; i < ugs.getNPlayers(); i++) {
+                    for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
                         if (ugs.getPlayerResults()[i] == GAME_ONGOING) {
                             if (playerScores[i] >= ugp.nWinPoints) {
                                 ugs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, i);
@@ -301,7 +301,7 @@ public class UnoForwardModel extends StandardForwardModel {
                         }
                     }
                     List<Integer> lowScoreIds = new ArrayList<>();
-                    for (int i = 0; i < ugs.getNPlayers(); i++)
+                    for (int i = 0; i < ugs.getNPlayers(playerId); i++)
                         if (ugs.getPlayerResults()[i] == GAME_ONGOING && lowScore == playerScores[i])
                             lowScoreIds.add(i);
 
@@ -315,7 +315,7 @@ public class UnoForwardModel extends StandardForwardModel {
                             ugs.setGameStatus(CoreConstants.GameResult.GAME_END);
                             return true;
                         case 1:
-                            for (int p = 0; p < ugs.getNPlayers(); p++) {
+                            for (int p = 0; p < ugs.getNPlayers(playerId); p++) {
                                 if (ugs.getPlayerResults()[p] == GAME_ONGOING) {
                                     ugs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, p);
                                     ugs.expulsionRound[p] = ugs.getRoundCounter() + 1;
@@ -343,7 +343,7 @@ public class UnoForwardModel extends StandardForwardModel {
             int cardIdx = playerHand.getComponents().indexOf(card);
             if (card.isPlayable(ugs)) {
                 if (ugs.isWildCard(card)) {
-                    for (String color : ((UnoGameParameters) ugs.getGameParameters()).colors) {
+                    for (String color : UnoGameParameters.colors) {
                         actions.add(new PlayCard(playerHand.getComponentID(), ugs.discardDeck.getComponentID(), cardIdx, color));
                     }
                 } else {

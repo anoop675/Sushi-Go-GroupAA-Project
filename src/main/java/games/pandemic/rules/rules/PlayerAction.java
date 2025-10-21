@@ -22,7 +22,7 @@ import static core.CoreConstants.nameHash;
 public class PlayerAction extends core.rules.rulenodes.PlayerAction {
 
     private int playerHandOverCapacity;
-    private int n_initial_disease_cubes;
+    private final int n_initial_disease_cubes;
 
     public PlayerAction(int n_initial_disease_cubes) {
         super();

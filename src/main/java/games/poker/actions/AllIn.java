@@ -38,8 +38,7 @@ public class AllIn extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AllIn)) return false;
-        AllIn bet = (AllIn) o;
+        if (!(o instanceof AllIn bet)) return false;
         return playerId == bet.playerId;
     }
 

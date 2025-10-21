@@ -17,17 +17,17 @@ public class Pathfinder {
      * Graph to be used for the path finding.
      * TODO: This could become a GraphBoard at some point.
      */
-    private GridBoard graph;
+    private final GridBoard graph;
 
     /**
      * Cache of shortest path from node i to the others
      */
-    private TreeMap<Integer, TreeMap<Integer, Path>> shortestPaths;
+    private final TreeMap<Integer, TreeMap<Integer, Path>> shortestPaths;
 
     /**
      * Utility for comparing nodes in A*'s priority queue.
      */
-    private NodeComparator nodeComparator;
+    private final NodeComparator nodeComparator;
 
 
     /**

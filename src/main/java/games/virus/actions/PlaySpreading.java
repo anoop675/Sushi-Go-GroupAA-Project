@@ -13,10 +13,10 @@ import static games.virus.components.VirusOrgan.VirusOrganState.Neutral;
 
 public class PlaySpreading extends PlayVirusCard implements IPrintable {
 
-    private int                 otherPlayerId;
-    private int                 otherPlayerBodyId;
-    private VirusCard.OrganType myOrganType;
-    private VirusCard.OrganType otherOrganType;
+    private final int                 otherPlayerId;
+    private final int                 otherPlayerBodyId;
+    private final VirusCard.OrganType myOrganType;
+    private final VirusCard.OrganType otherOrganType;
 
     public PlaySpreading(int deckFrom, int deckTo, int fromIndex, int bodyId, int otherPlayerId, int otherPlayerBodyId,
                          VirusCard.OrganType myOrganType, VirusCard.OrganType otherOrganType) {
@@ -56,8 +56,7 @@ public class PlaySpreading extends PlayVirusCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlaySpreading)) return false;
-        PlaySpreading that = (PlaySpreading) o;
+        if (!(o instanceof PlaySpreading that)) return false;
         return super.equals(o) &&
                 otherPlayerId == that.otherPlayerId &&
                 otherPlayerBodyId == that.otherPlayerBodyId &&

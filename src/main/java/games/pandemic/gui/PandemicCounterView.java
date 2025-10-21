@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class PandemicCounterView extends CounterView {
     private Image background;
-    private Color color;
+    private final Color color;
 
     public PandemicCounterView(Counter c, Color color, String backgroundPath) {
         super(c);

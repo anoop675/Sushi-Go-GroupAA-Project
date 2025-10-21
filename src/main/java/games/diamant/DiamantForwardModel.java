@@ -28,7 +28,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
         DiamantGameState dgs = (DiamantGameState) firstState;
         dgs._reset();
 
-        for (int i = 0; i < dgs.getNPlayers(); i++) {
+        for (int i = 0; i < dgs.getNPlayers(playerId); i++) {
             String counter_hand_name = "CounterHand" + i;
             String counter_chest_name = "CounterChest" + i;
             dgs.hands.add(new Counter(0, 0, 1000, counter_hand_name));
@@ -110,7 +110,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
     protected void _afterAction(AbstractGameState currentState, AbstractAction action) {
         DiamantGameState dgs = (DiamantGameState) currentState;
         // If all players have an action, execute them
-        if (dgs.actionsPlayed.size() == dgs.getNPlayers()) {
+        if (dgs.actionsPlayed.size() == dgs.getNPlayers(playerId)) {
             playActions(dgs);
             dgs.actionsPlayed.clear();
         }
@@ -165,7 +165,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
     }
 
     private void distributeGemsAmongPlayers(DiamantGameState dgs, int nPlayersExit) {
-        int nPlayers = dgs.getNPlayers();
+        int nPlayers = dgs.getNPlayers(playerId);
         int gemsCollected = 0;
 
         // Divide up gems per space
@@ -226,7 +226,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
             dgs.mainDeck.shuffle(dgs.getRnd());
 
             // All the player will participate in next cave
-            for (int p = 0; p < dgs.getNPlayers(); p++)
+            for (int p = 0; p < dgs.getNPlayers(playerId); p++)
                 dgs.playerInCave.set(p, true);
 
             drawAndPlayCard(dgs);
@@ -271,7 +271,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
             int gems_to_players = nInCave > 0 ? (int) Math.floor(card.getValue() / (double) nInCave) : 0;
             int gems_to_path = nInCave > 0 ? card.getValue() % nInCave : card.getValue();
 
-            for (int p = 0; p < dgs.getNPlayers(); p++)
+            for (int p = 0; p < dgs.getNPlayers(playerId); p++)
                 if (dgs.playerInCave.get(p))
                     dgs.hands.get(p).increment(gems_to_players);
 
@@ -288,7 +288,7 @@ public class DiamantForwardModel extends StandardForwardModel implements ITreeAc
             if (hazardCount.getOrDefault(card.getHazardType(), 0L) >= dp.nHazardsToDead) {
                 // Hazard card is the second of its type, cave ends
                 // All active players lose all gems on hand.
-                for (int p = 0; p < dgs.getNPlayers(); p++) {
+                for (int p = 0; p < dgs.getNPlayers(playerId); p++) {
                     if (dgs.playerInCave.get(p)) {
                         dgs.hands.get(p).setValue(0);
                         dgs.recordOfPlayerActions.add(new DiamantGameState.PlayerTurnRecord(p, dgs.nCave, -1));

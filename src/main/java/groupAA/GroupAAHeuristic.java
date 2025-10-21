@@ -5,7 +5,7 @@ import core.interfaces.IStateHeuristic;
 import org.json.simple.JSONObject;
 import core.components.Deck;
 import core.components.Card;
-import games.sushigo.SushiGoGameState;
+// import games.sushigo.SushiGoGameState; // removed
 
 public class GroupAAHeuristic implements IStateHeuristic {
 
@@ -25,12 +25,13 @@ public class GroupAAHeuristic implements IStateHeuristic {
 
     @Override
     public double evaluateState(AbstractGameState gs, int playerId) {
-        SushiGoGameState state = (SushiGoGameState) gs;
+        // SushiGoGameState state = (SushiGoGameState) gs; // removed
+        AbstractGameState state = gs; // use base type
 
         double score = 0;
-        score += state.getPlayerScore(playerId);
+        score += state.getGameScore(playerId);
 
-        Deck<Card> table = state.getPlayerCards(playerId);
+        int table = state.getNPlayers(playerId);
 
         int count_tempura = 0;
         int count_sashimi = 0;

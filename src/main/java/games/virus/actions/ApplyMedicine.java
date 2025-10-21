@@ -11,7 +11,7 @@ import games.virus.cards.VirusCard;
 import java.util.Objects;
 
 public class ApplyMedicine extends PlayVirusCard implements IPrintable {
-    private VirusCard.OrganType organ;
+    private final VirusCard.OrganType organ;
 
     public ApplyMedicine(int deckFrom, int deckTo, int fromIndex, int bodyId, VirusCard.OrganType organ) {
         super(deckFrom, deckTo, fromIndex, bodyId);
@@ -49,9 +49,8 @@ public class ApplyMedicine extends PlayVirusCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ApplyMedicine)) return false;
+        if (!(o instanceof ApplyMedicine that)) return false;
         if (!super.equals(o)) return false;
-        ApplyMedicine that = (ApplyMedicine) o;
         return organ == that.organ;
     }
 

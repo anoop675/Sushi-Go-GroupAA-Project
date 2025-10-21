@@ -25,17 +25,17 @@ public class PokerForwardModel extends StandardForwardModel {
         PokerGameState pgs = (PokerGameState) firstState;
         PokerGameParameters params = (PokerGameParameters) firstState.getGameParameters();
 
-        pgs.playerMoney = new Counter[firstState.getNPlayers()];
-        pgs.playerNeedsToCall = new boolean[firstState.getNPlayers()];
-        pgs.playerFold = new boolean[firstState.getNPlayers()];
-        pgs.playerAllIn = new boolean[firstState.getNPlayers()];
-        pgs.playerBet = new Counter[firstState.getNPlayers()];
-        pgs.playerActStreet = new boolean[pgs.getNPlayers()];
+        pgs.playerMoney = new Counter[firstState.getNPlayers(playerId)];
+        pgs.playerNeedsToCall = new boolean[firstState.getNPlayers(playerId)];
+        pgs.playerFold = new boolean[firstState.getNPlayers(playerId)];
+        pgs.playerAllIn = new boolean[firstState.getNPlayers(playerId)];
+        pgs.playerBet = new Counter[firstState.getNPlayers(playerId)];
+        pgs.playerActStreet = new boolean[pgs.getNPlayers(playerId)];
         pgs.moneyPots = new ArrayList<>();
         pgs.bet = false;
 
         pgs.playerDecks = new ArrayList<>();
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             pgs.playerDecks.add(new Deck<>("Player " + i + " deck", i, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
             pgs.playerMoney[i] = new Counter(params.nStartingMoney, 0, Integer.MAX_VALUE, "Player " + i + " money");
             pgs.playerBet[i] = new Counter(0, 0, Integer.MAX_VALUE, "Player " + i + " money");
@@ -63,7 +63,7 @@ public class PokerForwardModel extends StandardForwardModel {
         pgs.moneyPots.add(new MoneyPot());
 
         // Refresh player info
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             pgs.playerDecks.get(i).clear();
             pgs.playerNeedsToCall[i] = false;
             pgs.playerFold[i] = false;
@@ -108,7 +108,7 @@ public class PokerForwardModel extends StandardForwardModel {
     }
 
     private void drawCardsToPlayers(PokerGameState pgs) {
-        for (int player = 0; player < pgs.getNPlayers(); player++) {
+        for (int player = 0; player < pgs.getNPlayers(playerId); player++) {
             for (int card = 0; card < ((PokerGameParameters) pgs.getGameParameters()).nCardsPerPlayer; card++) {
                 pgs.playerDecks.get(player).add(pgs.drawDeck.draw());
             }
@@ -165,7 +165,7 @@ public class PokerForwardModel extends StandardForwardModel {
             if (pgs.isNotTerminal()) {
                 // who starts the bidding in the next phase?
                 // This is the small blind, or the next person round if they have Folded / are AllIn
-                int nextPlayer = pgs.getNextActingPlayer((pgs.getSmallId() - 1) % pgs.getNPlayers(), 1);
+                int nextPlayer = pgs.getNextActingPlayer((pgs.getSmallId() - 1) % pgs.getNPlayers(playerId), 1);
                 if (nextPlayer == -1) {
                     throw new AssertionError("No Player to act next!");
                 }
@@ -177,7 +177,7 @@ public class PokerForwardModel extends StandardForwardModel {
         checkMoney(pgs);
 
         // next player round (who is still in the game and has not folded)
-        int nextPlayer = pgs.getNextActingPlayer(pgs.getCurrentPlayer() % pgs.getNPlayers(), 1);
+        int nextPlayer = pgs.getNextActingPlayer(pgs.getCurrentPlayer() % pgs.getNPlayers(playerId), 1);
         endPlayerTurn(pgs, nextPlayer);
     }
 
@@ -215,7 +215,7 @@ public class PokerForwardModel extends StandardForwardModel {
             pot.setValue(0);
         }
 
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             if (pgs.playerMoney[i].isMinimum()) {
                 // Player is out of the game
                 pgs.setPlayerResult(LOSE_GAME, i);
@@ -236,7 +236,7 @@ public class PokerForwardModel extends StandardForwardModel {
     private void checkMoney(PokerGameState pgs) {
         int personalMoney = Arrays.stream(pgs.playerMoney).mapToInt(Counter::getValue).sum();
         int potMoney = pgs.moneyPots.stream().mapToInt(MoneyPot::getValue).sum();
-        int expectedTotal = pgs.getNPlayers() * ((PokerGameParameters) pgs.getGameParameters()).nStartingMoney;
+        int expectedTotal = pgs.getNPlayers(playerId) * ((PokerGameParameters) pgs.getGameParameters()).nStartingMoney;
         //    String potDetails = pgs.moneyPots.stream().map(MoneyPot::toString).collect(Collectors.joining(", "));
         //    String playerMoney = Arrays.stream(pgs.playerMoney).map(Counter::toString).collect(Collectors.joining(", "));
         //    System.out.println(potDetails + "\t" + playerMoney);
@@ -248,7 +248,7 @@ public class PokerForwardModel extends StandardForwardModel {
     public Pair<Map<Integer, Integer>, Map<Integer, Set<Integer>>> translatePokerHands(PokerGameState pgs) {
         Map<Integer, Integer> ranks = new HashMap<>();
         Map<Integer, Set<Integer>> hands = new HashMap<>();
-        for (int i = 0; i < pgs.getNPlayers(); i++) {
+        for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
             if (!pgs.playerFold[i] && pgs.getPlayerResults()[i] != LOSE_GAME) {
                 Deck<FrenchCard> cardsToEvaluate = pgs.playerDecks.get(i).copy();
                 cardsToEvaluate.add(pgs.communityCards.copy());
@@ -282,7 +282,7 @@ public class PokerForwardModel extends StandardForwardModel {
         }
         if (winners.size() > 1) {
             // A tie in rank, check card values
-            ArrayList<Integer>[] cardValues = new ArrayList[pgs.getNPlayers()];
+            ArrayList<Integer>[] cardValues = new ArrayList[pgs.getNPlayers(playerId)];
             int nCards = 0;
             for (int i : winners) {
                 cardValues[i] = new ArrayList<>(hands.get(i));
@@ -318,7 +318,7 @@ public class PokerForwardModel extends StandardForwardModel {
 
         if (pgp.endMinMoney) {
             int maxMoney = 0;
-            for (int playerID = 0; playerID < pgs.getNPlayers(); playerID++) {
+            for (int playerID = 0; playerID < pgs.getNPlayers(playerId); playerID++) {
                 int money = pgs.playerMoney[playerID].getValue();
                 if (money >= pgp.nWinMoney && money > maxMoney) {
                     maxMoney = money;
@@ -335,7 +335,7 @@ public class PokerForwardModel extends StandardForwardModel {
                 return true;
             } else {
                 int stillAlive = 0;
-                for (int i = 0; i < pgs.getNPlayers(); i++) {
+                for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                     if (pgs.getPlayerResults()[i] == CoreConstants.GameResult.GAME_ONGOING) {
                         stillAlive++;
                         if (stillAlive > 1) break;
@@ -364,7 +364,7 @@ public class PokerForwardModel extends StandardForwardModel {
 
         int biggestBet = 0;
         boolean othersAllIn = true;  // True if all others are all in / out of the game, false otherwise
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             if (pgs.getPlayerBet()[i].getValue() > biggestBet) biggestBet = pgs.getPlayerBet()[i].getValue();
             if (i != player && pgs.getPlayerResults()[i] != LOSE_GAME && !pgs.playerFold[i] && !pgs.playerAllIn[i])
                 othersAllIn = false;

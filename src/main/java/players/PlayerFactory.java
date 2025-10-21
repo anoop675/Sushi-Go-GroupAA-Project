@@ -59,10 +59,9 @@ public class PlayerFactory {
             if (instantiatedObject instanceof TunableParameters<?> parameters) {
                 instantiatedObject = parameters.instantiate();
             }
-            if (!(instantiatedObject instanceof AbstractPlayer)) {
+            if (!(instantiatedObject instanceof AbstractPlayer retValue)) {
                 throw new AssertionError("The file " + data + " does not contain a valid AbstractPlayer or TunableParameters class.");
             }
-            AbstractPlayer retValue = (AbstractPlayer) instantiatedObject;
             retValue.setName(data.substring(0, data.indexOf(".")));
             return retValue;
         }

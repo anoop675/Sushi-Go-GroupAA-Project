@@ -211,10 +211,7 @@ public class Monster extends Figure {
     }
     public void removeSurge (Surge surge)
     {
-        if (surges.contains(surge))
-        {
-            surges.remove(surge);
-        }
+        surges.remove(surge);
     }
     public void addPassive(MonsterAbilities.MonsterPassive ability)
     {
@@ -225,9 +222,7 @@ public class Monster extends Figure {
     }
     public void removePassive(MonsterAbilities.MonsterPassive ability)
     {
-        if (passives.contains(ability)) {
-            passives.remove(ability);
-        }
+        passives.remove(ability);
     }
     public void addAction(MonsterAbilities.MonsterAbility action)
     {
@@ -238,9 +233,7 @@ public class Monster extends Figure {
     }
     public void removeAction(MonsterAbilities.MonsterAbility action)
     {
-        if (actions.contains(action)) {
-            actions.remove(action);
-        }
+        actions.remove(action);
     }
     public List<Surge> getSurges() {
         return surges;

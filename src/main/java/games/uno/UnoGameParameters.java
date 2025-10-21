@@ -93,9 +93,8 @@ public class UnoGameParameters extends TunableParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UnoGameParameters)) return false;
+        if (!(o instanceof UnoGameParameters that)) return false;
         if (!super.equals(o)) return false;
-        UnoGameParameters that = (UnoGameParameters) o;
         return nCardsPerPlayer == that.nCardsPerPlayer &&
                 nNumberCards == that.nNumberCards &&
                 nWildCards == that.nWildCards &&
@@ -112,7 +111,7 @@ public class UnoGameParameters extends TunableParameters {
                 Objects.equals(dataPath, that.dataPath) &&
                 Arrays.equals(specialDrawCards, that.specialDrawCards) &&
                 Arrays.equals(specialWildDrawCards, that.specialWildDrawCards) &&
-                Arrays.equals(colors, that.colors);
+                Arrays.equals(colors, colors);
     }
 
     @Override

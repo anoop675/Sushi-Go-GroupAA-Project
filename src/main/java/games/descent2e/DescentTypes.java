@@ -246,7 +246,7 @@ public class DescentTypes {
     }
 
     public enum AttackType {
-        NONE, MELEE, RANGED, BLAST, BOTH;
+        NONE, MELEE, RANGED, BLAST, BOTH
     }
 
 }

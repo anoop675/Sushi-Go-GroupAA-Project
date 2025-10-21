@@ -400,34 +400,28 @@ public class CatanBoardView extends JComponent implements IScreenHighlight {
     }
 
     public void highlight(AbstractAction action) {
-        if (action instanceof BuildCity) {
+        if (action instanceof BuildCity buildCity) {
             // Highlight board node
-            BuildCity buildCity = (BuildCity)action;
             buildingHighlight = new Pair<>(new Point(buildCity.row, buildCity.col), buildCity.vertex);
         }
-        else if (action instanceof BuildRoad) {
+        else if (action instanceof BuildRoad buildRoad) {
             // Highlight edge
-            BuildRoad buildRoad = (BuildRoad) action;
             roadHighlight = new Pair<>(new Point(buildRoad.x, buildRoad.y), buildRoad.edge);
         }
-        else if (action instanceof BuildSettlement) {
+        else if (action instanceof BuildSettlement buildCity) {
             // Highlight board node
-            BuildSettlement buildCity = (BuildSettlement)action;
             buildingHighlight = new Pair<>(new Point(buildCity.x, buildCity.y), buildCity.vertex);
         }
-        else if (action instanceof DeepPlaceSettlementThenRoad) {
+        else if (action instanceof DeepPlaceSettlementThenRoad buildCity) {
             // settle
-            DeepPlaceSettlementThenRoad buildCity = (DeepPlaceSettlementThenRoad)action;
             buildingHighlight = new Pair<>(new Point(buildCity.x, buildCity.y), buildCity.vertex);
         }
-        else if (action instanceof MoveRobber) {  // Includes MoveRobberAndSteal
+        else if (action instanceof MoveRobber mr) {  // Includes MoveRobberAndSteal
             // tile
-            MoveRobber mr = (MoveRobber) action;
             tileHighlight = new Point(mr.x, mr.y);
         }
-        else if (action instanceof PlaceSettlementWithRoad) {
+        else if (action instanceof PlaceSettlementWithRoad pswr) {
             // settle + road
-            PlaceSettlementWithRoad pswr = (PlaceSettlementWithRoad) action;
             buildingHighlight = new Pair<>(new Point(pswr.x, pswr.y), pswr.vertex);
             roadHighlight = new Pair<>(new Point(pswr.x, pswr.y), pswr.edge);
         }

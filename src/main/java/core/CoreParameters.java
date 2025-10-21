@@ -43,9 +43,8 @@ public class CoreParameters extends TunableParameters<Object> {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CoreParameters)) return false;
+        if (!(o instanceof CoreParameters that)) return false;
         if (!super.equals(o)) return false;
-        CoreParameters that = (CoreParameters) o;
         return verbose == that.verbose && recordEventHistory == that.recordEventHistory && partialObservable == that.partialObservable && competitionMode == that.competitionMode && disqualifyPlayerOnIllegalActionPlayed == that.disqualifyPlayerOnIllegalActionPlayed && disqualifyPlayerOnTimeout == that.disqualifyPlayerOnTimeout && alwaysDisplayFullObservable == that.alwaysDisplayFullObservable && alwaysDisplayCurrentPlayer == that.alwaysDisplayCurrentPlayer && frameSleepMS == that.frameSleepMS && Objects.equals(actionSpace, that.actionSpace);
     }
 

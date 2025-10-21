@@ -300,9 +300,8 @@ public class DescentHeuristic extends TunableParameters implements IStateHeurist
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof DescentHeuristic)
+        if (o instanceof DescentHeuristic other)
         {
-            DescentHeuristic other = (DescentHeuristic) o;
             return FACTOR_HERO_HP == other.FACTOR_HERO_HP &&
                     FACTOR_HERO_DEFEATED == other.FACTOR_HERO_DEFEATED &&
                     FACTOR_MONSTERS_HP == other.FACTOR_MONSTERS_HP &&

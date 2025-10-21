@@ -41,8 +41,7 @@ public class DefaultTrade extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultTrade)) return false;
-        DefaultTrade that = (DefaultTrade) o;
+        if (!(o instanceof DefaultTrade that)) return false;
         return exchangeRate == that.exchangeRate && player == that.player && resourceOffer == that.resourceOffer && resourceToGet == that.resourceToGet;
     }
 

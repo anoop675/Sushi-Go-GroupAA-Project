@@ -51,7 +51,7 @@ public class VagabondSteal extends AbstractAction implements IExtendedSequence {
         List<AbstractAction> actions = new ArrayList<>();
         if (stage == Stage.chooseTarget){
             RootBoardNodeWithRootEdges clearing = gs.getGameMap().getVagabondClearing();
-            for (int i = 0; i < gs.getNPlayers(); i++){
+            for (int i = 0; i < gs.getNPlayers(playerId); i++){
                 if (i != playerID && clearing.isAttackable(gs.getPlayerFaction(i)) && gs.getPlayerHand(i).getSize() > 0){
                     actions.add(new ChooseNumber(playerID,i));
                 }

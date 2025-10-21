@@ -106,9 +106,8 @@ public class Award extends Token {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Award)) return false;
+        if (!(o instanceof Award award)) return false;
         if (!super.equals(o)) return false;
-        Award award = (Award) o;
         return claimed == award.claimed && Objects.equals(counterID, award.counterID);
     }
 

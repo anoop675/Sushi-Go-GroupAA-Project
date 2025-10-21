@@ -48,7 +48,7 @@ public class ExplodingKittensGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 5;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -140,7 +140,7 @@ public class ExplodingKittensGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             ExplodingKittensGameState ekgs = (ExplodingKittensGameState) gameState;
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].updateComponent(ekgs.getPlayerHand(i).copy());
                 if (i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
                         || humanPlayerIds.contains(i)

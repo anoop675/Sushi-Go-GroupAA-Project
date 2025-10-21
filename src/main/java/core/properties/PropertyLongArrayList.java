@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PropertyLongArrayList extends Property
 {
-    private ArrayList<Long> values;
+    private final ArrayList<Long> values;
 
     public PropertyLongArrayList(String hashString, JSONArray values)
     {

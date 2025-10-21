@@ -122,7 +122,7 @@ public class GameEvaluator implements SolutionEvaluator {
             newGame.run();
 
             int playerOnTeam = -1;
-            for (int p = 0; p < newGame.getGameState().getNPlayers(); p++) {
+            for (int p = 0; p < newGame.getGameState().getNPlayers(playerId); p++) {
                 if (newGame.getGameState().getTeam(p) == thisTeamIndex) {
                     playerOnTeam = p;
                 }

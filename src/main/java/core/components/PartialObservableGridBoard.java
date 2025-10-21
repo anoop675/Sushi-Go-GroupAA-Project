@@ -5,7 +5,7 @@ import java.util.*;
 public class PartialObservableGridBoard extends GridBoard
 {
     //visibility of Board for each player
-    private boolean[] gridBoardVisibility;
+    private final boolean[] gridBoardVisibility;
 
     //visibility of cell in Grid for each player, order corresponds to playerID
     private List<boolean[][]> elementVisibility = new ArrayList<>();

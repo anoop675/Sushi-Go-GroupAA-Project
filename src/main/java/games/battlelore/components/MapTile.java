@@ -11,7 +11,7 @@ public class MapTile extends BoardNode {
     private ArrayList<Unit> units;
 
     public enum TileArea {
-        NA, left, mid, right;
+        NA, left, mid, right
     }
 
     public int getLocationX() {
@@ -132,9 +132,8 @@ public class MapTile extends BoardNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MapTile)) return false;
+        if (!(o instanceof MapTile mapTile)) return false;
         if (!super.equals(o)) return false;
-        MapTile mapTile = (MapTile) o;
         return ownerId == mapTile.ownerId
                 && locationX == mapTile.locationX
                 && locationY == mapTile.locationY

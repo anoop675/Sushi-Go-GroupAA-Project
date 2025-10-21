@@ -42,8 +42,7 @@ public class Pass extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Pass)) return false;
-        Pass passCardsAction = (Pass) o;
+        if (!(o instanceof Pass passCardsAction)) return false;
         return playerID == passCardsAction.playerID &&
                 card1.equals(passCardsAction.card1);
     }
@@ -55,7 +54,7 @@ public class Pass extends AbstractAction implements IPrintable {
 
     @Override
     public void printToConsole() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 
     @Override

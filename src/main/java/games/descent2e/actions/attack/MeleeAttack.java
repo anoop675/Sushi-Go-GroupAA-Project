@@ -10,7 +10,6 @@ import games.descent2e.DescentTypes;
 import games.descent2e.abilities.HeroAbilities;
 import games.descent2e.abilities.NightStalker;
 import games.descent2e.actions.DescentAction;
-import games.descent2e.actions.Move;
 import games.descent2e.actions.Triggers;
 import games.descent2e.actions.items.Shield;
 import games.descent2e.actions.monsterfeats.MonsterAbilities;
@@ -150,7 +149,8 @@ public class MeleeAttack extends DescentAction implements IExtendedSequence {
                 // we need to get a decision from this player
             } else {
                 skip = false;
-                interruptPlayer = (interruptPlayer + 1) % state.getNPlayers();
+                int playerId = 0;
+                interruptPlayer = (interruptPlayer + 1) % state.getNPlayers(playerId);
                 if (phase.interrupt == null || interruptPlayer == attackingPlayer) {
                     // we have completed the loop, and start again with the attacking player
                     executePhase(state);
@@ -318,7 +318,6 @@ public class MeleeAttack extends DescentAction implements IExtendedSequence {
         else
         {
             // Monster f = (Monster) state.getComponentById(attackingFigure);
-            return;
         }
 
     }
@@ -444,8 +443,7 @@ public class MeleeAttack extends DescentAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MeleeAttack) {
-            MeleeAttack other = (MeleeAttack) obj;
+        if (obj instanceof MeleeAttack other) {
             return other.attackingFigure == attackingFigure &&
                     other.surgesToSpend == surgesToSpend && other.extraDamage == extraDamage &&
                     other.extraDefence == extraDefence &&
@@ -529,7 +527,7 @@ public class MeleeAttack extends DescentAction implements IExtendedSequence {
 
     public String toStringWithResult()
     {
-        return toString() + " - " + result;
+        return this + " - " + result;
     }
 
     public void registerSurge(Surge surge) {
@@ -547,8 +545,7 @@ public class MeleeAttack extends DescentAction implements IExtendedSequence {
         // now we filter this for any that have been used
         if (phase == SURGE_DECISIONS) {
             retValue.removeIf(a -> {
-               if (a instanceof SurgeAttackAction) {
-                   SurgeAttackAction surge = (SurgeAttackAction)a;
+               if (a instanceof SurgeAttackAction surge) {
                    return surgesUsed.contains(surge.surge);
                }
                return false;

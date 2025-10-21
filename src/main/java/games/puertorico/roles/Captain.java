@@ -83,7 +83,7 @@ public class Captain extends PuertoRicoRole<Captain> {
             state.addVP(roleOwner, 1);
         }
         // we also unset all Wharfs
-        for (int p = 0; p < state.getNPlayers(); p++) {
+        for (int p = 0; p < state.getNPlayers(playerId); p++) {
             state.getPlayerBoard(p).getBuildings().stream()
                     .filter(b -> b.buildingType == WHARF)
                     .findFirst().ifPresent(Building::refresh);

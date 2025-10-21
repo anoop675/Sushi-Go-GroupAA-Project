@@ -29,9 +29,7 @@ public class SearchSpaceUtil {
 
     public static int[] copyPoint(int[] v) {
         int[] p = new int[v.length];
-        for (int i = 0; i < p.length; i++) {
-            p[i] = v[i];
-        }
+        System.arraycopy(v, 0, p, 0, p.length);
         return p;
     }
 

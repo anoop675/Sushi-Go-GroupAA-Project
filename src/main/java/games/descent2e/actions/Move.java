@@ -27,7 +27,7 @@ public class Move extends AbstractAction {
     final Monster.Direction orientation;
     private Vector2D startPosition;
 
-    private int f;
+    private final int f;
 
     public int directionID;
 
@@ -378,7 +378,7 @@ public class Move extends AbstractAction {
     public String getString(AbstractGameState gameState) {
         //Figure f = ((DescentGameState) gameState).getActingFigure();
         List<Vector2D> move = positionsTraveled;
-        Figure f = (Figure) ((DescentGameState) gameState).getComponentById(this.f);
+        Figure f = (Figure) gameState.getComponentById(this.f);
 
         if (startPosition.equals(new Vector2D(0,0)))
         {
@@ -401,7 +401,7 @@ public class Move extends AbstractAction {
 
     @Override
     public String toString() {
-        return "Move by " + f + " to " + positionsTraveled.get(positionsTraveled.size()-1) + "";
+        return "Move by " + f + " to " + positionsTraveled.get(positionsTraveled.size()-1);
     }
 
     public String getDirection(Vector2D currentPosition, Vector2D newPosition) {
@@ -470,7 +470,7 @@ public class Move extends AbstractAction {
 
     public void updateDirectionID(AbstractGameState gameState)
     {
-        Figure f = (Figure) ((DescentGameState) gameState).getComponentById(this.f);
+        Figure f = (Figure) gameState.getComponentById(this.f);
         // If directionID is unset, update it
         if (directionID == -1)
         {

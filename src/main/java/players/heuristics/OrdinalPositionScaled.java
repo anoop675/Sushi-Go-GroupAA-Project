@@ -9,7 +9,7 @@ public class OrdinalPositionScaled implements IStateHeuristic {
     @Override
     public double evaluateState(AbstractGameState gs, int playerId) {
         // we score one point for each other player that we are beating (or equalling)
-        if (playerCount == -1) playerCount = gs.getNPlayers();
+        if (playerCount == -1) playerCount = gs.getNPlayers(playerId);
         return (playerCount - gs.getOrdinalPosition(playerId)) / (playerCount - 1.0);
     }
 

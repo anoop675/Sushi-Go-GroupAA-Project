@@ -27,7 +27,7 @@ public class HeroAbilities {
         RerollOnce,
         StunAdjacent,
         SurgeRecoverOneHeart,
-        NONE;
+        NONE
     }
 
     // Self-Contained Class for all Hero Abilities
@@ -103,8 +103,7 @@ public class HeroAbilities {
     public static int tarha(DescentGameState dgs, DescentDice dice) {
         int face = dice.getFace();
         Figure actingFigure = dgs.getActingFigure();
-        if (!(actingFigure instanceof Hero)) return face;
-        Hero f = (Hero) actingFigure;
+        if (!(actingFigure instanceof Hero f)) return face;
         // We can only do this once per round
         if (f.getAbility().equals(RerollOnce) && !f.hasUsedHeroAbility()) {
             DiceType type = dice.getColour();

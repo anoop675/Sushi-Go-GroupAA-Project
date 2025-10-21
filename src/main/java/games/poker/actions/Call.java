@@ -5,8 +5,6 @@ import core.actions.AbstractAction;
 import core.interfaces.IPrintable;
 import games.poker.PokerGameState;
 
-import java.util.Objects;
-
 public class Call extends AbstractAction implements IPrintable {
 
     private final int playerId;
@@ -20,7 +18,7 @@ public class Call extends AbstractAction implements IPrintable {
     public boolean execute(AbstractGameState gameState) {
         PokerGameState pgs = (PokerGameState) gameState;
         int biggestBet = 0;
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             if (pgs.getPlayerBet()[i].getValue() > biggestBet) biggestBet = pgs.getPlayerBet()[i].getValue();
         }
         int diff = biggestBet - pgs.getPlayerBet()[playerId].getValue();
@@ -43,8 +41,7 @@ public class Call extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Call)) return false;
-        Call call = (Call) o;
+        if (!(o instanceof Call call)) return false;
         return playerId == call.playerId;
     }
 

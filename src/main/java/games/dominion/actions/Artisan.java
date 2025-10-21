@@ -74,8 +74,7 @@ public class Artisan extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Artisan) {
-            Artisan other = (Artisan) obj;
+        if (obj instanceof Artisan other) {
             return other.gainedCard == gainedCard && other.putCardOnDeck == putCardOnDeck && super.equals(obj);
         }
         return false;

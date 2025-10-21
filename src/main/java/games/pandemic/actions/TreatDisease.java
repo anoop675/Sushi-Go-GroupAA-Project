@@ -16,10 +16,10 @@ import static core.CoreConstants.nameHash;
 
 public class TreatDisease extends AbstractAction {
 
-    private int initialDiseaseCubes;
-    private String color;
-    private String city;
-    private boolean treatAll;
+    private final int initialDiseaseCubes;
+    private final String color;
+    private final String city;
+    private final boolean treatAll;
 
     public TreatDisease(int initialDiseaseCubes, String color, String city) {
         this.initialDiseaseCubes = initialDiseaseCubes;
@@ -77,9 +77,8 @@ public class TreatDisease extends AbstractAction {
     public boolean equals(Object other)
     {
         if (this == other) return true;
-        if(other instanceof TreatDisease)
+        if(other instanceof TreatDisease otherAction)
         {
-            TreatDisease otherAction = (TreatDisease) other;
             return color.equals(otherAction.color) && city.equals(otherAction.city) &&
                     initialDiseaseCubes == otherAction.initialDiseaseCubes && treatAll == otherAction.treatAll;
 

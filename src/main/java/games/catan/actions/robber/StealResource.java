@@ -45,8 +45,7 @@ public class StealResource extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StealResource)) return false;
-        StealResource that = (StealResource) o;
+        if (!(o instanceof StealResource that)) return false;
         return playerID == that.playerID && targetPlayerID == that.targetPlayerID;
     }
 

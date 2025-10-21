@@ -93,8 +93,7 @@ public class Bandit extends DominionAttackAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Bandit) {
-            Bandit other = (Bandit) obj;
+        if (obj instanceof Bandit other) {
             return other.cardTrashed == cardTrashed &&
                     Arrays.equals(topCards, other.topCards) &&
                     super.equals(other);

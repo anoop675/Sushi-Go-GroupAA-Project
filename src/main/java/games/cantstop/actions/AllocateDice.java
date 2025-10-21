@@ -62,8 +62,7 @@ public class AllocateDice extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof AllocateDice) {
-            AllocateDice other = (AllocateDice) obj;
+        if (obj instanceof AllocateDice other) {
             if (numberSplit.length == other.numberSplit.length) {
                 if (numberSplit.length == 1) {
                     return numberSplit[0] == other.numberSplit[0];

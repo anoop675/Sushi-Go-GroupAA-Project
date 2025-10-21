@@ -74,8 +74,7 @@ public class BuildSettlement extends AbstractAction {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof BuildSettlement){
-            BuildSettlement otherAction = (BuildSettlement)other;
+        if (other instanceof BuildSettlement otherAction){
             return x == otherAction.x && y == otherAction.y && vertex == otherAction.vertex && playerID == otherAction.playerID && free == otherAction.free;
         }
         return false;

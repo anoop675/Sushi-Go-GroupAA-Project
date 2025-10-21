@@ -2,7 +2,6 @@ package games.terraformingmars.rules.requirements;
 
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
-import games.terraformingmars.actions.TMAction;
 import games.terraformingmars.components.TMCard;
 
 import java.awt.*;
@@ -38,15 +37,15 @@ public class ResourceRequirement implements Requirement<TMGameState> {
         } else if (p == -2) {
             // Can any player pay?
             if (resource == TMTypes.Resource.Card) {
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     if (gs.getPlayerHands()[i].getSize() >= amount) return true;
                 }
             } else {
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     if (gs.canPlayerPay(i, card, null, resource, amount, production)) return true;
                 }
             }
-            return gs.getNPlayers() == 1;  // In solo play this is always true
+            return gs.getNPlayers(playerId) == 1;  // In solo play this is always true
         }
         if (resource == TMTypes.Resource.Card) {
             return gs.getPlayerHands()[p].getSize() >= amount;
@@ -55,7 +54,7 @@ public class ResourceRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -92,8 +91,7 @@ public class ResourceRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResourceRequirement)) return false;
-        ResourceRequirement that = (ResourceRequirement) o;
+        if (!(o instanceof ResourceRequirement that)) return false;
         return amount == that.amount && production == that.production && cardID == that.cardID && player == that.player && resource == that.resource;
     }
 

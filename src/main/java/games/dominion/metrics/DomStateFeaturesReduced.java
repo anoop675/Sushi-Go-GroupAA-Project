@@ -55,7 +55,7 @@ public class DomStateFeaturesReduced implements IStateFeatureVector {
         retValue[11] = fm.computeAvailableActions(state).size();
 
         double bestScoreOfOtherPlayers = 0.0;
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (i != playerId) {
                 double score = state.getGameScore(i);
                 if (score > bestScoreOfOtherPlayers) {

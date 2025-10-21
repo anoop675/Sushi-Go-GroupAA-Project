@@ -114,7 +114,8 @@ public abstract class AttributeTest extends DescentAction implements IExtendedSe
                 // we need to get a decision from this player
             } else {
                 skip = false;
-                interruptPlayer = (interruptPlayer + 1) % state.getNPlayers();
+                int playerId = 0;
+                interruptPlayer = (interruptPlayer + 1) % state.getNPlayers(playerId);
                 if (phase.interrupt == null || interruptPlayer == testingPlayer) {
                     // we have completed the loop, and start again with the testing player
                     executePhase(state);
@@ -203,7 +204,6 @@ public abstract class AttributeTest extends DescentAction implements IExtendedSe
 
     public void resolveTest(DescentGameState dgs, int figureID, boolean result)
     {
-        return;
     }
 
     @Override
@@ -330,7 +330,7 @@ public abstract class AttributeTest extends DescentAction implements IExtendedSe
     }
 
     public String toStringWithResult() {
-        return toString() + " - " + (result ? "Passed" : "Failed");
+        return this + " - " + (result ? "Passed" : "Failed");
     }
 
 

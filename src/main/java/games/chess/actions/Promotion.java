@@ -46,8 +46,7 @@ public class Promotion extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Promotion)) return false;
-        Promotion other = (Promotion) obj;
+        if (!(obj instanceof Promotion other)) return false;
         return startX == other.startX && startY == other.startY && targetX == other.targetX && targetY == other.targetY && newPieceType == other.newPieceType;
     }
 

@@ -32,7 +32,7 @@ public class Bureaucrat extends DominionAttackAction {
             (new GainCard(CardType.SILVER, player, DeckType.DRAW)).execute(state);
             // and now everyone knows this
             PartialObservableDeck<DominionCard> drawDeck = (PartialObservableDeck<DominionCard>) state.getDeck(DeckType.DRAW, player);
-            for (int i = 0; i < state.getNPlayers(); i++) {
+            for (int i = 0; i < state.getNPlayers(playerId); i++) {
                 drawDeck.setVisibilityOfComponent(0, i, true);
             }
         }
@@ -95,8 +95,7 @@ public class Bureaucrat extends DominionAttackAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Bureaucrat) {
-            Bureaucrat other = (Bureaucrat) obj;
+        if (obj instanceof Bureaucrat other) {
             return victimHasResponded == other.victimHasResponded && super.equals(other);
         }
         return false;

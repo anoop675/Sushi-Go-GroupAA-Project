@@ -51,7 +51,7 @@ public class LLMTest {
      * 5. Mode of running
      * and then run this class.
      */
-    private static void evaluate (String args[], String gameStr, String evaluatorFileName, String className, Agent agent)
+    private static void evaluate (String[] args, String gameStr, String evaluatorFileName, String className, Agent agent)
     {
         GameType gameType = GameType.valueOf(Utils.getArg(args, "game", gameStr));
         boolean useGUI = Utils.getArg(args, "gui", true);

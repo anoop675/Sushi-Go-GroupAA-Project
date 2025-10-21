@@ -11,6 +11,8 @@ import players.human.ActionController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
@@ -214,7 +216,8 @@ public abstract class AbstractGUIManager {
                     } else if (event.type == Event.GameEvent.GAME_EVENT) {
                         history.add(event.action.toString());
                     } else if (event.type == Event.GameEvent.GAME_OVER) {
-                        for (int i = 0; i < event.state.getNPlayers(); i++) {
+                        int playerId = 0;
+                        for (int i = 0; i < event.state.getNPlayers(playerId); i++) {
                             history.add(String.format("Player %d finishes at position %d with score: %.0f", i, event.state.getOrdinalPosition(i), event.state.getGameScore(i)));
                         }
                     }
@@ -259,7 +262,8 @@ public abstract class AbstractGUIManager {
         }
         gameStatus.setText("Game status: " + gameState.getGameStatus());
         playerStatus.setText(Arrays.toString(gameState.getPlayerResults()));
-        playerScores.setText("Player Scores: " + IntStream.range(0, gameState.getNPlayers())
+        int playerId = 0;
+        playerScores.setText("Player Scores: " + IntStream.range(0, gameState.getNPlayers(playerId))
                 .mapToObj(p -> String.format("%.0f", gameState.getGameScore(p)))
                 .collect(joining(", ")));
         gamePhase.setText("Game phase: " + gameState.getGamePhase());
@@ -327,11 +331,11 @@ public abstract class AbstractGUIManager {
                 if (onActionSelected != null)
                     onActionSelected.accept(this);
             });
-            addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
+            addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent evt) {
                     if (onMouseEnter != null) onMouseEnter.accept(ActionButton.this);
                 }
-                public void mouseExited(java.awt.event.MouseEvent evt) {
+                public void mouseExited(MouseEvent evt) {
                     if (onMouseExit != null) onMouseExit.accept(ActionButton.this);
                 }
             });

@@ -4,7 +4,6 @@ import core.AbstractGameState;
 import core.CoreConstants;
 import core.StandardForwardModel;
 import core.actions.AbstractAction;
-import core.components.Card;
 import core.components.Deck;
 import core.components.Counter;
 import core.components.PartialObservableDeck;
@@ -24,11 +23,11 @@ public class HanabiForwardModel extends StandardForwardModel {
 
         HanabiGameState hbgs = (HanabiGameState) firstState;
         HanabiParameters hbp = (HanabiParameters) hbgs.getGameParameters();
-        hbgs.endTurn = hbgs.getNPlayers() + 1;
+        hbgs.endTurn = hbgs.getNPlayers(playerId) + 1;
         hbgs.playerDecks = new ArrayList<>();
-        for (int i = 0; i < hbgs.getNPlayers(); i++) {
-            boolean[] visibility = new boolean[hbgs.getNPlayers()];
-            for (int j = 0; j < hbgs.getNPlayers(); j++){
+        for (int i = 0; i < hbgs.getNPlayers(playerId); i++) {
+            boolean[] visibility = new boolean[hbgs.getNPlayers(playerId)];
+            for (int j = 0; j < hbgs.getNPlayers(playerId); j++){
                 visibility[j] = i != j;
             }
             hbgs.playerDecks.add(new PartialObservableDeck<>("Player" + i, i, visibility));
@@ -80,7 +79,7 @@ public class HanabiForwardModel extends StandardForwardModel {
 
     private void drawCardsToPlayers(HanabiGameState hgs) {
         hgs.drawDeck.shuffle(hgs.getRnd());
-        for (int player = 0; player < hgs.getNPlayers(); player++) {
+        for (int player = 0; player < hgs.getNPlayers(playerId); player++) {
             for (int card = 0; card < ((HanabiParameters) hgs.getGameParameters()).nHandCards; card++) {
                 hgs.playerDecks.get(player).add(hgs.drawDeck.draw());
             }
@@ -115,7 +114,7 @@ public class HanabiForwardModel extends StandardForwardModel {
 
         if (hbgs.hintCounter.getValue() != hbgs.hintCounter.getMinimum()){
             Set<AbstractAction> actionSet = new HashSet<>();
-            for (int i = 0; i < gameState.getNPlayers(); i++){
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++){
                 if (i != player) {
                     for (HanabiCard card: hbgs.playerDecks.get(i).getComponents()) {
                         actionSet.add(new Hint(i, card.number));
@@ -159,7 +158,7 @@ public class HanabiForwardModel extends StandardForwardModel {
             hbgs.setGameStatus(CoreConstants.GameResult.GAME_END);
 //            System.out.println("fail counter has reached 0");
 //            System.out.println("Point was " + total);
-            for (int i = 0; i < hbgs.getNPlayers(); i++) {
+            for (int i = 0; i < hbgs.getNPlayers(playerId); i++) {
                 hbgs.setPlayerResult(LOSE_GAME, i);
             }
             return true;
@@ -169,7 +168,7 @@ public class HanabiForwardModel extends StandardForwardModel {
             hbgs.setGameStatus(CoreConstants.GameResult.GAME_END);
 //            System.out.println("reached maximum point");
 //            System.out.println("Point was " + total);
-            for (int i = 0; i < hbgs.getNPlayers(); i++) {
+            for (int i = 0; i < hbgs.getNPlayers(playerId); i++) {
                 hbgs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, i);
             }
             return true;
@@ -182,7 +181,7 @@ public class HanabiForwardModel extends StandardForwardModel {
             hbgs.setGameStatus(CoreConstants.GameResult.GAME_END);
 //            System.out.println("run out of card and every player had one turn");
 //            System.out.println("Point was " + total);
-            for (int i = 0; i < hbgs.getNPlayers(); i++) {
+            for (int i = 0; i < hbgs.getNPlayers(playerId); i++) {
                 hbgs.setPlayerResult(WIN_GAME, i);
             }
             return true;

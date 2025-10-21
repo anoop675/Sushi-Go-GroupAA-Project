@@ -58,9 +58,8 @@ public class MoveRobberAndSteal extends MoveRobber {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoveRobberAndSteal)) return false;
+        if (!(o instanceof MoveRobberAndSteal that)) return false;
         if (!super.equals(o)) return false;
-        MoveRobberAndSteal that = (MoveRobberAndSteal) o;
         return targetPlayer == that.targetPlayer;
     }
 

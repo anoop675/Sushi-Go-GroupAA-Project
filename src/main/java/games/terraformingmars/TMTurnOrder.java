@@ -85,9 +85,8 @@ public class TMTurnOrder extends AlternatingTurnOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMTurnOrder)) return false;
+        if (!(o instanceof TMTurnOrder that)) return false;
         if (!super.equals(o)) return false;
-        TMTurnOrder that = (TMTurnOrder) o;
         return nActionsPerPlayer == that.nActionsPerPlayer &&
                 nActionsTaken == that.nActionsTaken &&
                 nPassed == that.nPassed &&

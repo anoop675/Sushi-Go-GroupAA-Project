@@ -54,7 +54,7 @@ public class ResGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + nPlayers;
                 double nVertAreas = 3.5;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -103,7 +103,7 @@ public class ResGUIManager extends AbstractGUIManager {
                 JPanel centerArea = new JPanel();
                 centerArea.setLayout(new BoxLayout(centerArea, BoxLayout.Y_AXIS));
                 Image backgroundImage;
-                String imageName = params.dataPath + gameState.getNPlayers() + "missions.png";
+                String imageName = params.dataPath + gameState.getNPlayers(playerId) + "missions.png";
                 backgroundImage = ImageIO.GetInstance().getImage(imageName);
 
                 if (backgroundImage == null) {
@@ -155,7 +155,7 @@ public class ResGUIManager extends AbstractGUIManager {
             ResGameState parsedGameState = (ResGameState) gameState;
 
             //missionSuccessText = createGameStateInfoPanel("Size of Mission Team needed : " + parsedGameState.gameBoard.getMissionSuccessValues()[parsedGameState.getRoundCounter()], gameState, width, 100);
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update(parsedGameState);
                 if (((ResGameState) gameState).getPlayerHandCards().get(gameState.getCurrentPlayer()).get(2).cardType == ResPlayerCards.CardType.SPY) {
                     playerHands[i].playerHandView.setFront(true);

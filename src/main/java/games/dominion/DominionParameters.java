@@ -145,8 +145,7 @@ public class DominionParameters extends TunableParameters {
      */
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof DominionParameters) {
-            DominionParameters dp = (DominionParameters) o;
+        if (o instanceof DominionParameters dp) {
             return dp.cardsUsed.equals(cardsUsed) &&
                     Arrays.equals(dp.VICTORY_CARDS_PER_PLAYER, VICTORY_CARDS_PER_PLAYER);
         }

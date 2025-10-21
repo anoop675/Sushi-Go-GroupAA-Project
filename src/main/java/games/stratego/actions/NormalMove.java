@@ -93,9 +93,8 @@ public class NormalMove extends Move{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NormalMove)) return false;
+        if (!(o instanceof NormalMove that)) return false;
         if (!super.equals(o)) return false;
-        NormalMove that = (NormalMove) o;
         return Objects.equals(displacement, that.displacement) && Objects.equals(destinationCoordinate, that.destinationCoordinate);
     }
 

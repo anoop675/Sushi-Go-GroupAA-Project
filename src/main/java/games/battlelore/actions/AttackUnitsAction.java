@@ -99,8 +99,7 @@ public class AttackUnitsAction extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AttackUnitsAction)) return false;
-        AttackUnitsAction that = (AttackUnitsAction) o;
+        if (!(o instanceof AttackUnitsAction that)) return false;
         return that.attackingUnitsTileID == attackingUnitsTileID &&
                 that.targetTileID == targetTileID &&
                 playerFaction == that.playerFaction &&

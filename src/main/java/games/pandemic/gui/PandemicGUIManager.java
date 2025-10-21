@@ -66,7 +66,7 @@ public class PandemicGUIManager extends AbstractGUIManager implements IScreenHig
         this.game = game;
         gameState = (PandemicGameState) game.getGameState();
         maxCards = ((PandemicParameters)gameState.getGameParameters()).getMaxCardsPerPlayer() + 2;  // 2 over limit before discard
-        nPlayers = gameState.getNPlayers();
+        nPlayers = gameState.getNPlayers(playerId);
         this.gameState = (PandemicGameState) game.getGameState();
         boardView = new PandemicBoardView(gameState);
 

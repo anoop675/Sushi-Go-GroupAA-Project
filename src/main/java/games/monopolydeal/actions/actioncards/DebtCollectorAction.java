@@ -8,7 +8,6 @@ import games.monopolydeal.MonopolyDealGameState;
 import games.monopolydeal.actions.ActionState;
 import games.monopolydeal.actions.informationcontainer.TargetPlayer;
 import games.monopolydeal.cards.CardType;
-import games.monopolydeal.cards.MonopolyDealCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class DebtCollectorAction extends AbstractAction implements IExtendedSequ
         List<AbstractAction> availableActions = new ArrayList<>();
         switch (actionState){
             case Target:
-                for(int i=0;i<MDGS.getNPlayers();i++){
+                for(int i = 0; i<MDGS.getNPlayers(playerId); i++){
                     if(playerID!=i)
                         availableActions.add(new TargetPlayer(i));
                 }

@@ -78,24 +78,24 @@ public class LoveLetterHeuristic extends TunableParameters implements IStateHeur
         }
 
         double maxCardValue = 1 + llgs.getPlayerHandCards().get(playerId).getSize() * getMaxCardValue();
-        double nRequiredTokens = (llgs.getNPlayers() == 2 ? llp.nTokensWin2 : llgs.getNPlayers() == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
+        double nRequiredTokens = (llgs.getNPlayers(playerId) == 2 ? llp.nTokensWin2 : llgs.getNPlayers(playerId) == 3 ? llp.nTokensWin3 : llp.nTokensWin4);
         if (nRequiredTokens < llgs.affectionTokens[playerId]) nRequiredTokens = llgs.affectionTokens[playerId];
 
         double retValue = FACTOR_CARDS * (cardValues / maxCardValue) + FACTOR_AFFECTION * (llgs.affectionTokens[playerId] / nRequiredTokens);
 
         if (FACTOR_HIDDEN != 0.0) {
             int visibleCards = 0;
-            for (int player = 0; player < llgs.getNPlayers(); player++) {
+            for (int player = 0; player < llgs.getNPlayers(playerId); player++) {
                 if (player != playerId) {
                     PartialObservableDeck<LoveLetterCard> deck = llgs.getPlayerHandCards().get(player);
                     visibleCards += (int) IntStream.range(0, deck.getSize()).filter(i -> deck.getVisibilityForPlayer(i, playerId)).count();
                 }
             }
-            retValue += visibleCards * FACTOR_HIDDEN / (llgs.getNPlayers() - 1.0);
+            retValue += visibleCards * FACTOR_HIDDEN / (llgs.getNPlayers(playerId) - 1.0);
         }
 
         if (FACTOR_ADVANTAGE != 0.0) {
-            int maxOtherScore = IntStream.range(0, llgs.getNPlayers())
+            int maxOtherScore = IntStream.range(0, llgs.getNPlayers(playerId))
                     .filter(p -> p != playerId)
                     .map(p -> (int) llgs.getGameScore(p)).max().orElseThrow(() -> new AssertionError("??"));
             retValue += FACTOR_ADVANTAGE * ((llgs.affectionTokens[playerId] - maxOtherScore) / nRequiredTokens);
@@ -144,8 +144,7 @@ public class LoveLetterHeuristic extends TunableParameters implements IStateHeur
      */
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof LoveLetterHeuristic) {
-            LoveLetterHeuristic other = (LoveLetterHeuristic) o;
+        if (o instanceof LoveLetterHeuristic other) {
             return other.FACTOR_HIDDEN == FACTOR_HIDDEN &&
                     other.FACTOR_AFFECTION == FACTOR_AFFECTION && other.FACTOR_CARDS == FACTOR_CARDS;
         }

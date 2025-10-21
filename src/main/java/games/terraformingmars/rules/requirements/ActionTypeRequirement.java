@@ -5,17 +5,9 @@ import games.terraformingmars.TMTypes;
 import games.terraformingmars.actions.TMAction;
 
 import java.awt.*;
-import java.util.Objects;
 
-public class ActionTypeRequirement implements Requirement<TMAction> {
-
-    public final TMTypes.ActionType actionType;
-    public final TMTypes.StandardProject project;
-
-    public ActionTypeRequirement(TMTypes.ActionType actionType, TMTypes.StandardProject sp) {
-        this.actionType = actionType;
-        this.project = sp;
-    }
+public record ActionTypeRequirement(TMTypes.ActionType actionType,
+                                    TMTypes.StandardProject project) implements Requirement<TMAction> {
 
     public ActionTypeRequirement copy() {
         return this;
@@ -25,11 +17,11 @@ public class ActionTypeRequirement implements Requirement<TMAction> {
     public boolean testCondition(TMAction o) {
         return o.actionType == actionType
                 && (project == null && o.standardProject == null
-                    || o.standardProject == project);
+                || o.standardProject == project);
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -56,14 +48,8 @@ public class ActionTypeRequirement implements Requirement<TMAction> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ActionTypeRequirement)) return false;
-        ActionTypeRequirement that = (ActionTypeRequirement) o;
+        if (!(o instanceof ActionTypeRequirement that)) return false;
         return actionType == that.actionType && project == that.project;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(actionType, project);
     }
 
     @Override

@@ -77,7 +77,7 @@ public abstract class FeatureListener implements IGameListener {
     }
 
     public void writeDataWithStandardHeaders(AbstractGameState state) {
-        int totP = state.getNPlayers();
+        int totP = state.getNPlayers(playerId);
         double[] finalScores = IntStream.range(0, totP).mapToDouble(state::getGameScore).toArray();
         double[] winLoss = Arrays.stream(state.getPlayerResults()).mapToDouble(r -> switch (r) {
             case WIN_GAME -> 1.0;
@@ -179,7 +179,7 @@ public abstract class FeatureListener implements IGameListener {
                 currentData.add(LocalDataWrapper.factory(currentPlayer, phi, names(), state, new HashMap<>()));
             }
         } else {
-            for (int p = 0; p < state.getNPlayers(); p++) {
+            for (int p = 0; p < state.getNPlayers(playerId); p++) {
                 if (isDouble) {
                     double[] phi = p == currentPlayer ? doubleData : extractDoubleVector(action, state, p);
                     currentData.add(LocalDataWrapper.factory(p, phi, names(), state, new HashMap<>()));

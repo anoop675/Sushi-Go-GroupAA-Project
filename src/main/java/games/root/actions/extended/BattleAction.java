@@ -108,7 +108,7 @@ public class BattleAction extends AbstractAction implements IExtendedSequence {
         if (gs.getPlayerFaction(gs.getCurrentPlayer())!= RootParameters.Factions.EyrieDynasties) {
             for (RootBoardNodeWithRootEdges clearing : gs.getGameMap().getNonForrestBoardNodes()) {
                 boolean canAttack = false;
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     if (i != playerID && clearing.isAttackable(gs.getPlayerFaction(i))) {
                         canAttack = true;
                     }
@@ -123,7 +123,7 @@ public class BattleAction extends AbstractAction implements IExtendedSequence {
             for (RootParameters.ClearingTypes clearingType : available) {
                 for (RootBoardNodeWithRootEdges node : gs.getGameMap().getNodesOfType(clearingType)) {
                     boolean canAttack = false;
-                    for (int i = 0; i < gs.getNPlayers(); i++) {
+                    for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                         if (i != playerID && node.isAttackable(gs.getPlayerFaction(i))) {
                             canAttack = true;
                         }
@@ -142,7 +142,7 @@ public class BattleAction extends AbstractAction implements IExtendedSequence {
     private List<AbstractAction> getChooseTargetPlayerActions(RootGameState gs) {
         List<AbstractAction> actions = new ArrayList<>();
         RootBoardNodeWithRootEdges clearing = gs.getGameMap().getNodeByID(locationID);
-        for (int i = 0; i < gs.getNPlayers(); i++){
+        for (int i = 0; i < gs.getNPlayers(playerId); i++){
             if (i != playerID && clearing.isAttackable(gs.getPlayerFaction(i))){
                 actions.add(new ChooseNumber(playerID,i));
             }
@@ -520,7 +520,7 @@ public class BattleAction extends AbstractAction implements IExtendedSequence {
                     stage = Stage.OutrageWoodland;
                     ArrayList<boolean[]> handVisibility = new ArrayList<>();
                     for (int i = 0; i <  gs.getPlayerHand(playerDestroyedSympathyID).getSize(); i++) {
-                        boolean[] cardVisibility = new boolean[gs.getNPlayers()];
+                        boolean[] cardVisibility = new boolean[gs.getNPlayers(playerId)];
                         cardVisibility[playerDestroyedSympathyID] = true;
                         cardVisibility[gs.getFactionPlayerID(RootParameters.Factions.WoodlandAlliance)] = true;
                         handVisibility.add(cardVisibility);

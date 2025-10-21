@@ -99,8 +99,7 @@ public class DrawCard extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DrawCard)) return false;
-        DrawCard drawCard = (DrawCard) o;
+        if (!(o instanceof DrawCard drawCard)) return false;
         return deckFrom == drawCard.deckFrom &&
                 deckTo == drawCard.deckTo &&
                 fromIndex == drawCard.fromIndex &&

@@ -16,9 +16,8 @@ public class TileBuildParameters extends AbstractParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TileBuildParameters)) return false;
+        if (!(o instanceof TileBuildParameters that)) return false;
         if (!super.equals(o)) return false;
-        TileBuildParameters that = (TileBuildParameters) o;
         return defaultGridSize == that.defaultGridSize &&
                 maxGridSize == that.maxGridSize;
     }

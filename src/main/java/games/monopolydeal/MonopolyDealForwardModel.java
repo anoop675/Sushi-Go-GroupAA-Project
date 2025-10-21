@@ -35,7 +35,7 @@ public class MonopolyDealForwardModel extends StandardForwardModel {
         state.discardPile = new Deck<>("Discard",VISIBLE_TO_ALL);
         state.playerHands.clear();
         state.playerBanks.clear();
-        for(int i=0;i<state.getNPlayers();i++){
+        for(int i = 0; i<state.getNPlayers(playerId); i++){
             state.playerHands.add(new Deck<>("Hand P" + (i + 1), VISIBLE_TO_OWNER));
             state.playerBanks.add(new Deck<>("Bank P"+(i+1),VISIBLE_TO_ALL));
             state.initPropertySets(i);
@@ -57,7 +57,7 @@ public class MonopolyDealForwardModel extends StandardForwardModel {
         //Shuffle Deck
         state.drawPile.shuffle(state.getRnd());
         //Deal 5 cards to each player
-        for(int i=0;i< state.getNPlayers();i++) {
+        for(int i = 0; i< state.getNPlayers(playerId); i++) {
             state.drawCard(i,params.INITIAL_DEAL);
         }
         state.setGamePhase(MonopolyDealGameState.MonopolyDealGamePhase.Play);
@@ -116,7 +116,7 @@ public class MonopolyDealForwardModel extends StandardForwardModel {
                         if (state.playerHands.get(playerID).getSize() > params.HAND_SIZE) {
                             state.setGamePhase(MonopolyDealGameState.MonopolyDealGamePhase.Discard);
                         } else {
-                            if (state.getCurrentPlayer() == state.getNPlayers() - 1) endRound(state);
+                            if (state.getCurrentPlayer() == state.getNPlayers(playerId) - 1) endRound(state);
                             else endPlayerTurn(currentState);
                             state.endTurn();
                         }
@@ -125,7 +125,7 @@ public class MonopolyDealForwardModel extends StandardForwardModel {
                 case "Discard":
                     if (state.playerHands.get(playerID).getSize() <= params.HAND_SIZE) {
                         state.setGamePhase(MonopolyDealGameState.MonopolyDealGamePhase.Play);
-                        if (state.getCurrentPlayer() == state.getNPlayers() - 1) endRound(state);
+                        if (state.getCurrentPlayer() == state.getNPlayers(playerId) - 1) endRound(state);
                         else endPlayerTurn(currentState);
                         state.endTurn();
                     }

@@ -49,8 +49,7 @@ public class EnPassant extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof EnPassant)) return false;
-        EnPassant other = (EnPassant) obj;
+        if (!(obj instanceof EnPassant other)) return false;
         return startX == other.startX && startY == other.startY && targetX == other.targetX;
 
     }

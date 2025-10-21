@@ -73,8 +73,8 @@ public class CatanMetrics implements IMetricsCollection {
             CatanParameters cp = (CatanParameters) gs.getGameParameters();
             Map<Integer, Integer> nDots = nDots(cp);
             List<List<CatanParameters.Resource>> initResources = new ArrayList<>();
-            int[] initProductionSum = new int[gs.getNPlayers()];
-            for (int i = 0; i < gs.getNPlayers(); i++) {
+            int[] initProductionSum = new int[gs.getNPlayers(playerId)];
+            for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                 initResources.add(new ArrayList<>());
             }
 
@@ -91,7 +91,7 @@ public class CatanMetrics implements IMetricsCollection {
                     }
                 }
             }
-            for (int i = 0; i < gs.getNPlayers(); i++) {
+            for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                 String playerName = listener.getGame().getPlayers().get(i).toString();
                 for (CatanParameters.Resource r: CatanParameters.Resource.values()) {
                     if (r == CatanParameters.Resource.WILD) continue;
@@ -178,7 +178,7 @@ public class CatanMetrics implements IMetricsCollection {
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             CatanGameState gs = (CatanGameState) e.state;
-            for (int i = 0; i < gs.getNPlayers(); i++) {
+            for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                 String playerName = listener.getGame().getPlayers().get(i).toString();
                 records.put(playerName + "_nKnights", gs.getKnights()[i]);
                 records.put(playerName + "_longestRoadLength", gs.getRoadLengths()[i]);
@@ -215,7 +215,7 @@ public class CatanMetrics implements IMetricsCollection {
                 return false;
             }
             else {
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     String playerName = listener.getGame().getPlayers().get(i).toString();
                     records.put(playerName + "_nSevenOuts", sevenOuts.contains(i) ? 1 : 0);
                 }
@@ -321,7 +321,7 @@ public class CatanMetrics implements IMetricsCollection {
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             if (e.type == Event.GameEvent.GAME_OVER) {
-                for (int i = 0; i < e.state.getNPlayers(); i++) {
+                for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                     String playerName = listener.getGame().getPlayers().get(i).toString();
                     records.put(playerName + "_leadPercentage", (double) nTurnsInLead[i] / nTurnsPlayed[i]);
                 }
@@ -332,9 +332,9 @@ public class CatanMetrics implements IMetricsCollection {
                 int pId = Integer.parseInt(((LogEvent)e.action).text);
                 int[] scores = gs.getScores();
                 int[] vps = gs.getVictoryPoints();
-                IntStream.range(0, e.state.getNPlayers()).forEach(i -> scores[i] += vps[i]);
+                IntStream.range(0, e.state.getNPlayers(playerId)).forEach(i -> scores[i] += vps[i]);
                 int leader = pId;
-                for (int i = 0; i < e.state.getNPlayers(); i++) {
+                for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                     if (scores[i] > scores[leader]) {
                         leader = i;
                     }
@@ -372,8 +372,8 @@ public class CatanMetrics implements IMetricsCollection {
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             CatanGameState gs = (CatanGameState) e.state;
-            int[] cutOffs = new int[e.state.getNPlayers()];  // players cut off by others
-            int[] cuttingOffs = new int[e.state.getNPlayers()];  // players doing the cut offs
+            int[] cutOffs = new int[e.state.getNPlayers(playerId)];  // players cut off by others
+            int[] cuttingOffs = new int[e.state.getNPlayers(playerId)];  // players doing the cut offs
             for (CatanTile[] row: gs.getBoard()) {
                 for (CatanTile tile: row) {
                     for (int v = 0; v < HEX_SIDES; v++) {
@@ -405,7 +405,7 @@ public class CatanMetrics implements IMetricsCollection {
                     }
                 }
             }
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 String playerName = listener.getGame().getPlayers().get(i).toString();
                 records.put(playerName + "_nRoadsCutOffToOthers", cuttingOffs[i]);
                 records.put(playerName + "_nRoadsCutOffByOthers", cutOffs[i]);

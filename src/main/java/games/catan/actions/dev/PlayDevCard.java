@@ -72,8 +72,7 @@ public class PlayDevCard extends AbstractAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayDevCard)) return false;
-        PlayDevCard that = (PlayDevCard) o;
+        if (!(o instanceof PlayDevCard that)) return false;
         return playerID == that.playerID && nSteps == that.nSteps && nStepsTaken == that.nStepsTaken && type == that.type;
     }
 

@@ -80,8 +80,7 @@ public class ChooseCard extends AbstractAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChooseCard)) return false;
-        ChooseCard that = (ChooseCard) o;
+        if (!(o instanceof ChooseCard that)) return false;
         return playerId == that.playerId && useChopsticks == that.useChopsticks && chopstickChooseDone == that.chopstickChooseDone && cardIdx == that.cardIdx;
     }
 

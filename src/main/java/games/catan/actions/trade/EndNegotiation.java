@@ -38,8 +38,7 @@ public class EndNegotiation extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof EndNegotiation)) return false;
-        EndNegotiation that = (EndNegotiation) o;
+        if (!(o instanceof EndNegotiation that)) return false;
         return playerID == that.playerID && offeringPlayerID == that.offeringPlayerID;
     }
 

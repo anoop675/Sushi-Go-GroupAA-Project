@@ -1,7 +1,6 @@
 package games.loveletter.actions.deep;
 
 import core.AbstractGameState;
-import core.CoreConstants;
 import core.actions.AbstractAction;
 import core.interfaces.IExtendedSequence;
 import core.interfaces.IPrintable;
@@ -35,9 +34,8 @@ public class DeepGuardAction extends PlayCardDeep implements IExtendedSequence, 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepGuardAction)) return false;
+        if (!(o instanceof DeepGuardAction that)) return false;
         if (!super.equals(o)) return false;
-        DeepGuardAction that = (DeepGuardAction) o;
         return targetPlayer == that.targetPlayer && step == that.step;
     }
 
@@ -52,7 +50,7 @@ public class DeepGuardAction extends PlayCardDeep implements IExtendedSequence, 
         LoveLetterGameState gs = (LoveLetterGameState) state;
         if (step == Step.TargetPlayer) {
             // Actions to select player
-            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(); targetPlayer++) {
+            for (int targetPlayer = 0; targetPlayer < gs.getNPlayers(playerId); targetPlayer++) {
                 if (targetPlayer == playerID || !gs.isCurrentlyActive(targetPlayer) || gs.isProtected(targetPlayer))
                     continue;
                 cardActions.add(new ChoosePlayer(targetPlayer));

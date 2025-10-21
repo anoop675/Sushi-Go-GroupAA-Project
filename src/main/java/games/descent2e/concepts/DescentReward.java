@@ -58,9 +58,8 @@ public class DescentReward {
         if (jsonObject.containsKey("apply")) dr.apply = ApplyType.valueOf((String) jsonObject.get("apply"));
         if (jsonObject.containsKey("multiplier")) {
             Object o = jsonObject.get("multiplier");
-            if (o instanceof JSONObject) {
+            if (o instanceof JSONObject def) {
                 // parse first as a CountGameFeature class
-                JSONObject def = (JSONObject) o;
                 dr.countGameFeatureMultiplier = CountGameFeature.parse(def);
             } else {
                 dr.multiplier = (double) jsonObject.get("multiplier");

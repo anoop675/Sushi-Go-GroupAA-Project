@@ -98,9 +98,8 @@ public class ReserveTile extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReserveTile)) return false;
+        if (!(o instanceof ReserveTile that)) return false;
         if (!super.equals(o)) return false;
-        ReserveTile that = (ReserveTile) o;
         return mapTileID == that.mapTileID && placed == that.placed && impossible == that.impossible && mapType == that.mapType;
     }
 

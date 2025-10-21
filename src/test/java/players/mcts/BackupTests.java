@@ -169,7 +169,7 @@ public class BackupTests {
         assertEquals(25 * 0.9 + 0.5, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Left")).totValue[0], 0.00001);
 
         // change at root
-        double update = 30.0/51.0 * 0.5 + 21.0 / 51.0 * 1.0;
+        double update = 30.0/51.0 * 0.5 + 21.0 / 51.0;
         assertEquals(51, root.getActionStats(new LMRAction("Middle")).nVisits);
         assertEquals(50.0 + update, root.getActionStats(new LMRAction("Middle")).totValue[0], 0.0001);
     }
@@ -198,12 +198,12 @@ public class BackupTests {
         assertEquals(update, nodeTrajectory001.get(2).actionValues.get(new LMRAction("Right")).totValue[0], 0.0001);
 
         // 51 Visits, Right is best at 1.0 (Left has been taken 25 times with mean 0.9 reward)
-        update = 2.0/26.0 * update + 24.0 / 26.0 * 1.0;
+        update = 2.0/26.0 * update + 24.0 / 26.0;
         assertEquals(26, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Left")).nVisits);
         assertEquals(25 * 0.9 + update, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Left")).totValue[0], 0.00001);
 
         // Middle is best action
-        update = 2.0/51.0 * update + 49.0 / 51.0 * 1.0;
+        update = 2.0/51.0 * update + 49.0 / 51.0;
         assertEquals(51, root.getActionStats(new LMRAction("Middle")).nVisits);
         assertEquals(50 + update, root.getActionStats(new LMRAction("Middle")).totValue[0], 0.0001);
     }
@@ -277,7 +277,7 @@ public class BackupTests {
         assertEquals(update, nodeTrajectory001.get(2).actionValues.get(new LMRAction("Right")).totValue[0], 0.0001);
 
         // 51 Visits, Right is best at 1.0 (Left has been taken 25 times with mean 0.9 reward)
-        update = 2.0/26.0 * update + 24.0 / 26.0 * 1.0;
+        update = 2.0/26.0 * update + 24.0 / 26.0;
         assertEquals(25, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Left")).nVisits);
         assertEquals(25 * 0.9, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Left")).totValue[0], 0.00001);
         assertEquals(11, nodeTrajectory001.get(1).actionValues.get(new LMRAction("Right")).nVisits);

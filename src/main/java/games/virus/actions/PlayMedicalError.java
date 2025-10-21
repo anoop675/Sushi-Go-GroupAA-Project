@@ -11,9 +11,9 @@ import games.virus.components.VirusBody;
 import java.util.Objects;
 
 public class PlayMedicalError extends PlayVirusCard implements IPrintable {
-    private int otherBodyId;
-    private int playerId;
-    private int otherPlayerId;
+    private final int otherBodyId;
+    private final int playerId;
+    private final int otherPlayerId;
 
     public PlayMedicalError(int deckFrom, int deckTo, int fromIndex, int bodyId, int otherBodyId, int playerId, int otherPlayerId) {
         super(deckFrom, deckTo, fromIndex, bodyId);
@@ -71,9 +71,8 @@ public class PlayMedicalError extends PlayVirusCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayMedicalError)) return false;
+        if (!(o instanceof PlayMedicalError that)) return false;
         if (!super.equals(o)) return false;
-        PlayMedicalError that = (PlayMedicalError) o;
         return playerId == that.playerId && otherPlayerId == that.otherPlayerId && otherBodyId == that.otherBodyId;
     }
 

@@ -6,21 +6,13 @@ import games.terraformingmars.TMTypes;
 import utilities.ImageIO;
 
 import java.awt.*;
-import java.util.Objects;
 
-public class TilePlacedRequirement implements Requirement<TMGameState> {
-
-    public final TMTypes.Tile tile;
-    public final int threshold;
-    public final boolean max;  // if true, value of counter must be <= threshold, if false >=
-    public final boolean any;  // tiles placed by any player, or by the player who checks this
-
-    public TilePlacedRequirement(TMTypes.Tile tile, int threshold, boolean max, boolean any) {
-        this.tile = tile;
-        this.threshold = threshold;
-        this.max = max;
-        this.any = any;
-    }
+/**
+ * @param max if true, value of counter must be <= threshold, if false >=
+ * @param any tiles placed by any player, or by the player who checks this
+ */
+public record TilePlacedRequirement(TMTypes.Tile tile, int threshold, boolean max,
+                                    boolean any) implements Requirement<TMGameState> {
 
     @Override
     public boolean testCondition(TMGameState gs) {
@@ -35,21 +27,16 @@ public class TilePlacedRequirement implements Requirement<TMGameState> {
         if (!any) {
             nPlaced = gs.getPlayerTilesPlaced()[player].get(tile).getValue();
         } else {
-            for (int i = 0; i < gs.getNPlayers(); i++) {
+            for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                 nPlaced = gs.getPlayerTilesPlaced()[i].get(tile).getValue();
             }
-            if (gs.getNPlayers() == 1) {
+            if (gs.getNPlayers(playerId) == 1) {
                 if (tile == TMTypes.Tile.City || tile == TMTypes.Tile.Greenery) {
                     nPlaced += ((TMGameParameters) gs.getGameParameters()).getSoloCities();
                 }
             }
         }
         return nPlaced;
-    }
-
-    @Override
-    public boolean isMax() {
-        return max;
     }
 
     @Override
@@ -65,12 +52,12 @@ public class TilePlacedRequirement implements Requirement<TMGameState> {
     @Override
     public String getReasonForFailure(TMGameState gs) {
         int nPlaced = nPlaced(gs);
-        return nPlaced + "/" + threshold + " " + tile + " tiles placed" + (!any? " by you" : "");
+        return nPlaced + "/" + threshold + " " + tile + " tiles placed" + (!any ? " by you" : "");
     }
 
     @Override
     public Image[] getDisplayImages() {
-        return new Image[] {ImageIO.GetInstance().getImage(tile.getImagePath())};
+        return new Image[]{ImageIO.GetInstance().getImage(tile.getImagePath())};
     }
 
     @Override
@@ -86,13 +73,8 @@ public class TilePlacedRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TilePlacedRequirement)) return false;
-        TilePlacedRequirement that = (TilePlacedRequirement) o;
+        if (!(o instanceof TilePlacedRequirement that)) return false;
         return threshold == that.threshold && max == that.max && any == that.any && tile == that.tile;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(tile, threshold, max, any);
-    }
 }

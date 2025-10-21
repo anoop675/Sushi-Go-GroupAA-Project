@@ -44,9 +44,8 @@ public class ShareKnowledge extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ShareKnowledge)) return false;
+        if (!(o instanceof ShareKnowledge that)) return false;
         if (!super.equals(o)) return false;
-        ShareKnowledge that = (ShareKnowledge) o;
         return giver == that.giver && receiver == that.receiver;
     }
 

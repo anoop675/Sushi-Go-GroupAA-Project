@@ -11,7 +11,6 @@ import games.dominion.DominionGameState.DominionGamePhase;
 import games.dominion.actions.*;
 import games.dominion.cards.CardType;
 import games.dominion.cards.DominionCard;
-import games.wonders7.actions.PlayCard;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -1345,7 +1344,7 @@ public class BaseActionCardsTest {
         }
         // and that player 2's hand is fully visible
         for (int i = 0; i < state.getDeck(DeckType.HAND, 2).getSize(); i++)
-            for (int j = 0; j < state.getNPlayers(); j++)
+            for (int j = 0; j < state.getNPlayers(playerId); j++)
                 assertTrue(((PartialObservableDeck<DominionCard>) state.getDeck(DeckType.HAND, 2)).getVisibilityForPlayer(i, j));
 
         // then check that we have correct card counts

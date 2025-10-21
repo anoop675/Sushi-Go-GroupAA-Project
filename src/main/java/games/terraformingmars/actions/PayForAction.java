@@ -162,9 +162,8 @@ public class PayForAction extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PayForAction)) return false;
+        if (!(o instanceof PayForAction that)) return false;
         if (!super.equals(o)) return false;
-        PayForAction that = (PayForAction) o;
         return costPaid == that.costPaid && stage == that.stage && Objects.equals(action, that.action) && Arrays.equals(resourcesToPayWith, that.resourcesToPayWith);
     }
 

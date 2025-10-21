@@ -1,14 +1,11 @@
 package games.blackjack.actions;
 
 import core.AbstractGameState;
-import core.CoreConstants;
 import core.actions.AbstractAction;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
 import core.interfaces.IPrintable;
-import games.blackjack.BlackjackForwardModel;
 import games.blackjack.BlackjackGameState;
-import games.blackjack.BlackjackParameters;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -38,7 +35,7 @@ public class Hit extends AbstractAction implements IPrintable {
             playerHand.add(bjgs.getDrawDeck().draw());
         } else {
             // Dealer
-            boolean[] visibility = new boolean[gameState.getNPlayers()];
+            boolean[] visibility = new boolean[gameState.getNPlayers(playerId)];
             Arrays.fill(visibility, !hidden);
             playerHand.add(bjgs.getDrawDeck().draw(), visibility);
         }
@@ -54,8 +51,7 @@ public class Hit extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Hit)) return false;
-        Hit hit = (Hit) o;
+        if (!(o instanceof Hit hit)) return false;
         return hidden == hit.hidden && playerID == hit.playerID && advanceTurnOrder == hit.advanceTurnOrder;
     }
 

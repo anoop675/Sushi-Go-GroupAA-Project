@@ -9,7 +9,7 @@ import games.pandemic.PandemicGameState;
 import utilities.Hash;
 
 public class PandemicDiffHeuristic implements IStateHeuristic {
-    private BoardStats rootBoardStats;
+    private final BoardStats rootBoardStats;
 
     public PandemicDiffHeuristic(AbstractGameState root) {
         rootBoardStats = new BoardStats((PandemicGameState)root);

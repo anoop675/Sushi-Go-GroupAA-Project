@@ -160,35 +160,24 @@ public class TAGOccurrenceStatSummary extends TAGStatSummary {
         return data;
     }
 
-    private static class DataMeasure implements Comparable
-    {
-        private final String data;
-        private final int count;
-
-        DataMeasure(String data, int count)
-        {
-            this.data = data;
-            this.count = count;
-        }
+    private record DataMeasure(String data, int count) implements Comparable {
 
         @Override
-        public int compareTo(@NotNull Object o) {
-            if(!(o instanceof DataMeasure)) return 0;
-            int comparison = Integer.compare(this.count, ((DataMeasure)o).count);
-            if(comparison == 0) return this.data.compareTo(((DataMeasure)o).data);
-            return -comparison; //This is to sort from high count to lower count.
-        }
+            public int compareTo(@NotNull Object o) {
+                if (!(o instanceof DataMeasure)) return 0;
+                int comparison = Integer.compare(this.count, ((DataMeasure) o).count);
+                if (comparison == 0) return this.data.compareTo(((DataMeasure) o).data);
+                return -comparison; //This is to sort from high count to lower count.
+            }
 
-        public boolean equals(Object o)
-        {
-            if(!(o instanceof DataMeasure)) return false;
-            return this.data.equals(((DataMeasure)o).data) && this.count == ((DataMeasure)o).count;
-        }
+            public boolean equals(Object o) {
+                if (!(o instanceof DataMeasure)) return false;
+                return this.data.equals(((DataMeasure) o).data) && this.count == ((DataMeasure) o).count;
+            }
 
-        public String toString()
-        {
-            return count + " - " + data;
+            public String toString() {
+                return count + " - " + data;
+            }
         }
-    }
 
 }

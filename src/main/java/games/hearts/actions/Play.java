@@ -58,8 +58,7 @@ public class Play extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Play)) return false;
-        Play play = (Play) o;
+        if (!(o instanceof Play play)) return false;
         return playerID == play.playerID && card.equals(play.card);
     }
 
@@ -70,7 +69,7 @@ public class Play extends AbstractAction implements IPrintable {
 
     @Override
     public void printToConsole() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 
     @Override

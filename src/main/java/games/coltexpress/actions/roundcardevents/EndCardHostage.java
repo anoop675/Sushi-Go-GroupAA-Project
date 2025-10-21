@@ -6,7 +6,6 @@ import games.coltexpress.ColtExpressGameState;
 import games.coltexpress.ColtExpressParameters;
 import games.coltexpress.components.Compartment;
 import games.coltexpress.components.Loot;
-import utilities.Utils;
 
 import static games.coltexpress.ColtExpressTypes.LootType.Purse;
 
@@ -15,7 +14,7 @@ public class EndCardHostage extends RoundEvent {
     @Override
     public boolean execute(AbstractGameState gs) {
         ColtExpressGameState gameState = (ColtExpressGameState) gs;
-        Compartment locomotive = gameState.getTrainCompartments().get(gameState.getNPlayers());
+        Compartment locomotive = gameState.getTrainCompartments().get(gameState.getNPlayers(playerId));
         int reward = ((ColtExpressParameters)gs.getGameParameters()).nCardHostageReward;
         for (Integer playerID : locomotive.playersOnTopOfCompartment){
             gameState.addLoot(playerID, new Loot(Purse, reward));

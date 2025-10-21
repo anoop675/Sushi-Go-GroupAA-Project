@@ -18,7 +18,7 @@ import static core.CoreConstants.GameResult.GAME_ONGOING;
  */
 public abstract class RuleNode extends Node {
     Node childNext;  // Child to execute next after this node
-    private ArrayList<GameOverCondition> gameOverConditions;  // List of game over conditions to check after this node is executed
+    private final ArrayList<GameOverCondition> gameOverConditions;  // List of game over conditions to check after this node is executed
 
     public RuleNode() {
         super();

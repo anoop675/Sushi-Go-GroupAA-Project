@@ -66,8 +66,7 @@ public class BuyAction extends AbstractAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BuyAction)) return false;
-        BuyAction buyAction = (BuyAction) o;
+        if (!(o instanceof BuyAction buyAction)) return false;
         return playerID == buyAction.playerID && executed == buyAction.executed && type == buyAction.type;
     }
 

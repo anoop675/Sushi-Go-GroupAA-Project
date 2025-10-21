@@ -6,8 +6,8 @@ import games.coltexpress.ColtExpressTypes;
 
 public class Loot extends Component {
 
-    private int value;
-    private ColtExpressTypes.LootType type;
+    private final int value;
+    private final ColtExpressTypes.LootType type;
 
     public Loot(ColtExpressTypes.LootType type, int value){
         super(CoreConstants.ComponentType.TOKEN, type.toString());
@@ -50,9 +50,8 @@ public class Loot extends Component {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Loot)) return false;
+        if (!(o instanceof Loot loot)) return false;
         if (!super.equals(o)) return false;
-        Loot loot = (Loot) o;
         return value == loot.value &&
                 type == loot.type;
     }

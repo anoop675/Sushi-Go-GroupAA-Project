@@ -26,6 +26,6 @@ public abstract class RotatingFirstPlayerForwardModel extends StandardForwardMod
         // All we need to do is end the player turn after every action
         endPlayerTurn(currentState);
         if (currentState.getCurrentPlayer() == currentState.getFirstPlayer())
-            endRound(currentState, (currentState.getCurrentPlayer() + 1) % currentState.getNPlayers());
+            endRound(currentState, (currentState.getCurrentPlayer() + 1) % currentState.getNPlayers(playerId));
     }
 }

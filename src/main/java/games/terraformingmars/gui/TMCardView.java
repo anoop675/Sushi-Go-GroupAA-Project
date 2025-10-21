@@ -203,7 +203,7 @@ public class TMCardView extends JComponent {
             Rectangle reqRect = new Rectangle(aboveRibbon.x + spacing/2, aboveRibbon.y + 2, aboveRibbon.width-tagsWidth - spacing, aboveRibbon.height - 4);
             boolean max = false;
             for (Requirement r: card.requirements) {
-                if (r.isMax()) max = true;
+                if (r.max()) max = true;
             }
             if (max) {
                 drawImage(g, reqMax, reqRect.x, reqRect.y, reqRect.width, reqRect.height);
@@ -297,8 +297,8 @@ public class TMCardView extends JComponent {
                 drawShadowStringCentered(g, ": +/-" + amount, new Rectangle(xD + size, yD, size*3, size));
             } else if (r instanceof ActionTypeRequirement) {
                 int xD = spacing/2;
-                TMTypes.ActionType actionType = ((ActionTypeRequirement) r).actionType;
-                TMTypes.StandardProject project = ((ActionTypeRequirement) r).project;
+                TMTypes.ActionType actionType = ((ActionTypeRequirement) r).actionType();
+                TMTypes.StandardProject project = ((ActionTypeRequirement) r).project();
                 String text = "";
                 if (actionType != null) text = actionType.name();
                 else if (project != null) text = project.name();
@@ -522,8 +522,8 @@ public class TMCardView extends JComponent {
                 drawShadowStringCentered(g, ": +/-" + amount, new Rectangle(xD + size, yD, size*3, size));
             } else if (r instanceof ActionTypeRequirement) {
                 int xD = spacing/2;
-                TMTypes.ActionType actionType = ((ActionTypeRequirement) r).actionType;
-                TMTypes.StandardProject project = ((ActionTypeRequirement) r).project;
+                TMTypes.ActionType actionType = ((ActionTypeRequirement) r).actionType();
+                TMTypes.StandardProject project = ((ActionTypeRequirement) r).project();
                 String text = "";
                 if (actionType != null) text = actionType.name();
                 else if (project != null) text = project.name();

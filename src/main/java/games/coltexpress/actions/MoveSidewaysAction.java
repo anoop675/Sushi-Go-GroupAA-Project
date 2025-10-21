@@ -50,9 +50,8 @@ public class MoveSidewaysAction extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoveSidewaysAction)) return false;
+        if (!(o instanceof MoveSidewaysAction that)) return false;
         if (!super.equals(o)) return false;
-        MoveSidewaysAction that = (MoveSidewaysAction) o;
         return sourceCompartment == that.sourceCompartment &&
                 targetCompartment == that.targetCompartment;
     }

@@ -42,10 +42,8 @@ public class PlayCardEffect extends Effect {
     @Override
     public boolean canExecute(TMGameState gameState, TMAction actionTaken, int player) {
         // PlayCard is always wrapped in PayForAction
-        if (!(actionTaken instanceof PayForAction) || !super.canExecute(gameState, actionTaken, player)) return false;
-        PayForAction aa = (PayForAction) actionTaken;
-        if (!(aa.action instanceof PlayCard)) return false;
-        PlayCard action = (PlayCard) aa.action;
+        if (!(actionTaken instanceof PayForAction aa) || !super.canExecute(gameState, actionTaken, player)) return false;
+        if (!(aa.action instanceof PlayCard action)) return false;
         TMCard card = (TMCard) gameState.getComponentById(action.getPlayCardID());
         for (TMTypes.Tag t: card.tags) {
             if (tagsOnCard.contains(t)) {

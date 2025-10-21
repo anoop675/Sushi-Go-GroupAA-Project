@@ -8,7 +8,7 @@ import java.util.Objects;
 public class PropertyColor extends Property
 {
     public String valueStr;
-    private Color value;
+    private final Color value;
 
     public PropertyColor(String hashString, String valStr)
     {

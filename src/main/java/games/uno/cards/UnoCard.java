@@ -98,7 +98,7 @@ public class UnoCard extends Card {
                 if (drawN < 1) {
                     return type.toString();
                 } else {
-                    return type.toString() + "{draw " + drawN + "}";
+                    return type + "{draw " + drawN + "}";
                 }
         }
         return null;

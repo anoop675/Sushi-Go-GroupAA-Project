@@ -13,7 +13,6 @@ import games.wonders7.cards.Wonder7Board;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static core.CoreConstants.VisibilityMode.VISIBLE_TO_ALL;
 import static games.wonders7.Wonders7Constants.Resource.*;
 import static games.wonders7.cards.Wonder7Card.CardType.*;
 
@@ -38,7 +37,8 @@ public class Wonders7GameState extends AbstractGameState {
 
         // Each player starts off with no resources
         playerResources = new ArrayList<>(); // New arraylist , containing different hashmaps for each player
-        for (int i = 0; i < getNPlayers(); i++) {
+        int playerId = 0;
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             playerResources.add(new EnumMap<>(Wonders7Constants.Resource.class)); // Adds a new hashmap for each player
         }
     }
@@ -72,14 +72,14 @@ public class Wonders7GameState extends AbstractGameState {
         // Including components that player with the given ID will see.
         // For example, some decks may be face down and unobservable to the player
         // All the components in the observation should be copies of those in the game state
-        Wonders7GameState copy = new Wonders7GameState(gameParameters.copy(), getNPlayers());
+        Wonders7GameState copy = new Wonders7GameState(gameParameters.copy(), getNPlayers(playerId));
         //Wonders7TurnOrder turnOrder = new Wonders7TurnOrder(getNPlayers());
         copy.playerResources = new ArrayList<>();
         copy.playerHands = new ArrayList<>();
         copy.playedCards = new ArrayList<>();
-        copy.playerWonderBoard = new Wonder7Board[getNPlayers()];
-        copy.turnActions = new AbstractAction[getNPlayers()];
-        for (int i = 0; i < getNPlayers(); i++) {
+        copy.playerWonderBoard = new Wonder7Board[getNPlayers(playerId)];
+        copy.turnActions = new AbstractAction[getNPlayers(playerId)];
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (turnActions[i] != null)
                 copy.turnActions[i] = turnActions[i].copy();
         }
@@ -93,7 +93,7 @@ public class Wonders7GameState extends AbstractGameState {
         for (Deck<Wonder7Card> deck : playedCards) {
             copy.playedCards.add(deck.copy());
         }
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             copy.playerWonderBoard[i] = playerWonderBoard[i].copy();  // Every player's wonder boards are known
         }
         copy.ageDeck = ageDeck.copy();
@@ -110,7 +110,7 @@ public class Wonders7GameState extends AbstractGameState {
             // (we ignore this exception for now; as this is a small effect compared to know cards other players mostly have)
 
 
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (!isHandKnownTo(playerId, i)) {
                     copy.ageDeck.add(copy.playerHands.get(i));
                     // Groups other players cards (except for next players hand) into the ageDeck
@@ -132,7 +132,7 @@ public class Wonders7GameState extends AbstractGameState {
 
             copy.ageDeck.add(previousAgeDiscards.get(true)); // Groups the same age cards from the discard pile into the ageDeck
             copy.ageDeck.shuffle(redeterminisationRnd); // Shuffle all the cards
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (!isHandKnownTo(playerId, i)) {
                     Deck<Wonder7Card> hand = copy.playerHands.get(i);
                     int nCards = hand.getSize();
@@ -147,7 +147,7 @@ public class Wonders7GameState extends AbstractGameState {
             while(copy.discardPile.getSize() < this.discardPile.getSize()) {
                 copy.discardPile.add(copy.ageDeck.draw()); // Fills the pile with the remaining shuffled cards in the ageDeck
             }
-            copy.turnActions = new AbstractAction[getNPlayers()];
+            copy.turnActions = new AbstractAction[getNPlayers(playerId)];
             if (turnActions[playerId] != null)
                 copy.turnActions[playerId] = turnActions[playerId].copy();
             // we know our action (if one has been chosen, but no one elses)
@@ -170,8 +170,8 @@ public class Wonders7GameState extends AbstractGameState {
         int handsKnown = params.nWonderCardsPerPlayer - playerHands.get(playerId).getSize();
 
         // 'Left' means we pass to lower numbered players, 'Right' means we pass to higher numbered players
-        int opponentSpacesToLeft = (playerId - opponentId + getNPlayers()) % getNPlayers();
-        int opponentSpacesToRight = (opponentId - playerId + getNPlayers()) % getNPlayers();
+        int opponentSpacesToLeft = (playerId - opponentId + getNPlayers(playerId)) % getNPlayers(playerId);
+        int opponentSpacesToRight = (opponentId - playerId + getNPlayers(playerId)) % getNPlayers(playerId);
 
         if (direction == 1) {  // this passes to lower numbered players
             return handsKnown >= opponentSpacesToLeft;
@@ -191,7 +191,8 @@ public class Wonders7GameState extends AbstractGameState {
 
     protected void updateEndOfAgeMilitaryVPs() {
         for (int player = 0; player < nPlayers; player++) {
-            int nextplayer = (player + 1) % getNPlayers();
+            int playerId = 0;
+            int nextplayer = (player + 1) % getNPlayers(playerId);
             if (playerResources.get(player).get(Shield) > playerResources.get(nextplayer).get(Shield)) {
                 // IF PLAYER WINS
                 playerResources.get(player).put(Victory, playerResources.get(player).get(Victory) + (2 * currentAge - 1)); // 2N-1 POINTS FOR PLAYER i
@@ -209,7 +210,7 @@ public class Wonders7GameState extends AbstractGameState {
         // this just looks at current VP (including science based on evaluation now)
         int vp = playerResources.get(playerId).get(Victory);
         // Treasury
-        vp += playerResources.get(playerId).get(Wonders7Constants.Resource.Coin) / 3;
+        vp += playerResources.get(playerId).get(Coin) / 3;
         // Scientific
         vp += getSciencePoints(playerId);
 
@@ -354,9 +355,8 @@ public class Wonders7GameState extends AbstractGameState {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Wonders7GameState)) return false;
+        if (!(o instanceof Wonders7GameState that)) return false;
         if (!super.equals(o)) return false;
-        Wonders7GameState that = (Wonders7GameState) o;
         return currentAge == that.currentAge && direction == that.direction && Objects.equals(playerResources, that.playerResources) &&
                 Objects.equals(playerHands, that.playerHands) && Objects.equals(playedCards, that.playedCards) &&
                 Objects.equals(ageDeck, that.ageDeck) &&

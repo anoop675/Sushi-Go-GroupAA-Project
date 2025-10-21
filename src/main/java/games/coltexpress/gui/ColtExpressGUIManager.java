@@ -84,7 +84,7 @@ public class ColtExpressGUIManager extends AbstractGUIManager {
                 roundView.setOpaque(false);
 
                 activePlayer = gameState.getCurrentPlayer();
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 this.width = trainCarWidth*3/2*(train.size()+1) + playerAreaWidth;
                 this.height = Math.max(playerAreaHeight * (nPlayers+1), trainView.height + ceCardHeight + 50 + roundView.height) + defaultInfoPanelHeight + defaultActionPanelHeight;
                 ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
@@ -235,7 +235,7 @@ public class ColtExpressGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             ColtExpressGameState cegs = (ColtExpressGameState)gameState;
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update((ColtExpressGameState) gameState, humanPlayerIds);
 
                 // Highlight active player

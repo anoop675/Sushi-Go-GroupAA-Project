@@ -46,8 +46,7 @@ public class OfferPlayerTrade extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OfferPlayerTrade)) return false;
-        OfferPlayerTrade that = (OfferPlayerTrade) o;
+        if (!(o instanceof OfferPlayerTrade that)) return false;
         return offeringPlayerID == that.offeringPlayerID && otherPlayerID == that.otherPlayerID && nOffered == that.nOffered && nRequested == that.nRequested && resourceOffered == that.resourceOffered && resourceRequested == that.resourceRequested && stage == that.stage;
     }
 

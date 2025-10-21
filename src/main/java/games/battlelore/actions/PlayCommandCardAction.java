@@ -68,8 +68,7 @@ public class PlayCommandCardAction extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayCommandCardAction)) return false;
-        PlayCommandCardAction that = (PlayCommandCardAction) o;
+        if (!(o instanceof PlayCommandCardAction that)) return false;
         return type == that.type &&
                 playerID == that.playerID &&
                 playerFaction == that.playerFaction;

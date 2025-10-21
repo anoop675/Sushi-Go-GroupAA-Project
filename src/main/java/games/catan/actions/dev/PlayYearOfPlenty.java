@@ -59,8 +59,7 @@ public class PlayYearOfPlenty extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayYearOfPlenty)) return false;
-        PlayYearOfPlenty that = (PlayYearOfPlenty) o;
+        if (!(o instanceof PlayYearOfPlenty that)) return false;
         return player == that.player && removeCard == that.removeCard && Arrays.equals(resources, that.resources);
     }
 

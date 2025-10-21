@@ -81,7 +81,7 @@ public class SaboteurGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 4;
                 int nVertAreas = 2;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -246,7 +246,7 @@ public class SaboteurGUIManager extends AbstractGUIManager {
             }
 
             // Update decks and visibility
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 boolean front = i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
                         || humanPlayerIds.contains(i)
                         || gameState.getCoreGameParameters().alwaysDisplayFullObservable;

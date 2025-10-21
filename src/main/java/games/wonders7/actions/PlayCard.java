@@ -105,9 +105,8 @@ public class PlayCard extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayCard)) return false;
+        if (!(o instanceof PlayCard playCard)) return false;
         if (!super.equals(o)) return false;
-        PlayCard playCard = (PlayCard) o;
         return player == playCard.player && free == playCard.free && cardType == playCard.cardType && fromDiscard == playCard.fromDiscard;
     }
 

@@ -75,8 +75,7 @@ public class DeepYearOfPlenty extends AbstractAction implements IExtendedSequenc
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepYearOfPlenty)) return false;
-        DeepYearOfPlenty that = (DeepYearOfPlenty) o;
+        if (!(o instanceof DeepYearOfPlenty that)) return false;
         return playerID == that.playerID && nSteps == that.nSteps && nStepsTaken == that.nStepsTaken && resource == that.resource;
     }
 

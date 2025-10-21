@@ -31,7 +31,7 @@ public class PlayMonopoly extends AbstractAction {
             playerDevDeck.remove(monopolyCard);
 
             int nCollected = 0;
-            for (int targetPlayerID = 0; targetPlayerID < gs.getNPlayers(); targetPlayerID++){
+            for (int targetPlayerID = 0; targetPlayerID < gs.getNPlayers(playerId); targetPlayerID++){
                 if (targetPlayerID != gs.getCurrentPlayer()) {
                     Counter c = cgs.getPlayerResources(targetPlayerID).get(resource);
                     nCollected += c.getValue();
@@ -54,8 +54,7 @@ public class PlayMonopoly extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayMonopoly)) return false;
-        PlayMonopoly monopoly = (PlayMonopoly) o;
+        if (!(o instanceof PlayMonopoly monopoly)) return false;
         return player == monopoly.player && resource == monopoly.resource;
     }
 

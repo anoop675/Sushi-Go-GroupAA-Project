@@ -48,8 +48,7 @@ public class SummaryLogger implements IStatisticLogger {
                 data.put(key, summary);
             }
             ((TAGTimeSeriesSummary) summary).append((TimeStamp) value);
-        } else if(value instanceof ArrayList && ((ArrayList<?>) value).get(0) instanceof TimeStamp){
-            TimeStamp ts = (TimeStamp) ((ArrayList<?>) value).get(0);
+        } else if(value instanceof ArrayList && ((ArrayList<?>) value).get(0) instanceof TimeStamp ts){
             if(!(ts instanceof TimeStampSummary)) return;
 
             if (!data.containsKey(key)) {
@@ -59,7 +58,7 @@ public class SummaryLogger implements IStatisticLogger {
             for(TimeStampSummary tst : ((ArrayList<TimeStampSummary>) value))
                 ((TAGTimeSeriesSummary) summary).append(tst);
 
-            return; //Nothing to do here.
+            //Nothing to do here.
         }else {
             if (value instanceof Map && ((Map<?, ?>) value).keySet().iterator().next() instanceof String) {
                 // A collection of other stats that should be recorded separately, ignore key // TODO: maybe we want to keep the key too in the name of records?
@@ -138,8 +137,7 @@ public class SummaryLogger implements IStatisticLogger {
             if (summary instanceof TAGOccurrenceStatSummary) {
                 header.append(key).append("\t");
                 outputData.append(data.get(key)).append("\t");
-            } else if (summary instanceof TAGNumericStatSummary) {
-                TAGNumericStatSummary statSummary = (TAGNumericStatSummary) summary;
+            } else if (summary instanceof TAGNumericStatSummary statSummary) {
                 if (data.get(key).n() == 1) {
                     header.append(key).append("\t");
                     outputData.append(String.format("%.3g\t", statSummary.mean()));
@@ -259,9 +257,8 @@ public class SummaryLogger implements IStatisticLogger {
                 List<String> alphabeticOrder = d.keySet().stream().sorted().collect(toList());
                 for (String key : alphabeticOrder) {
                     TAGStatSummary summary = d.get(key);
-                    if (summary instanceof TAGNumericStatSummary) {
+                    if (summary instanceof TAGNumericStatSummary stats) {
                         // Print numeric data, stat summaries
-                        TAGNumericStatSummary stats = (TAGNumericStatSummary) summary;
                         if (d.size() > 1) {
                             sb.append(String.format(" * %-" + keyMaxLength + "s", key)).append("\t");
                         }
@@ -271,8 +268,7 @@ public class SummaryLogger implements IStatisticLogger {
                             sb.append(String.format("\tMean: %8.3g +/- %6.2g,\tMedian: %8.3g,\tSum: %8.3g,\tRange: [%3d, %3d],\tPop sd: %8.3g,\tSkew: %8.3g,\tKurtosis: %8.3g,\tN: %d\n",
                                     stats.mean(), stats.stdErr(), stats.median(), stats.sum(), (int) stats.min(), (int) stats.max(), stats.sd(), stats.skew(), stats.kurtosis(), stats.n()));
                         }
-                    } else if (summary instanceof TAGTimeSeriesSummary) {
-                        TAGTimeSeriesSummary stats = (TAGTimeSeriesSummary) summary;
+                    } else if (summary instanceof TAGTimeSeriesSummary stats) {
                         sb.append(key).append("\n");
                         ArrayList<TimeStamp> series = (ArrayList<TimeStamp>) stats.getElements();
                         int lastX = -1;

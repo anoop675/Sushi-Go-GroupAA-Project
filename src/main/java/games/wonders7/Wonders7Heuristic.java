@@ -36,9 +36,9 @@ public class Wonders7Heuristic extends TunableParameters implements IStateHeuris
             playerResourcesCopy.add(new EnumMap<>(map));  // Will be used to calculate everybody's VP scores
         }
 
-        for (int i=0;i<wgs.getNPlayers();i++){
+        for (int i = 0; i<wgs.getNPlayers(playerId); i++){
             // Evaluate military conflicts
-            int nextplayer = (i+1)% wgs.getNPlayers();
+            int nextplayer = (i+1)% wgs.getNPlayers(playerId);
             if(playerResourcesCopy.get(i).get(Wonders7Constants.Resource.Shield) > playerResourcesCopy.get(nextplayer).get(Wonders7Constants.Resource.Shield)){ // IF PLAYER i WINS
                 playerResourcesCopy.get(i).put(Wonders7Constants.Resource.Victory,  playerResourcesCopy.get(i).get(Wonders7Constants.Resource.Victory)+(2*wgs.currentAge-1)); // 2N-1 POINTS FOR PLAYER i
                 playerResourcesCopy.get(nextplayer).put(Wonders7Constants.Resource.Victory,  playerResourcesCopy.get(nextplayer).get(Wonders7Constants.Resource.Victory)-1); // -1 FOR THE PLAYER i+1
@@ -62,7 +62,7 @@ public class Wonders7Heuristic extends TunableParameters implements IStateHeuris
         if (wgs.currentAge == 4) playerResourcesCopy.get(playerId).put(Wonders7Constants.Resource.Victory, wgs.playerResources.get(playerId).get(Wonders7Constants.Resource.Victory)); // If Game is completed and VP have already been calculated for players, use already calculated scores
 
         // Counts the accumulated total of each player in the game
-        for (int i=0;i<wgs.getNPlayers();i++){
+        for (int i = 0; i<wgs.getNPlayers(playerId); i++){
             totalVP += playerResourcesCopy.get(i).get(Wonders7Constants.Resource.Victory);
             if ((playerResourcesCopy.get(i).get(Wonders7Constants.Resource.Victory) > highestVP) && (i!=playerId)) highestVP = playerResourcesCopy.get(i).get(Wonders7Constants.Resource.Victory);
         }

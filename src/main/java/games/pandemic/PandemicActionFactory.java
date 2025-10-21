@@ -175,13 +175,13 @@ class PandemicActionFactory {
             // Dispatcher special actions
             case "Dispatcher":
                 // Move any pawn, if its owner agrees, to any city containing another pawn.
-                String[] locations = new String[pgs.getNPlayers()];
-                for (int i = 0; i < pgs.getNPlayers(); i++) {
+                String[] locations = new String[pgs.getNPlayers(playerId)];
+                for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                     locations[i] = ((PropertyString) pgs.getComponent(playerCardHash, i)
                             .getProperty(playerLocationHash)).value;
                 }
-                for (int j = 0; j < pgs.getNPlayers(); j++) {
-                    for (int i = 0; i < pgs.getNPlayers(); i++) {
+                for (int j = 0; j < pgs.getNPlayers(playerId); j++) {
+                    for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                         if (i != j) {
                             actions.add(new MovePlayer(MovePlayer.MoveType.Dispatcher, i, locations[j]));
                         }
@@ -189,7 +189,7 @@ class PandemicActionFactory {
                 }
 
                 // Move another player’s pawn, if its owner agrees, as if it were his own.
-                for (int i = 0; i < pgs.getNPlayers(); i++) {
+                for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                     if (i != playerIdx) {
                         actions.addAll(getMoveActions(pgs, i, playerHand));
                     }
@@ -382,7 +382,7 @@ class PandemicActionFactory {
 //            System.out.println("Move any 1 pawn to any city. Get permission before moving another player's pawn.");
                 for (BoardNode bn: pgs.world.getBoardNodes()) {
                     String cityName = ((PropertyString) bn.getProperty(nameHash)).value;
-                    for (int i = 0; i < pgs.getNPlayers(); i++) {
+                    for (int i = 0; i < pgs.getNPlayers(playerId); i++) {
                         // Check if player is already there
                         String pLocation = ((PropertyString) pgs.getComponent(playerCardHash, i).getProperty(playerLocationHash)).value;
                         if (pLocation.equals(cityName)) continue;

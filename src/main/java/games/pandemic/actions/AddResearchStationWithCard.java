@@ -45,9 +45,8 @@ public class AddResearchStationWithCard extends AddResearchStation {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AddResearchStationWithCard)) return false;
+        if (!(o instanceof AddResearchStationWithCard that)) return false;
         if (!super.equals(o)) return false;
-        AddResearchStationWithCard that = (AddResearchStationWithCard) o;
         return cardIdx == that.cardIdx;
     }
 

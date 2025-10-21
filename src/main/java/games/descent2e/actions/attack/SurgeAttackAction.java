@@ -76,8 +76,7 @@ public class SurgeAttackAction extends DescentAction {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof SurgeAttackAction) {
-            SurgeAttackAction o = (SurgeAttackAction) other;
+        if (other instanceof SurgeAttackAction o) {
             return o.figureSource == figureSource && o.surge == surge;
         }
         return false;

@@ -92,15 +92,15 @@ public class PuertoRicoGUI extends AbstractGUIManager {
         JPanel middle = new JPanel();
         middle.setOpaque(false);
         middle.setLayout(new BoxLayout(middle, BoxLayout.X_AXIS));
-        playerViewBorders = new Border[gs.getNPlayers()];
-        playerViewBordersHighlightCurrent = new Border[gs.getNPlayers()];
-        playerViewBordersHighlightLose = new Border[gs.getNPlayers()];
-        playerViewBordersHighlightWin = new Border[gs.getNPlayers()];
-        playerBoards = new PlayerBoard[gs.getNPlayers()];
+        playerViewBorders = new Border[gs.getNPlayers(playerId)];
+        playerViewBordersHighlightCurrent = new Border[gs.getNPlayers(playerId)];
+        playerViewBordersHighlightLose = new Border[gs.getNPlayers(playerId)];
+        playerViewBordersHighlightWin = new Border[gs.getNPlayers(playerId)];
+        playerBoards = new PlayerBoard[gs.getNPlayers(playerId)];
         // player boards
         // player ID, name in border
         List<IScreenHighlight> highlights = new ArrayList<>();
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             PlayerBoard pb = new PlayerBoard(this, gs, i);
             playerBoards[i] = pb;
             highlights.add(pb);
@@ -268,7 +268,7 @@ public class PuertoRicoGUI extends AbstractGUIManager {
         if (!gameState.isNotTerminal()) {
             roundCount.setText("Round: " + gameState.getRoundCounter() + " (GAME OVER)");
 
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 // Highlight win/lose player
                 if (gameState.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME) {
                     playerBoards[i].setBorder(playerViewBordersHighlightWin[i]);
@@ -279,7 +279,7 @@ public class PuertoRicoGUI extends AbstractGUIManager {
         } else {
             roundCount.setText("Round: " + gameState.getRoundCounter());
 
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 // Highlight active player
                 if (i == gameState.getCurrentPlayer()) {
                     playerBoards[i].setBorder(playerViewBordersHighlightCurrent[i]);

@@ -7,7 +7,7 @@ public interface SolutionEvaluator {
      * Evaluates solutions and logs fitness improvement
      */
     // call reset before running
-    public void reset();
+    void reset();
 
     /**
      * Evaluates a given set of parameter settings.

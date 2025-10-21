@@ -36,8 +36,7 @@ public class DiscardResources extends AbstractAction {
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        if (other instanceof DiscardResources){
-            DiscardResources otherAction = (DiscardResources)other;
+        if (other instanceof DiscardResources otherAction){
             return Arrays.equals(otherAction.resourcesToDiscard, resourcesToDiscard) && playerID == otherAction.playerID;
         }
         return false;

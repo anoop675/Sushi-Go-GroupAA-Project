@@ -8,7 +8,6 @@ import core.components.Deck;
 import core.components.Counter;
 import core.components.PartialObservableDeck;
 import core.interfaces.IPrintable;
-import core.turnorders.AlternatingTurnOrder;
 import games.GameType;
 
 
@@ -24,7 +23,8 @@ public class HanabiGameState extends AbstractGameState implements IPrintable {
     Counter failCounter;
     Counter hintCounter;
     List<HanabiCard> currentCard;
-    int endTurn = getNPlayers() + 1;
+    private int playerId;
+    int endTurn = getNPlayers(playerId) + 1;
 
 
     public HanabiGameState(AbstractParameters gameParameters, int nPlayers) {
@@ -50,7 +50,7 @@ public class HanabiGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        HanabiGameState copy = new HanabiGameState(gameParameters.copy(), getNPlayers());
+        HanabiGameState copy = new HanabiGameState(gameParameters.copy(), getNPlayers(playerId));
         copy.playerDecks = new ArrayList<>();
         for (PartialObservableDeck<HanabiCard> d : playerDecks) {
             copy.playerDecks.add(d.copy(playerId));

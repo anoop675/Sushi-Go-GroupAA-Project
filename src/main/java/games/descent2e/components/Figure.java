@@ -76,7 +76,7 @@ public class Figure extends Token {
     boolean hasMoved, hasAttacked, hasRerolled;
     boolean isOffMap, canIgnoreEnemies, extraAction = false;
 
-    Deck<DescentCard> exhausted = new Deck<>("Exhausted", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);;
+    Deck<DescentCard> exhausted = new Deck<>("Exhausted", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
 
     List<String> actionsTaken = new ArrayList<>();
 
@@ -212,14 +212,11 @@ public class Figure extends Token {
     public void addCondition(DescentTypes.DescentCondition condition) {
         // A Figure can only be affected by a condition once - they do not stack
         // Therefore we can only add the condition if it is not already on the list
-        if (!conditions.contains(condition)) {
-            conditions.add(condition);
-        }
+        conditions.add(condition);
     }
 
     public void removeCondition(DescentTypes.DescentCondition condition) {
-        if (conditions.contains(condition))
-            conditions.remove(condition);
+        conditions.remove(condition);
     }
     public void removeAllConditions() {
         if (!conditions.isEmpty()) {

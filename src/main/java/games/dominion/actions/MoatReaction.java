@@ -24,7 +24,7 @@ public class MoatReaction extends AbstractAction implements IDominionReaction {
         PartialObservableDeck<DominionCard> hand = (PartialObservableDeck<DominionCard>) state.getDeck(DominionConstants.DeckType.HAND, player);
         for (int pos = 0; pos < hand.getSize(); pos++) {
             if (hand.get(pos).cardType() == CardType.MOAT) {
-                boolean[] allTrue = new boolean[state.getNPlayers()];
+                boolean[] allTrue = new boolean[state.getNPlayers(playerId)];
                 Arrays.fill(allTrue, true);
                 hand.setVisibilityOfComponent(pos, allTrue);
                 state.setDefended(player);

@@ -105,7 +105,7 @@ public class Piece extends BoardNode {
         Piece pieceAtTile = (Piece) board.getElement(newPos.getX(), newPos.getY());
         if (pieceAtTile == null) {
             // Just move
-            if (actionSpace.context == ActionSpace.Context.Dependent) {
+            if (actionSpace.context() == ActionSpace.Context.Dependent) {
                 // Dependent
                 moves.add(new NormalMove(position, dir));
             } else {
@@ -114,7 +114,7 @@ public class Piece extends BoardNode {
             }
         } else {
             // Attack
-            if (actionSpace.context == ActionSpace.Context.Dependent) {
+            if (actionSpace.context() == ActionSpace.Context.Dependent) {
                 // Dependent
                 moves.add(new AttackMove(position, newPos));
             } else {
@@ -140,9 +140,8 @@ public class Piece extends BoardNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Piece)) return false;
+        if (!(o instanceof Piece piece)) return false;
         if (!super.equals(o)) return false;
-        Piece piece = (Piece) o;
         return pieceKnown == piece.pieceKnown && Objects.equals(position, piece.position) && pieceType == piece.pieceType && alliance == piece.alliance;
     }
 

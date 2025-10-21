@@ -37,14 +37,14 @@ class PlayerPanel extends JPanel {
                     // Left-click
                     gui.addPlayerHighlight(playerID);
                     playerLabel.setBorder(highlightBorder);
-                    for (int i = 0; i < gui.gs.getNPlayers(); i++) {
+                    for (int i = 0; i < gui.gs.getNPlayers(playerId); i++) {
                         if (i != playerID) {
                             gui.playerPanels[i].playerLabel.setBorder(null);
                         }
                     }
                 } else {
                     gui.clearHighlights();
-                    for (int i = 0; i < gui.gs.getNPlayers(); i++) {
+                    for (int i = 0; i < gui.gs.getNPlayers(playerId); i++) {
                         gui.playerPanels[i].playerLabel.setBorder(null);
                     }
                 }

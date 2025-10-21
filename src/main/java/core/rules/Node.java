@@ -9,7 +9,7 @@ import core.actions.AbstractAction;
 public abstract class Node {
     private static int nextID = 0;
 
-    private int id;  // Unique id for this node
+    private final int id;  // Unique id for this node
     protected boolean actionNode;  // True if this node requires an action to execute
     protected boolean nextPlayerNode;  // True if this action changes active player
     protected AbstractAction action;  // Action to execute if this node requires one

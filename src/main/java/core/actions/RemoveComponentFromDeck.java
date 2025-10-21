@@ -8,8 +8,8 @@ import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class RemoveComponentFromDeck<T extends Component> extends DrawCard {
-    private int deck;
-    private int componentIdx;
+    private final int deck;
+    private final int componentIdx;
 
     public RemoveComponentFromDeck(int deckFrom, int deckTo, int fromIndex, int deckRemoveId, int componentRemoveIdx) {
         super(deckFrom, deckTo, fromIndex);
@@ -28,9 +28,8 @@ public class RemoveComponentFromDeck<T extends Component> extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RemoveComponentFromDeck)) return false;
+        if (!(o instanceof RemoveComponentFromDeck that)) return false;
         if (!super.equals(o)) return false;
-        RemoveComponentFromDeck that = (RemoveComponentFromDeck) o;
         return deck == that.deck &&
                 componentIdx == that.componentIdx;
     }

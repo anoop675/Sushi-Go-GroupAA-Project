@@ -261,8 +261,7 @@ public class GraphBoard extends Component implements IComponentContainer<BoardNo
 
         for (BoardNode bn : boardNodes.values()) {
             Property p = bn.getProperty(_hash_neighbours_);
-            if (p instanceof PropertyStringArray) {
-                PropertyStringArray psa = (PropertyStringArray) p;
+            if (p instanceof PropertyStringArray psa) {
                 for (String str : psa.getValues()) {
                     BoardNode neigh = this.getNodeByProperty(_hash_vertices_, new PropertyString(str));
                     if (neigh != null) {
@@ -276,8 +275,7 @@ public class GraphBoard extends Component implements IComponentContainer<BoardNo
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof GraphBoard) {
-            GraphBoard other = (GraphBoard) o;
+        if (o instanceof GraphBoard other) {
             return componentID == other.componentID && other.boardNodes.equals(boardNodes);
         }
         return false;

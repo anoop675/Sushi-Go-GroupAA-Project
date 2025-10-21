@@ -134,7 +134,7 @@ public class Hero extends Figure {
         return abilityStr;
     }
     public void setAbility(HeroAbilities.HeroAbility heroAbility) {
-        this.heroAbility = heroAbility;;
+        this.heroAbility = heroAbility;
     }
 
     public void setAbilityStr(String abilityStr) {

@@ -1,3 +1,4 @@
+
 package games.terraformingmars;
 
 import core.AbstractGameStateWithTurnOrder;
@@ -6,7 +7,6 @@ import core.components.*;
 import core.interfaces.IGamePhase;
 import core.turnorders.TurnOrder;
 import games.GameType;
-import games.terraformingmars.actions.PlaceTile;
 import games.terraformingmars.actions.TMAction;
 import games.terraformingmars.components.*;
 import games.terraformingmars.rules.Discount;
@@ -17,13 +17,14 @@ import games.terraformingmars.rules.requirements.Requirement;
 import games.terraformingmars.rules.requirements.TagsPlayedRequirement;
 import utilities.Pair;
 import utilities.Utils;
-import utilities.Vector2D;
 
 import java.util.*;
 
 import static games.terraformingmars.TMGameState.TMPhase.CorporationSelect;
 
 public class TMGameState extends AbstractGameStateWithTurnOrder {
+
+    private int player;
 
     enum TMPhase implements IGamePhase {
         CorporationSelect,
@@ -104,7 +105,8 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
             addAll(Arrays.asList(playerComplicatedPointCards));
             addAll(Arrays.asList(playedCards));
             addAll(Arrays.asList(playerCardPoints));
-            for (int i = 0; i < getNPlayers(); i++) {
+            int playerId = 0;
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 addAll(playerResources[i].values());
                 addAll(playerProduction[i].values());
                 addAll(playerCardsPlayedTags[i].values());
@@ -119,7 +121,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
 
     @Override
     protected AbstractGameStateWithTurnOrder __copy(int playerId) {
-        TMGameState copy = new TMGameState(gameParameters.copy(), getNPlayers());
+        TMGameState copy = new TMGameState(gameParameters.copy(), getNPlayers(playerId));
 
         // General public info
         copy.generation = generation;
@@ -162,21 +164,21 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
         copy.discardCards = discardCards.copy(); // TODO: some of these are unknown
 
         // Player-specific public info
-        copy.playerExtraActions = new HashSet[getNPlayers()];
-        copy.playerResourceMap = new HashSet[getNPlayers()];
-        copy.playerPersistingEffects = new HashSet[getNPlayers()];
-        copy.playerDiscountEffects = new HashMap[getNPlayers()];
-        copy.playerResources = new HashMap[getNPlayers()];
-        copy.playerResourceIncreaseGen = new HashMap[getNPlayers()];
-        copy.playerProduction = new HashMap[getNPlayers()];
-        copy.playerCardsPlayedTags = new HashMap[getNPlayers()];
-        copy.playerCardsPlayedTypes = new HashMap[getNPlayers()];
-        copy.playerTilesPlaced = new HashMap[getNPlayers()];
-        copy.playerCardPoints = new Counter[getNPlayers()];
-        copy.playerComplicatedPointCards = new Deck[getNPlayers()];
-        copy.playedCards = new Deck[getNPlayers()];
-        copy.playerCorporations = new TMCard[getNPlayers()];
-        for (int i = 0; i < getNPlayers(); i++) {
+        copy.playerExtraActions = new HashSet[getNPlayers(playerId)];
+        copy.playerResourceMap = new HashSet[getNPlayers(playerId)];
+        copy.playerPersistingEffects = new HashSet[getNPlayers(playerId)];
+        copy.playerDiscountEffects = new HashMap[getNPlayers(playerId)];
+        copy.playerResources = new HashMap[getNPlayers(playerId)];
+        copy.playerResourceIncreaseGen = new HashMap[getNPlayers(playerId)];
+        copy.playerProduction = new HashMap[getNPlayers(playerId)];
+        copy.playerCardsPlayedTags = new HashMap[getNPlayers(playerId)];
+        copy.playerCardsPlayedTypes = new HashMap[getNPlayers(playerId)];
+        copy.playerTilesPlaced = new HashMap[getNPlayers(playerId)];
+        copy.playerCardPoints = new Counter[getNPlayers(playerId)];
+        copy.playerComplicatedPointCards = new Deck[getNPlayers(playerId)];
+        copy.playedCards = new Deck[getNPlayers(playerId)];
+        copy.playerCorporations = new TMCard[getNPlayers(playerId)];
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             copy.playerExtraActions[i] = new HashSet<>();
             copy.playerResourceMap[i] = new HashSet<>();
             copy.playerPersistingEffects[i] = new HashSet<>();
@@ -224,10 +226,10 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
         }
 
         // Player-specific hidden info
-        copy.playerHands = new Deck[getNPlayers()];
-        copy.playerCardChoice = new Deck[getNPlayers()];
+        copy.playerHands = new Deck[getNPlayers(playerId)];
+        copy.playerCardChoice = new Deck[getNPlayers(playerId)];
         if (playerId != -1 && getCoreGameParameters().partialObservable) {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 copy.playerHands[i] = playerHands[i].copy();
                 copy.playerCardChoice[i] = playerCardChoice[i].copy();
                 if (i != playerId) {  // Player knows what cards they have, but shuffle for opponents, all project cards together and deal new
@@ -241,7 +243,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
             }
             copy.corpCards.shuffle(rnd);
             copy.projectCards.shuffle(rnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     for (int j = 0; j < playerHands[i].getSize(); j++) {
                         copy.playerHands[i].add(copy.drawCard());
@@ -254,7 +256,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
                 }
             }
         } else {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 copy.playerHands[i] = playerHands[i].copy();
                 copy.playerCardChoice[i] = playerCardChoice[i].copy();
             }
@@ -289,8 +291,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMGameState)) return false;
-        TMGameState that = (TMGameState) o;
+        if (!(o instanceof TMGameState that)) return false;
         return generation == that.generation
                 && Objects.equals(board, that.board)
                 && Objects.equals(extraTiles, that.extraTiles)
@@ -468,7 +469,8 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
     }
 
     public boolean allCorpChosen() {
-        for (int i = 0; i < getNPlayers(); i++) {
+        int playerId = 0;
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (playerCorporations[i] == null) return false;
         }
         return true;
@@ -730,19 +732,19 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
     }
 
     public boolean anyTilesPlaced() {
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(0); i++) {
             for (Counter c : playerTilesPlaced[i].values()) {
                 if (c.getValue() > 0) return true;
             }
         }
-        return getNPlayers() == 1;
+        return getNPlayers(0) == 1;
     }
 
     public boolean anyTilesPlaced(TMTypes.Tile type) {
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(0); i++) {
             if (playerTilesPlaced[i].get(type).getValue() > 0) return true;
         }
-        return getNPlayers() == 1 && (type == TMTypes.Tile.City || type == TMTypes.Tile.Greenery);
+        return getNPlayers(0) == 1 && (type == TMTypes.Tile.City || type == TMTypes.Tile.Greenery);
     }
 
     public int countPoints(int player) {
@@ -757,6 +759,14 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
         // Add points on cards
         points += countPointsCards(player);
         return points;
+    }
+
+    private int countPointsCards(int player) {
+        return 0;
+    }
+
+    private int countPointsBoard(int player) {
+                return 0;
     }
 
     public int countPointsMilestones(int player) {
@@ -790,7 +800,7 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
             int secondBest = -1;
             HashSet<Integer> bestPlayer = new HashSet<>();
             HashSet<Integer> secondBestPlayer = new HashSet<>();
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(0); i++) {
                 int playerPoints = a.checkProgress(this, i);
                 if (playerPoints >= best) {
                     if (playerPoints > best) {
@@ -806,118 +816,4 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
                     secondBest = playerPoints;
                 }
             }
-            for (int i = 0; i < getNPlayers(); i++) {
-                int playerPoints = a.checkProgress(this, i);
-                if (playerPoints == best) {
-                    bestPlayer.add(i);
-                } else if (playerPoints == secondBest) {
-                    secondBestPlayer.add(i);
-                }
-            }
-            if (getNPlayers() <= 2 || bestPlayer.size() > 1)
-                secondBestPlayer.clear();  // No second-best awarded unless there are 3 or more players, and only 1 got first place
             return new Pair<>(bestPlayer, secondBestPlayer);
-        }
-        return null;
-    }
-
-    public int countPointsBoard(int player) {
-        int points = 0;
-        // Greeneries
-        points += playerTilesPlaced[player].get(TMTypes.Tile.Greenery).getValue();
-        // Add cities on board
-        for (int i = 0; i < board.getHeight(); i++) {
-            for (int j = 0; j < board.getWidth(); j++) {
-                TMMapTile mt = (TMMapTile) board.getElement(j, i);
-                if (mt != null && mt.getTilePlaced() == TMTypes.Tile.City) {
-                    // Count adjacent greeneries
-                    points += PlaceTile.nAdjacentTiles(this, mt, TMTypes.Tile.Greenery);
-                }
-            }
-        }
-        return points;
-    }
-
-    public int countPointsCards(int player) {
-        int points = 0;
-
-        // Normal points
-        points += playerCardPoints[player].getValue();
-        // Complicated points
-        for (TMCard card : playerComplicatedPointCards[player].getComponents()) {
-            if (card == null) {
-                continue;
-            }
-            if (card.pointsThreshold != null) {
-                if (card.pointsResource != null) {
-                    if (card.nResourcesOnCard >= card.pointsThreshold) {
-                        points += card.nPoints;
-                    }
-                }
-            } else {
-                if (card.pointsResource != null) {
-                    points += card.nPoints * card.nResourcesOnCard;
-                } else if (card.pointsTag != null) {
-                    points += card.nPoints * playerCardsPlayedTags[player].get(card.pointsTag).getValue();
-                } else if (card.pointsTile != null) {
-                    if (card.pointsTileAdjacent && card.mapTileIDTilePlaced >= 0) {  // TODO: mapTileIDPlaced should have been set in this case, bug
-                        // only adjacent tiles count
-                        TMMapTile mt = (TMMapTile) getComponentById(card.mapTileIDTilePlaced);
-                        List<Vector2D> neighbours = PlaceTile.getNeighbours(new Vector2D(mt.getX(), mt.getY()));
-                        for (Vector2D n : neighbours) {
-                            TMMapTile e = (TMMapTile) board.getElement(n.getX(), n.getY());
-                            if (e != null && e.getTilePlaced() == card.pointsTile) {
-                                points += card.nPoints;
-                            }
-                        }
-                    } else {
-                        points += card.nPoints * playerTilesPlaced[player].get(card.pointsTile).getValue();
-                    }
-                } else if (card.getComponentName().equalsIgnoreCase("capital")) {
-                    // x VP per Ocean adjacent
-                    int position = card.mapTileIDTilePlaced;
-                    TMMapTile mt = (TMMapTile) getComponentById(position);
-                    points += card.nPoints * PlaceTile.nAdjacentTiles(this, mt, TMTypes.Tile.Ocean);
-                }
-            }
-        }
-        return points;
-    }
-
-    public static class ResourceMapping {
-        public final TMTypes.Resource from;
-        public final TMTypes.Resource to;
-        public double rate;
-        public Requirement<TMCard> requirement;
-
-        public ResourceMapping(TMTypes.Resource from, TMTypes.Resource to, double rate, Requirement<TMCard> requirement) {
-            this.from = from;
-            this.to = to;
-            this.rate = rate;
-            this.requirement = requirement;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ResourceMapping)) return false;
-            ResourceMapping that = (ResourceMapping) o;
-            return from == that.from &&
-                    to == that.to &&
-                    (requirement == null && that.requirement == null || Objects.equals(requirement, that.requirement));
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(from, to, requirement);
-        }
-
-        public ResourceMapping copy() {
-            ResourceMapping rm = new ResourceMapping(from, to, rate, requirement);
-            if (requirement != null) {
-                rm.requirement = requirement.copy();
-            }
-            return rm;
-        }
-    }
-}

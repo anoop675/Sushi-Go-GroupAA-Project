@@ -138,8 +138,7 @@ public class Area extends Component implements IComponentContainer<Component> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Area) {
-            Area other = (Area) o;
+        if (o instanceof Area other) {
             return componentID == other.componentID && other.components.equals(components);
         }
         return false;

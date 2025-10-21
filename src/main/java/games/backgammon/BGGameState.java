@@ -198,7 +198,7 @@ public class BGGameState extends AbstractGameState {
 
     @Override
     protected BGGameState _copy(int playerId) {
-        BGGameState copy = new BGGameState(gameParameters, getNPlayers());
+        BGGameState copy = new BGGameState(gameParameters, getNPlayers(playerId));
         copy.piecesPerPoint = new int[piecesPerPoint.length][];
         for (int i = 0; i < piecesPerPoint.length; i++) {
             copy.piecesPerPoint[i] = Arrays.copyOf(piecesPerPoint[i], piecesPerPoint[i].length);

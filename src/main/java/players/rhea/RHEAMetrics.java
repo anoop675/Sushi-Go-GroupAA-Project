@@ -16,8 +16,7 @@ public class RHEAMetrics implements IMetricsCollection {
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> stats) {
             AbstractPlayer player = listener.getGame().getPlayers().get(e.state.getCurrentPlayer());
-            if (player instanceof RHEAPlayer) {
-                RHEAPlayer rheaPlayer = (RHEAPlayer) player;
+            if (player instanceof RHEAPlayer rheaPlayer) {
                 stats.put("iterations", rheaPlayer.numIters);
                 stats.put("fmCalls", rheaPlayer.numIters == 0 ? 0 : rheaPlayer.fmCalls / rheaPlayer.numIters);
                 stats.put("copyCalls", rheaPlayer.numIters == 0 ? 0 : rheaPlayer.copyCalls / rheaPlayer.numIters);

@@ -2,10 +2,8 @@ package games.cantstop;
 
 import core.AbstractGameState;
 import core.StandardForwardModel;
-import core.StandardForwardModelWithTurnOrder;
 import core.actions.AbstractAction;
 import core.components.Dice;
-import core.forwardModels.SequentialActionForwardModel;
 import games.cantstop.actions.Pass;
 import games.cantstop.actions.RollDice;
 import games.cantstop.actions.AllocateDice;
@@ -28,7 +26,7 @@ public class CantStopForwardModel extends StandardForwardModel {
         CantStopGameState state = (CantStopGameState) firstState;
         CantStopParameters params = (CantStopParameters) state.getGameParameters();
         state.completedColumns = new boolean[13];
-        state.playerMarkerPositions = new int[state.getNPlayers()][13];
+        state.playerMarkerPositions = new int[state.getNPlayers(playerId)][13];
         state.temporaryMarkerPositions = new HashMap<>();
         state.dice = new ArrayList<>();
         for (int i = 0; i < params.DICE_NUMBER; i++) {
@@ -39,8 +37,7 @@ public class CantStopForwardModel extends StandardForwardModel {
 
     @Override
     protected void _afterAction(AbstractGameState currentState, AbstractAction action) {
-        if (action instanceof Pass) {
-            Pass pass = (Pass) action;
+        if (action instanceof Pass pass) {
             CantStopGameState state = (CantStopGameState) currentState;
             // this is the trigger to move on to the next player
             if (!pass.bust)

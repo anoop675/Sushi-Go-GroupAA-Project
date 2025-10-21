@@ -14,7 +14,6 @@ import games.battlelore.components.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BattleloreForwardModel extends StandardForwardModel {
 
@@ -25,7 +24,7 @@ public class BattleloreForwardModel extends StandardForwardModel {
         BattleloreData _data = new BattleloreData();
         _data.load(gameParams.getDataPath());
 
-        if (gameState.getNPlayers() != 2) {
+        if (gameState.getNPlayers(playerId) != 2) {
             throw new IllegalArgumentException("3 or more players are not supported");
         }
 
@@ -37,7 +36,7 @@ public class BattleloreForwardModel extends StandardForwardModel {
         gameState.gameBoard = new GridBoard(hexWidth, hexHeight);
         gameState.unitTypes = new ArrayList<>();
         gameState.unitTypes = _data.getUnits();
-        gameState.playerScores = new int[gameState.getNPlayers()];
+        gameState.playerScores = new int[gameState.getNPlayers(playerId)];
 
         for (int x = 0; x < gameState.gameBoard.getWidth(); x++) {
             for (int y = 0; y < gameState.gameBoard.getHeight(); y++) {

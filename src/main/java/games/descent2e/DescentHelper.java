@@ -35,11 +35,7 @@ public class DescentHelper {
 
         // TODO: Check for Reach weapons, so far only affects monsters with Reach passive
         // If the figure has the Reach passive, they can attack up to two spaces away
-        boolean reach = false;
-        if (f instanceof Monster && ((Monster) f).hasPassive(MonsterAbilities.MonsterPassive.REACH))
-        {
-            reach = true;
-        }
+        boolean reach = f instanceof Monster && ((Monster) f).hasPassive(MonsterAbilities.MonsterPassive.REACH);
 
         List<Integer> targets = new ArrayList<>();
 
@@ -607,7 +603,7 @@ public class DescentHelper {
 
         // Distance from the source cell is initialized to 0
         Queue<Pair<BoardNode, Integer>> queue = new LinkedList<>();
-        queue.add(new Pair<BoardNode, Integer>((BoardNode) board.getElement(start), 0));
+        queue.add(new Pair<BoardNode, Integer>(board.getElement(start), 0));
 
         // BFS starting from start cell
         while (!queue.isEmpty())

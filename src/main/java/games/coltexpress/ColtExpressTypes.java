@@ -53,8 +53,8 @@ public class ColtExpressTypes {
                 RoundCard.TurnType.HiddenTurn, RoundCard.TurnType.NormalTurn},
                 new EndCardPickPocket()));
 
-        private String key;
-        private Pair<RoundCard.TurnType[], RoundEvent> content;
+        private final String key;
+        private final Pair<RoundCard.TurnType[], RoundEvent> content;
         EndRoundCard(String key, Pair<RoundCard.TurnType[], RoundEvent> content) {
             this.key = key;
             this.content = content;
@@ -107,8 +107,8 @@ public class ColtExpressTypes {
                 new RoundCard.TurnType[] {RoundCard.TurnType.NormalTurn, RoundCard.TurnType.HiddenTurn, RoundCard.TurnType.NormalTurn, RoundCard.TurnType.HiddenTurn},
                 null));
 
-        private String key;
-        private Group<RoundCard.TurnType[], RoundCard.TurnType[], RoundEvent> content;
+        private final String key;
+        private final Group<RoundCard.TurnType[], RoundCard.TurnType[], RoundEvent> content;
         RegularRoundCard(String key, Group<RoundCard.TurnType[], RoundCard.TurnType[], RoundEvent> content) {
             this.key = key;
             this.content = content;

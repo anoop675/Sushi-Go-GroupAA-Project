@@ -1,20 +1,11 @@
 package games.backgammon;
 
-import core.AbstractGameState;
-import core.AbstractPlayer;
-import core.CoreConstants;
-import core.actions.AbstractAction;
-import games.descent2e.actions.Move;
-import games.dotsboxes.AddGridCellEdge;
-import games.dotsboxes.DBEdge;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,12 +19,12 @@ public class BackgammonBoardView extends JComponent {
     int discRadius = 20;
     int discMargin = 5;
 
-    private int[][] piecesPerPoint = new int[2][24]; // [player][point]
-    private int[] piecesOnBar = new int[2];      // [player]
-    private int[] piecesBorneOff = new int[2];   // [player]
+    private final int[][] piecesPerPoint = new int[2][24]; // [player][point]
+    private final int[] piecesOnBar = new int[2];      // [player]
+    private final int[] piecesBorneOff = new int[2];   // [player]
     private int[] diceValues = new int[2];
     private boolean[] diceUsed = new boolean[2];
-    private BGForwardModel forwardModel;
+    private final BGForwardModel forwardModel;
     private List<MovePiece> validActions = new ArrayList<>();
     private int currentPlayer = 0;
 
@@ -85,7 +76,7 @@ public class BackgammonBoardView extends JComponent {
     }
 
     public synchronized void update(BGGameState state) {
-        int nPlayers = state.getNPlayers();
+        int nPlayers = state.getNPlayers(playerId);
 
         validActions = forwardModel.computeAvailableActions(state).stream()
                 .filter(a -> a instanceof MovePiece)

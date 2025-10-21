@@ -17,7 +17,7 @@ public class CommonView extends JComponent {
     RootDeckView discardPile;
     RootQuestDeckView questPile;
     RootQuestDeckView activeQuests;
-    private List<String> craftabledItems = new ArrayList<>();
+    private final List<String> craftabledItems = new ArrayList<>();
     String dataPath;
     int border = 5;
     int textHeight = 15;
@@ -26,14 +26,14 @@ public class CommonView extends JComponent {
         this.dataPath = dataPath;
             discardPile = new RootDeckView(-1, state.getDiscardPile(), true, dataPath, new Rectangle(0, 10, cardWidth, cardHeight));
             drawPile = new RootDeckView(-1, state.getDrawPile(), false, dataPath, new Rectangle(0, 10, cardWidth, cardHeight));
-            if (state.getNPlayers() > 3) {
+            if (state.getNPlayers(playerId) > 3) {
             questPile = new RootQuestDeckView(-1, state.getQuestDrawPile(), false, dataPath, new Rectangle(0, 10, handWidth / 2, cardHeight));
             activeQuests = new RootQuestDeckView(-1, state.getActiveQuests(), true, dataPath, new Rectangle(0, 10, handWidth / 2, cardHeight));
         }
         this.setLayout(new GridLayout(1, 4));
         this.add(drawPile);
         this.add(discardPile);
-        if (state.getNPlayers() > 3) {
+        if (state.getNPlayers(playerId) > 3) {
             this.add(questPile);
             this.add(activeQuests);
         }

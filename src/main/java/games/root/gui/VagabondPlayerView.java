@@ -90,11 +90,11 @@ public class VagabondPlayerView extends JComponent {
             if (bag.refreshed && !bag.damaged){
                 bags.add(dataPath+bag.itemType.toString().toLowerCase()+".png");
             } else if (!bag.refreshed && !bag.damaged) {
-                exhausted.add(dataPath+bag.itemType.toString().toLowerCase()+".png");;
+                exhausted.add(dataPath+bag.itemType.toString().toLowerCase()+".png");
             } else if (bag.refreshed && bag.damaged) {
                 damaged.add(dataPath+bag.itemType.toString().toLowerCase()+".png");
             } else{
-                damagedExhausted.add(dataPath+bag.itemType.toString().toLowerCase()+".png");;
+                damagedExhausted.add(dataPath+bag.itemType.toString().toLowerCase()+".png");
             }
         }
         for (Item item: state.getTeas()){

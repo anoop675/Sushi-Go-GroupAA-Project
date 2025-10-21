@@ -47,7 +47,7 @@ public class RootGUIManager extends AbstractGUIManager {
             AbstractGameState gameState = game.getGameState();
             activePlayer = gameState.getCurrentPlayer();
 
-            int nPlayers = gameState.getNPlayers();
+            int nPlayers = gameState.getNPlayers(playerId);
 
             this.width = 1600;
             this.height = 1100;
@@ -122,7 +122,6 @@ public class RootGUIManager extends AbstractGUIManager {
                         playerViewBorders[i] = title3;
                         vagabondPlayerView.setBorder(title3);
                         sides[i].add(vagabondPlayerView);
-                        ;
                         break;
 
                 }
@@ -193,24 +192,20 @@ public class RootGUIManager extends AbstractGUIManager {
                     case 1:
                         eyriePlayerView.playerHand.setCardHighlight(-1);
                     case 2:
-                        if (gameState.getNPlayers() > 2) woodlandPlayerView.playerHand.setCardHighlight(-1);
+                        if (gameState.getNPlayers(playerId) > 2) woodlandPlayerView.playerHand.setCardHighlight(-1);
                     case 3:
-                        if (gameState.getNPlayers() > 3) vagabondPlayerView.playerHand.setCardHighlight(-1);
+                        if (gameState.getNPlayers(playerId) > 3) vagabondPlayerView.playerHand.setCardHighlight(-1);
                 }
             }
 
             RootGameState state = (RootGameState) gameState;
             commonView.update(state);
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 switch (i) {
                     case 0:
                         catPlayerView.update(state);
-                        if (i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer || humanPlayerIds.contains(i) || gameState.getCoreGameParameters().alwaysDisplayFullObservable) {
-                            catPlayerView.playerHand.setFront(true);
-                            //catPlayerView.playerHand.setFocusable(true);
-                        } else {
-                            catPlayerView.playerHand.setFront(false);
-                        }
+                        //catPlayerView.playerHand.setFocusable(true);
+                        catPlayerView.playerHand.setFront(i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer || humanPlayerIds.contains(i) || gameState.getCoreGameParameters().alwaysDisplayFullObservable);
 
                         // Highlight active player
                         if (i == gameState.getCurrentPlayer()) {
@@ -221,12 +216,8 @@ public class RootGUIManager extends AbstractGUIManager {
                         break;
                     case 1:
                         eyriePlayerView.update(state);
-                        if (i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer || humanPlayerIds.contains(i) || gameState.getCoreGameParameters().alwaysDisplayFullObservable) {
-                            eyriePlayerView.playerHand.setFront(true);
-                            //eyriePlayerView.playerHand.setFocusable(true);
-                        } else {
-                            eyriePlayerView.playerHand.setFront(false);
-                        }
+                        //eyriePlayerView.playerHand.setFocusable(true);
+                        eyriePlayerView.playerHand.setFront(i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer || humanPlayerIds.contains(i) || gameState.getCoreGameParameters().alwaysDisplayFullObservable);
 
                         // Highlight active player
                         if (i == gameState.getCurrentPlayer()) {
@@ -283,7 +274,7 @@ public class RootGUIManager extends AbstractGUIManager {
         updateGameStateInfo(gameState);
 
         StringBuilder victoryCon = new StringBuilder("VC: ");
-        for (int i = 0; i< gs.getNPlayers(); i++){
+        for (int i = 0; i< gs.getNPlayers(playerId); i++){
             victoryCon.append(gs.getPlayerVictoryCondition(i).toString()).append(",");
         }
         victoryConditions.setText(victoryCon.toString());
@@ -310,7 +301,7 @@ public class RootGUIManager extends AbstractGUIManager {
     protected void updateGameStateInfo(AbstractGameState gameState) {
         RootGameState gs = (RootGameState) gameState;
         StringBuilder victoryCon = new StringBuilder("VC: ");
-        for (int i = 0; i< gs.getNPlayers(); i++){
+        for (int i = 0; i< gs.getNPlayers(playerId); i++){
             victoryCon.append(gs.getPlayerVictoryCondition(i).toString()).append(",");
         }
         victoryConditions.setText(victoryCon.toString());

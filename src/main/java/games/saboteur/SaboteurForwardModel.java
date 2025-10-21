@@ -13,7 +13,6 @@ import utilities.Pair;
 import utilities.Vector2D;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static core.CoreConstants.VisibilityMode.HIDDEN_TO_ALL;
@@ -29,9 +28,9 @@ public class SaboteurForwardModel extends StandardForwardModel {
         SaboteurGameState sgs = (SaboteurGameState) firstState;
         SaboteurGameParameters sgp = (SaboteurGameParameters) sgs.getGameParameters();
 
-        sgs.roleDeck = new PartialObservableDeck<>("RoleDeck", sgs.getNPlayers(), new boolean[sgs.getNPlayers()]);
-        int nSaboteurs = sgp.saboteursForPlayerCount[sgs.getNPlayers()];
-        int nMiners = sgp.minersForPlayerCount[sgs.getNPlayers()];
+        sgs.roleDeck = new PartialObservableDeck<>("RoleDeck", sgs.getNPlayers(playerId), new boolean[sgs.getNPlayers(playerId)]);
+        int nSaboteurs = sgp.saboteursForPlayerCount[sgs.getNPlayers(playerId)];
+        int nMiners = sgp.minersForPlayerCount[sgs.getNPlayers(playerId)];
         for (int i = 0; i < nSaboteurs; i++)
             sgs.roleDeck.add(new RoleCard(Saboteur));
         for (int i = 0; i < nMiners; i++)
@@ -62,7 +61,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
             sgs.drawDeck.add(new ActionCard(RockFall, new ActionCard.ToolCardType[]{}));
         }
 
-        sgs.discardDeck = new PartialObservableDeck<>("DiscardDeck", -1, sgs.getNPlayers(), HIDDEN_TO_ALL);
+        sgs.discardDeck = new PartialObservableDeck<>("DiscardDeck", -1, sgs.getNPlayers(playerId), HIDDEN_TO_ALL);
 
         // we now build a new grid board. This is not infinite to void silliness.
         // We have a start space on the left, the number of treasure cards goalSpacingX to the right, plus the defined horizontal padding on each side
@@ -70,7 +69,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
         int verticalSize = (sgp.goalSpacingY + 1) * sgp.nGoals + sgp.verticalPadding * 2;
         int horizontalSize = sgp.goalSpacingX + 2 + sgp.horizontalPadding * 2;
 
-        sgs.gridBoard = new PartialObservableGridBoard(horizontalSize, verticalSize, sgs.getNPlayers(), true);
+        sgs.gridBoard = new PartialObservableGridBoard(horizontalSize, verticalSize, sgs.getNPlayers(playerId), true);
 
         sgs.startingSquare = new Vector2D(sgp.horizontalPadding, verticalSize / 2); // we start just in on the left edge, and half way down vertically
 
@@ -103,7 +102,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
         sgs.playerDecks.clear();
         sgs.toolDeck.clear();
         sgs.playerNuggetDecks.clear();
-        for (int i = 0; i < sgs.getNPlayers(); i++) {
+        for (int i = 0; i < sgs.getNPlayers(playerId); i++) {
             sgs.playerDecks.add(new Deck<>("Player" + i + "Deck", VISIBLE_TO_OWNER));
             sgs.toolDeck.add(new HashMap<>(brokenTools));
             sgs.playerNuggetDecks.add(new Deck<>("Player" + i + "NuggetDeck", i, VISIBLE_TO_OWNER));
@@ -111,8 +110,8 @@ public class SaboteurForwardModel extends StandardForwardModel {
     }
 
     private void setupStartingHand(SaboteurGameState sgs, SaboteurGameParameters sgp) {
-        for (int i = 0; i < sgs.getNPlayers(); i++) {
-            for (int j = 0; j < sgp.cardsPerPlayer[sgs.getNPlayers()]; j++) {
+        for (int i = 0; i < sgs.getNPlayers(playerId); i++) {
+            for (int j = 0; j < sgp.cardsPerPlayer[sgs.getNPlayers(playerId)]; j++) {
                 sgs.playerDecks.get(i).add(sgs.drawDeck.draw());
             }
         }
@@ -150,7 +149,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
     private void resetDecks(SaboteurGameState sgs) {
         sgs.drawDeck.add(sgs.discardDeck);
         sgs.discardDeck.clear();
-        for (int i = 0; i < sgs.getNPlayers(); i++) {
+        for (int i = 0; i < sgs.getNPlayers(playerId); i++) {
             for (ActionCard.ToolCardType toolType : ActionCard.ToolCardType.values()) {
                 sgs.toolDeck.get(i).put(toolType, true);
             }
@@ -165,7 +164,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
         // Assign roles
         sgs.roleDeck.shuffle(sgs.getRnd());
         for (int i = 0; i < sgs.roleDeck.getSize(); i++) {
-            for (int j = 0; j < sgs.getNPlayers(); j++) {
+            for (int j = 0; j < sgs.getNPlayers(playerId); j++) {
                 sgs.roleDeck.setVisibilityOfComponent(i, j, i == j);
             }
         }
@@ -173,7 +172,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
         sgs.nOfSaboteurs = 0;
         sgs.nOfMiners = 0;
         //does this remove the card?
-        IntStream.range(0, sgs.getNPlayers()).mapToObj(i -> (RoleCard) sgs.roleDeck.get(i)).forEach(currentRole -> {
+        IntStream.range(0, sgs.getNPlayers(playerId)).mapToObj(i -> (RoleCard) sgs.roleDeck.get(i)).forEach(currentRole -> {
             if (currentRole.type == Saboteur) {
                 sgs.nOfSaboteurs++;
             } else {
@@ -309,7 +308,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
             return; // out of bounds
         } else if (currentCard.type == PathCard.PathCardType.Goal) {
             // we have found a goal
-            for (int i = 0; i < sgs.getNPlayers(); i++) {
+            for (int i = 0; i < sgs.getNPlayers(playerId); i++) {
                 sgs.gridBoard.setElementVisibility(location.getX(), location.getY(), i, true);
             }
             sgs.goalLocationsFound.add(location);
@@ -370,7 +369,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
         //If that player doesn't have a BrokenTool Matching it
         //new action to add card onto their BrokenToolDeck
         ArrayList<AbstractAction> actions = new ArrayList<>();
-        for (int currentPlayer = 0; currentPlayer < sgs.getNPlayers(); currentPlayer++) {
+        for (int currentPlayer = 0; currentPlayer < sgs.getNPlayers(playerId); currentPlayer++) {
             if (currentPlayer == sgs.getCurrentPlayer()) {
                 continue;
             }
@@ -462,7 +461,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
             winningPlayersNuggetDeck.add(sgs.nuggetDeck.pick(highestNuggetSizeIndex));
         }
 
-        for (int player = 0; player < sgs.getNPlayers(); player++) {
+        for (int player = 0; player < sgs.getNPlayers(playerId); player++) {
             RoleCard currentPlayersRole = (RoleCard) sgs.roleDeck.get(player);
             if (player == sgs.getCurrentPlayer() || currentPlayersRole.type == Saboteur) {
                 continue;
@@ -492,7 +491,7 @@ public class SaboteurForwardModel extends StandardForwardModel {
             default -> targetNuggetValue;
         };
 
-        for (int player = 0; player < sgs.getNPlayers(); player++) {
+        for (int player = 0; player < sgs.getNPlayers(playerId); player++) {
             RoleCard currentPlayersRole = (RoleCard) sgs.roleDeck.get(player);
             if (currentPlayersRole.type == RoleCard.RoleCardType.GoldMiner) {
                 continue;

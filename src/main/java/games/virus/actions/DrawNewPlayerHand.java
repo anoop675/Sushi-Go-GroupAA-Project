@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class DrawNewPlayerHand extends AbstractAction implements IPrintable {
 
-    private int playerHandId;
+    private final int playerHandId;
 
     public DrawNewPlayerHand(int playerHandId) {
         this.playerHandId  = playerHandId;
@@ -60,8 +60,7 @@ public class DrawNewPlayerHand extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DrawNewPlayerHand)) return false;
-        DrawNewPlayerHand that = (DrawNewPlayerHand) o;
+        if (!(o instanceof DrawNewPlayerHand that)) return false;
         return playerHandId == that.playerHandId;
     }
 

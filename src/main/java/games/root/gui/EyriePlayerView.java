@@ -27,7 +27,7 @@ public class EyriePlayerView extends JComponent {
     int playerID;
     int warriors;
     int roosts;
-    private List<String> craftedItems = new ArrayList<>();
+    private final List<String> craftedItems = new ArrayList<>();
     String dataPath;
     String ruler;
     int border = 5;

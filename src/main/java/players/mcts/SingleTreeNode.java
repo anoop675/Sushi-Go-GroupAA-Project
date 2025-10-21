@@ -91,7 +91,8 @@ public class SingleTreeNode {
         retValue.rnd = rnd;
         // only root node maintains MAST statistics
         retValue.MASTStatistics = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++)
+        int playerId = 0;
+        for (int i = 0; i < state.getNPlayers(playerId); i++)
             retValue.MASTStatistics.add(new HashMap<>());
         if (retValue.params.useMASTAsActionHeuristic) {
             retValue.params.actionHeuristic = new MASTActionHeuristic(retValue.params.MASTActionKey, retValue.params.MASTDefaultValue);
@@ -260,7 +261,8 @@ public class SingleTreeNode {
             }
             for (AbstractAction action : actionsFromOpenLoopState) {
                 if (!actionValues.containsKey(action)) {
-                    actionValues.put(action, new ActionStats(actionState.getNPlayers()));
+                    int playerId = 0;
+                    actionValues.put(action, new ActionStats(actionState.getNPlayers(playerId)));
                     children.put(action.copy(), null); // mark a new node to be expanded
                     // This *does* rely on a good equals method being implemented for Actions
                     if (!children.containsKey(action))
@@ -283,7 +285,7 @@ public class SingleTreeNode {
                         stats.totValue[decisionPlayer] = actionEstimate * params.initialiseVisits;
                         stats.squaredTotValue[decisionPlayer] = actionEstimate * actionEstimate * params.initialiseVisits;
                         if (params.paranoid) // default to zero for other players, unless we're paranoid
-                            for (int i = 0; i < actionState.getNPlayers(); i++)
+                            for (int i = 0; i < actionState.getNPlayers(playerId); i++)
                                 if (i != decisionPlayer)
                                     stats.totValue[i] = -stats.totValue[decisionPlayer];
                         if (nVisits < params.initialiseVisits * nActions) {
@@ -528,8 +530,9 @@ public class SingleTreeNode {
         SingleTreeNode tn = createChildNode(actionCopy, nextState);
         // It is possible that we are expanding a node because a different player is the next to act
         SingleTreeNode[] newNodeArray = children.get(actionCopy);
+        int playerId = 0;
         if (newNodeArray == null)
-            newNodeArray = new SingleTreeNode[nextState.getNPlayers()];
+            newNodeArray = new SingleTreeNode[nextState.getNPlayers(playerId)];
         newNodeArray[nextPlayer] = tn; // we store this by id of the player who will take their turn next
         children.put(actionCopy, newNodeArray);
         return tn;
@@ -912,7 +915,8 @@ public class SingleTreeNode {
             }
         }
         // Evaluate final state and return normalised score
-        double[] retValue = new double[rolloutState.getNPlayers()];
+        int playerId = 0;
+        double[] retValue = new double[rolloutState.getNPlayers(playerId)];
 
         for (int i = 0; i < retValue.length; i++) {
             retValue[i] = params.heuristic.evaluateState(rolloutState, i);
@@ -932,7 +936,8 @@ public class SingleTreeNode {
         if (!rollerState.isNotTerminal())
             return true;
         int currentActor = rollerState.getTurnOwner();
-        int maxRollout = params.rolloutLengthPerPlayer ? params.rolloutLength * rollerState.getNPlayers() : params.rolloutLength;
+        int playerId = 0;
+        int maxRollout = params.rolloutLengthPerPlayer ? params.rolloutLength * rollerState.getNPlayers(playerId) : params.rolloutLength;
         int rolloutDepth = switch (params.rolloutIncrementType) {
             case TICK -> root.actionsInRollout.size();
             case TURN -> rollerState.getTurnCounter() - turnAtStartOfRollout;
@@ -1065,7 +1070,7 @@ public class SingleTreeNode {
             return result;
 
         // otherwise we do some more complex backup
-        double resultToPropagateUpwards[] = result.clone();
+        double[] resultToPropagateUpwards = result.clone();
         AbstractAction bestAction = bestAction(actionsToConsider);
         double[] maxValue = actionValues.get(bestAction).totValue.clone();
         for (int i = 0; i < maxValue.length; i++) {
@@ -1320,8 +1325,9 @@ public class SingleTreeNode {
         // visits and values for each
         StringBuilder retValue = new StringBuilder();
         String valueString = String.format("%.2f", nodeValue(decisionPlayer));
+        int playerId = 0;
         if (!params.opponentTreePolicy.selfOnlyTree && openLoopState != null) {
-            valueString = IntStream.range(0, openLoopState.getNPlayers())
+            valueString = IntStream.range(0, openLoopState.getNPlayers(playerId))
                     .mapToDouble(this::nodeValue)
                     .mapToObj(v -> String.format("%.2f", v))
                     .collect(joining(", "));
@@ -1342,7 +1348,7 @@ public class SingleTreeNode {
                 actionName = actionName.substring(0, 50);
             valueString = String.format("%.2f", actionTotValue(action, decisionPlayer) / actionVisits);
             if (params.opponentTreePolicy == OneTree) {
-                int players = state == null ? children.get(action).length : state.getNPlayers();
+                int players = state == null ? children.get(action).length : state.getNPlayers(playerId);
                 valueString = IntStream.range(0, players)
                         .mapToObj(p -> String.format("%.2f", actionTotValue(action, p) / actionVisits))
                         .collect(joining(", "));

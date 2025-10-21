@@ -43,9 +43,9 @@ public class BasicGameTurn {
         // and that the draw pile contains 3 Exploding kittens
         // and that the discard pile is empty
 
-        for (int player = 0; player < state.getNPlayers(); player++) {
+        for (int player = 0; player < state.getNPlayers(playerId); player++) {
             assertEquals(8, state.playerHandCards.get(player).getSize());
-            assertTrue(state.playerHandCards.get(player).stream().filter(c -> c.cardType == ExplodingKittensCard.CardType.DEFUSE).count() == 1);
+            assertEquals(1, state.playerHandCards.get(player).stream().filter(c -> c.cardType == DEFUSE).count());
         }
         assertEquals(0, state.discardPile.getSize());
         assertEquals(3, state.drawPile.stream().filter(c -> c.cardType == ExplodingKittensCard.CardType.EXPLODING_KITTEN).count());
@@ -62,7 +62,7 @@ public class BasicGameTurn {
             fm.next(state, actions.get(rnd.nextInt(actions.size())));
             if (!state.isActionInProgress())
                 do {
-                    expectedPlayer = (expectedPlayer + 1) % state.getNPlayers();
+                    expectedPlayer = (expectedPlayer + 1) % state.getNPlayers(playerId);
                 } while (state.getPlayerResults()[expectedPlayer] == CoreConstants.GameResult.LOSE_GAME);
         } while (state.isNotTerminal());
     }
@@ -93,7 +93,6 @@ public class BasicGameTurn {
             assertEquals(1, state.discardPile.getSize());
             assertEquals(9, state.playerHandCards.get(0).getSize());
         }
-;
     }
 
     @Test

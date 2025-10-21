@@ -40,25 +40,25 @@ public class VirusGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        VirusGameState vgs = new VirusGameState(gameParameters.copy(), getNPlayers());
+        VirusGameState vgs = new VirusGameState(gameParameters.copy(), getNPlayers(playerId));
         vgs.drawDeck = drawDeck.copy();
         vgs.discardDeck = discardDeck.copy();
         vgs.playerDecks = new ArrayList<>();
         vgs.playerBodies = new ArrayList<>();
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             vgs.playerDecks.add(playerDecks.get(i).copy());
             vgs.playerBodies.add((VirusBody) playerBodies.get(i).copy());
         }
         if (getCoreGameParameters().partialObservable && playerId != -1) {
             // Draw deck and opponent hand cards are hidden. Shuffle all together and deal random cards for opponents.
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (playerId != i) {
                     vgs.drawDeck.add(vgs.playerDecks.get(i));
                     vgs.playerDecks.get(i).clear();
                 }
             }
             vgs.drawDeck.shuffle(redeterminisationRnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (playerId != i) {
                     for (int j = 0; j < playerDecks.get(i).getSize(); j++) {
                         vgs.playerDecks.get(i).add(vgs.drawDeck.draw());
@@ -82,8 +82,7 @@ public class VirusGameState extends AbstractGameState implements IPrintable {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof VirusGameState)) return false;
-        VirusGameState that = (VirusGameState) o;
+        if (!(o instanceof VirusGameState that)) return false;
         return Objects.equals(playerBodies, that.playerBodies) &&
                 Objects.equals(playerDecks, that.playerDecks) &&
                 Objects.equals(drawDeck, that.drawDeck) &&
@@ -119,7 +118,8 @@ public class VirusGameState extends AbstractGameState implements IPrintable {
     }
     @Override
     public void printToConsole() {
-        int nPlayers = getNPlayers();
+        int playerId = 0;
+        int nPlayers = getNPlayers(playerId);
 
         System.out.println("----------------------------------------------------");
 

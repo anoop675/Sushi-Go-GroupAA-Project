@@ -40,7 +40,7 @@ public class CommandCard extends Card {
     }
 
     private int orderCount;
-    private int bonusAttackCount;
+    private final int bonusAttackCount;
     private int bonusLorePoints;
     private int bonusMoveCount;
     private Boolean hasCondition;

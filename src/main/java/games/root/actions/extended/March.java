@@ -27,7 +27,7 @@ public class March extends AbstractAction implements IExtendedSequence {
         chooseAmount,
         chooseTo,
         Outrage,
-        OutrageWoodland;
+        OutrageWoodland
     }
 
     Stage stage = Stage.chooseFrom;
@@ -147,7 +147,7 @@ public class March extends AbstractAction implements IExtendedSequence {
                 stage = Stage.OutrageWoodland;
                 ArrayList<boolean[]> handVisibility = new ArrayList<>();
                 for (int i = 0; i <  gs.getPlayerHand(playerID).getSize(); i++) {
-                    boolean[] cardVisibility = new boolean[gs.getNPlayers()];
+                    boolean[] cardVisibility = new boolean[gs.getNPlayers(playerId)];
                     cardVisibility[playerID] = true;
                     cardVisibility[gs.getFactionPlayerID(RootParameters.Factions.WoodlandAlliance)] = true;
                     handVisibility.add(cardVisibility);

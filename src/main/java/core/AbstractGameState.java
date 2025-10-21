@@ -92,11 +92,12 @@ public abstract class AbstractGameState {
     protected void reset() {
         allComponents = new Area(-1, "All Components");
         gameStatus = GAME_ONGOING;
-        playerResults = new CoreConstants.GameResult[getNPlayers()];
+        int playerId = 0;
+        playerResults = new CoreConstants.GameResult[getNPlayers(playerId)];
         Arrays.fill(playerResults, GAME_ONGOING);
         history = new ArrayList<>();
         historyText = new ArrayList<>();
-        playerTimer = new ElapsedCpuChessTimer[getNPlayers()];
+        playerTimer = new ElapsedCpuChessTimer[getNPlayers(playerId)];
         tick = 0;
         turnOwner = 0;
         turnCounter = 0;
@@ -124,7 +125,7 @@ public abstract class AbstractGameState {
     public final AbstractParameters getGameParameters() {
         return this.gameParameters;
     }
-    public int getNPlayers() { return nPlayers; }
+    public int getNPlayers(int playerId) { return nPlayers; }
     public int getNTeams() { return nTeams; }
     /**
      * Returns the team number the specified player is on.
@@ -139,14 +140,14 @@ public abstract class AbstractGameState {
     public final Set<Integer> getWinners() {
         Set<Integer> winners = new HashSet<>();
         for (int i = 0; i < playerResults.length; i++) {
-            if (playerResults[i] == CoreConstants.GameResult.WIN_GAME) winners.add(i);
+            if (playerResults[i] == WIN_GAME) winners.add(i);
         }
         return winners;
     }
     public final Set<Integer> getTied() {
         Set<Integer> tied = new HashSet<>();
         for (int i = 0; i < playerResults.length; i++) {
-            if (playerResults[i] == CoreConstants.GameResult.DRAW_GAME) tied.add(i);
+            if (playerResults[i] == DRAW_GAME) tied.add(i);
         }
         return tied;
     }
@@ -329,8 +330,8 @@ public abstract class AbstractGameState {
                 a -> s.actionsInProgress.push(a.copy())
         );
 
-        s.playerTimer = new ElapsedCpuChessTimer[getNPlayers()];
-        for (int i = 0; i < getNPlayers(); i++) {
+        s.playerTimer = new ElapsedCpuChessTimer[getNPlayers(playerId)];
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             s.playerTimer[i] = playerTimer[i].copy();
         }
 
@@ -516,7 +517,7 @@ public abstract class AbstractGameState {
     public int getOrdinalPosition(int playerId, Function<Integer, Double> scoreFunction, BiFunction<Integer, Integer, Double> tiebreakFunction) {
         int ordinal = 1;
         double playerScore = scoreFunction.apply(playerId);
-        for (int i = 0, n = getNPlayers(); i < n; i++) {
+        for (int i = 0, n = getNPlayers(playerId); i < n; i++) {
             double otherScore = scoreFunction.apply(i);
             if (otherScore > playerScore)
                 ordinal++;

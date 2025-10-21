@@ -75,8 +75,7 @@ public class DeepRoadBuilding extends AbstractAction implements IExtendedSequenc
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepRoadBuilding)) return false;
-        DeepRoadBuilding that = (DeepRoadBuilding) o;
+        if (!(o instanceof DeepRoadBuilding that)) return false;
         return playerID == that.playerID && nSteps == that.nSteps && nStepsTaken == that.nStepsTaken && Objects.equals(road, that.road);
     }
 

@@ -97,11 +97,10 @@ public class ITPSearchSpace<T> extends AgentSearchSpace<T> {
                         if (str.endsWith(".json"))
                             data = JSONUtils.loadJSONFile(str);
                     }
-                    if (data instanceof JSONObject) {
+                    if (data instanceof JSONObject subJSON) {
                         // in this case we have nesting, and need to recurse to get all the relevant parameters
                         // we use key as the nameSpace
                         try {
-                            JSONObject subJSON = (JSONObject) data;
                             subJSON.get("class");
                             if (debug)
                                 System.out.println("Starting recursion on " + key);

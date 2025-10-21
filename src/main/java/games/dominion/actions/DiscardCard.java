@@ -62,8 +62,7 @@ public class DiscardCard extends AbstractAction {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof DiscardCard) {
-            DiscardCard dc = (DiscardCard) other;
+        if (other instanceof DiscardCard dc) {
             return dc.player == player && dc.type == type;
         }
         return false;

@@ -35,8 +35,7 @@ public class Check extends AbstractAction implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Check)) return false;
-        Check call = (Check) o;
+        if (!(o instanceof Check call)) return false;
         return playerId == call.playerId;
     }
 

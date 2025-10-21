@@ -32,11 +32,11 @@ public class CantStopBoardView extends JComponent {
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(boardWidth, boardHeight));
         params = (CantStopParameters) state.getGameParameters();
-        markerPositions = new int[state.getNPlayers()][13];
+        markerPositions = new int[state.getNPlayers(playerId)][13];
         tempPositions = new int[13];
         completedColumns = new int[13];
         Arrays.fill(completedColumns, -1);
-        discOffset = 25 / (state.getNPlayers() + 1);
+        discOffset = 25 / (state.getNPlayers(playerId) + 1);
         dice = new int[params.DICE_NUMBER];
     }
 
@@ -46,10 +46,10 @@ public class CantStopBoardView extends JComponent {
         // while we are updating this data
         dice = state.getDice();
         currentPlayer = state.getCurrentPlayer();
-        markerPositions = new int[state.getNPlayers()][13];
+        markerPositions = new int[state.getNPlayers(playerId)][13];
         completedColumns = new int[13];
         Arrays.fill(completedColumns, -1);
-        for (int p = 0; p < state.getNPlayers(); p++) {
+        for (int p = 0; p < state.getNPlayers(playerId); p++) {
             for (int n = 2; n <= 12; n++) {
                 markerPositions[p][n] = state.getMarkerPosition(n, p);
                 if (markerPositions[p][n] == params.maxValue(n)) {

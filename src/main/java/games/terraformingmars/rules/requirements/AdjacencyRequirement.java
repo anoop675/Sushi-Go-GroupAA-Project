@@ -42,7 +42,7 @@ public class AdjacencyRequirement implements Requirement<Group<TMGameState, TMMa
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -98,8 +98,7 @@ public class AdjacencyRequirement implements Requirement<Group<TMGameState, TMMa
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdjacencyRequirement)) return false;
-        AdjacencyRequirement that = (AdjacencyRequirement) o;
+        if (!(o instanceof AdjacencyRequirement that)) return false;
         return owned == that.owned && noneAdjacent == that.noneAdjacent && reversed == that.reversed && Objects.equals(tileTypes, that.tileTypes);
     }
 

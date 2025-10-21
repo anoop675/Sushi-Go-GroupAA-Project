@@ -88,7 +88,8 @@ public class TMMapTile extends BoardNode {
             ownerId = player;
         }
 
-        if (player >= 0 && player < gs.getNPlayers()) {
+        int playerId = 0;
+        if (player >= 0 && player < gs.getNPlayers(playerId)) {
             gs.getPlayerTilesPlaced()[player].get(which).increment(1);
 
             // Current player gets resources
@@ -171,9 +172,8 @@ public class TMMapTile extends BoardNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMMapTile)) return false;
+        if (!(o instanceof TMMapTile tmMapTile)) return false;
         if (!super.equals(o)) return false;
-        TMMapTile tmMapTile = (TMMapTile) o;
         return ownerId == tmMapTile.ownerId && x == tmMapTile.x && y == tmMapTile.y && volcanic == tmMapTile.volcanic && reserved == tmMapTile.reserved && tilePlaced == tmMapTile.tilePlaced && type == tmMapTile.type && Arrays.equals(resources, tmMapTile.resources);
     }
 

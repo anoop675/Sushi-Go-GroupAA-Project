@@ -142,19 +142,18 @@ public class Compartment extends Component implements IComponentContainer<Deck<L
 
     @Override
     public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Compartment: Inside=");
-        sb.append(playersInsideCompartment.toString());
-        sb.append("; Outside=");
-        sb.append(playersOnTopOfCompartment.toString());
-        sb.append("; Marshal=");
-        sb.append(containsMarshal);
-        sb.append("; LootInside=");
-        sb.append(lootInside.toString());
-        sb.append("; LootOntop=");
-        sb.append(lootOnTop.toString());
+        String sb = "Compartment: Inside=" +
+                playersInsideCompartment.toString() +
+                "; Outside=" +
+                playersOnTopOfCompartment.toString() +
+                "; Marshal=" +
+                containsMarshal +
+                "; LootInside=" +
+                lootInside.toString() +
+                "; LootOntop=" +
+                lootOnTop.toString();
 
-        return sb.toString();
+        return sb;
     }
 
     @Override

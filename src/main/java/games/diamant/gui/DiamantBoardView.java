@@ -36,7 +36,7 @@ public class DiamantBoardView extends JComponent {
         path = state.getPath().getComponents();
         gemsOnPath = state.getGemsOnPathList();
         playersInCave = new ArrayList<>(state.getPlayersInCave());
-        nPlayers = state.getNPlayers();
+        nPlayers = state.getNPlayers(playerId);
         int totalCaves = ((games.diamant.DiamantParameters) state.getGameParameters()).nCaves;
         nCavesLeft = totalCaves - state.getRoundCounter();
 

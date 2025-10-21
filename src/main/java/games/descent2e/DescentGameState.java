@@ -120,7 +120,7 @@ public class DescentGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        DescentGameState copy = new DescentGameState(gameParameters, getNPlayers());
+        DescentGameState copy = new DescentGameState(gameParameters, getNPlayers(playerId));
         copy.data = data.copy();
         copy.tiles = new HashMap<>();
         for (Map.Entry<Integer, GridBoard> e : tiles.entrySet()) {

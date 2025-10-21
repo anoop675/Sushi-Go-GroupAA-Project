@@ -137,8 +137,7 @@ public class TicTacToeHeuristic extends TunableParameters implements IStateHeuri
      */
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof TicTacToeHeuristic) {
-            TicTacToeHeuristic other = (TicTacToeHeuristic) o;
+        if (o instanceof TicTacToeHeuristic other) {
             return other.FACTOR_OPPONENT == FACTOR_OPPONENT && other.FACTOR_PLAYER == FACTOR_PLAYER;
         }
         return false;

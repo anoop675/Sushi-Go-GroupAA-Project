@@ -29,9 +29,9 @@ class BasicTreeNode {
     // Number of FM calls and State copies up until this node
     private int fmCallsCount;
     // Parameters guiding the search
-    private BasicMCTSPlayer player;
-    private Random rnd;
-    private RandomPlayer randomPlayer = new RandomPlayer();
+    private final BasicMCTSPlayer player;
+    private final Random rnd;
+    private final RandomPlayer randomPlayer = new RandomPlayer();
 
     // State in this node (closed loop)
     private AbstractGameState state;

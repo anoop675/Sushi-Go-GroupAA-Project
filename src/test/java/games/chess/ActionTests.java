@@ -1,6 +1,4 @@
 package games.chess;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -16,6 +14,8 @@ import games.chess.actions.EnPassant;
 import games.chess.actions.MovePiece;
 import games.chess.actions.Castle.CastleType;
 import games.chess.components.ChessPiece;
+
+import static org.junit.Assert.*;
 
 public class ActionTests {
     ChessForwardModel fm = new ChessForwardModel();
@@ -171,7 +171,7 @@ public class ActionTests {
         ChessPiece pawn = state.getPiece(3, 5);
         assertEquals(pawn.getChessPieceType(), ChessPiece.ChessPieceType.PAWN);
         assertEquals(pawn.getOwnerId(), 0);
-        assertEquals(state.getPiece(4, 4), null); // Check the pawn at (4, 4) is removed
+        assertNull(state.getPiece(4, 4)); // Check the pawn at (4, 4) is removed
     }
     @Test
     public void drawByRepetitionTest() {

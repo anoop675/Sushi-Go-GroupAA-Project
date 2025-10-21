@@ -203,8 +203,7 @@ public class ColtExpressParameters extends TunableParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ColtExpressParameters)) return false;
-        ColtExpressParameters that = (ColtExpressParameters) o;
+        if (!(o instanceof ColtExpressParameters that)) return false;
         return nCardsInHand == that.nCardsInHand &&
                 nCardsInHandExtraDoc == that.nCardsInHandExtraDoc &&
                 nBulletsPerPlayer == that.nBulletsPerPlayer &&

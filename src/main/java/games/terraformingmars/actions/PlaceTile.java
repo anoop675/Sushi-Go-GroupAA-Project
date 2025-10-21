@@ -135,7 +135,7 @@ public class PlaceTile extends TMAction implements IExtendedSequence {
                     TMCard card = (TMCard) gs.getComponentById(getCardID());
                     card.mapTileIDTilePlaced = mt.getComponentID();
                 }
-                if (player < 0 || player >= gs.getNPlayers()) return super._execute(gs);
+                if (player < 0 || player >= gs.getNPlayers(playerId)) return super._execute(gs);
 
                 // Add money earned from adjacent oceans
                 int nOceans = nAdjacentTiles(gs, mt, TMTypes.Tile.Ocean);
@@ -286,9 +286,8 @@ public class PlaceTile extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlaceTile)) return false;
+        if (!(o instanceof PlaceTile placeTile)) return false;
         if (!super.equals(o)) return false;
-        PlaceTile placeTile = (PlaceTile) o;
         return respectingAdjacency == placeTile.respectingAdjacency && onMars == placeTile.onMars && mapTileID == placeTile.mapTileID && volcanicRestriction == placeTile.volcanicRestriction && removeResourcesAdjacentOwner == placeTile.removeResourcesAdjacentOwner && removeResourcesAmount == placeTile.removeResourcesAmount && removeResourcesProd == placeTile.removeResourcesProd && placed == placeTile.placed && impossible == placeTile.impossible && Objects.equals(tileName, placeTile.tileName) && tile == placeTile.tile && mapType == placeTile.mapType && Objects.equals(legalPositions, placeTile.legalPositions) && Arrays.equals(resourcesGainedRestriction, placeTile.resourcesGainedRestriction) && Objects.equals(adjacencyRequirement, placeTile.adjacencyRequirement) && removeResourcesRes == placeTile.removeResourcesRes;
     }
 

@@ -1,7 +1,6 @@
 package games.terraformingmars.actions;
 
 import core.AbstractGameState;
-import core.actions.AbstractAction;
 import core.components.Counter;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
@@ -36,7 +35,7 @@ public class TMModifyCounter extends TMAction {
     @Override
     public boolean _execute(TMGameState gs) {
         Counter c = (Counter)gs.getComponentById(counterID);
-        if (gs.getNPlayers() == 1 && c == null) return true;  // Null if applied to neutral player in solo
+        if (gs.getNPlayers(playerId) == 1 && c == null) return true;  // Null if applied to neutral player in solo
         if (c instanceof GlobalParameter) return ((GlobalParameter) c).increment((int)change, gs);
         return c.increment((int)change);
     }
@@ -49,9 +48,8 @@ public class TMModifyCounter extends TMAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMModifyCounter)) return false;
+        if (!(o instanceof TMModifyCounter that)) return false;
         if (!super.equals(o)) return false;
-        TMModifyCounter that = (TMModifyCounter) o;
         return counterID == that.counterID &&
                 change == that.change;
     }

@@ -29,9 +29,9 @@ class GroupAATreeNode {
     private int n; //no.of times current node is visited
     private int fmCalls; //no.of Forward Model calls and state copies up until current node
 
-    private SushiGoAgentGroupAA player;
-    private Random rand;
-    private RandomPlayer randomPlayer = new RandomPlayer(); //TODO: Use a heuristic instead of random rollouts
+    private final SushiGoAgentGroupAA player;
+    private final Random rand;
+    private final RandomPlayer randomPlayer = new RandomPlayer(); //TODO: Use a heuristic instead of random rollouts
 
     private AbstractGameState state; //current state for this current node
 
@@ -69,7 +69,7 @@ class GroupAATreeNode {
             double childValue = hvVal / (child.n + params.epsilon);
 
             // default to standard UCB
-            double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1) / (child.n + params.epsilon));
+            double explorationTerm = PlayerParameters.K * Math.sqrt(Math.log(this.n + 1) / (child.n + params.epsilon));
             // unless we are using a variant
 
             // Find 'UCB' value

@@ -99,8 +99,7 @@ public class MonopolyDealMetrics implements IMetricsCollection {
                     counters[7][e.state.getCurrentPlayer()]++;
                 else if (e.action instanceof JustSayNoAction)
                     counters[8][e.state.getCurrentPlayer()]++;
-                else if (e.action instanceof AddMoney){
-                    AddMoney action = (AddMoney) e.action;
+                else if (e.action instanceof AddMoney action){
                     if(action.cardType == CardType.DealBreaker)
                         counters[9][e.state.getCurrentPlayer()]++;
                     else if(action.cardType == CardType.JustSayNo)
@@ -194,7 +193,7 @@ public class MonopolyDealMetrics implements IMetricsCollection {
 
         @Override
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 records.put("Player-" + i, e.state.getHeuristicScore(i));
                 records.put("PlayerName-" + i, listener.getGame().getPlayers().get(i).toString());
             }
@@ -221,8 +220,7 @@ public class MonopolyDealMetrics implements IMetricsCollection {
 
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            if (e.action instanceof IActionCard) {
-                IActionCard action = (IActionCard) e.action;
+            if (e.action instanceof IActionCard action) {
                 records.put("ActionTargetPlayer", action.getTarget((MonopolyDealGameState) e.state));
                 return true;
             }

@@ -43,8 +43,7 @@ public class Bonus {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bonus)) return false;
-        Bonus bonus = (Bonus) o;
+        if (!(o instanceof Bonus bonus)) return false;
         return threshold == bonus.threshold && claimed == bonus.claimed && param == bonus.param && Objects.equals(effect, bonus.effect);
     }
 

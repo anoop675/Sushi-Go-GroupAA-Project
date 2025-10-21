@@ -97,8 +97,7 @@ public class ThroneRoom extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ThroneRoom) {
-            ThroneRoom other = (ThroneRoom) obj;
+        if (obj instanceof ThroneRoom other) {
             return super.equals(obj) && other.enthronedCard == enthronedCard && other.executionCount == executionCount;
         }
         return false;

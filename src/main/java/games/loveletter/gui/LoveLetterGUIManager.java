@@ -10,7 +10,6 @@ import games.loveletter.LoveLetterForwardModel;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.LoveLetterParameters;
 import games.loveletter.actions.*;
-import games.loveletter.actions.deep.PlayCardDeep;
 import games.loveletter.cards.LoveLetterCard;
 import gui.AbstractGUIManager;
 import gui.GamePanel;
@@ -82,7 +81,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 4;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -139,7 +138,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
                 // Add GUI listener
                 game.addListener(new LLGUIListener(fm, parent, playerHands));
 
-                if (gameState.getNPlayers() == 2) {
+                if (gameState.getNPlayers(playerId) == 2) {
                     // Add reserve
                     JLabel label = new JLabel("Reserve cards:");
                     reserve = new LoveLetterDeckView(-1, llgs.getReserveCards(), true, llp.getDataPath(),
@@ -280,8 +279,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
                 int k = 0;
                 for (AbstractAction action : actions) {
-                    if (action instanceof PlayCard) {
-                        PlayCard pc = (PlayCard) action;
+                    if (action instanceof PlayCard pc) {
                         if (pc.getTargetPlayer() == -1 || pc.getTargetPlayer() == highlightPlayerIdx) {
                             actionButtons[k].setVisible(true);
                             actionButtons[k].setButtonAction(action, action.getString(gameState));
@@ -318,7 +316,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             llgs = (LoveLetterGameState)gameState.copy();
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 boolean front = i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
                         || humanPlayerIds.contains(i)
                         || gameState.getCoreGameParameters().alwaysDisplayFullObservable;

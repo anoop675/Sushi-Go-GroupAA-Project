@@ -58,7 +58,7 @@ public class RunGames implements IGameRunner {
         runGames.config = parseConfig(args, Collections.singletonList(Usage.RunGames));
 
         runGames.initialiseGamesAndPlayerCount();
-        if (!runGames.config.get(RunArg.gameParams).equals("") && runGames.gamesAndPlayerCounts.keySet().size() > 1)
+        if (!runGames.config.get(RunArg.gameParams).equals("") && runGames.gamesAndPlayerCounts.size() > 1)
             throw new IllegalArgumentException("Cannot yet provide a gameParams argument if running multiple games");
 
         // 2. Setup

@@ -19,8 +19,8 @@ public class CCForwardModel extends StandardForwardModel {
     private static boolean isColourInPlay(Peg.Colour col, CCGameState state) {
         if (col == Peg.Colour.neutral) return true;
         CCParameters params = (CCParameters) state.getGameParameters();
-        Peg.Colour[] colours = params.playerColours.get(state.getNPlayers());
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        Peg.Colour[] colours = params.playerColours.get(state.getNPlayers(playerId));
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (colours[i] == col) return true;
         }
         return false;
@@ -33,9 +33,9 @@ public class CCForwardModel extends StandardForwardModel {
 
         state.starBoard = new StarBoard();
 
-        Peg.Colour[] playerColours = params.playerColours.get(state.getNPlayers());
+        Peg.Colour[] playerColours = params.playerColours.get(state.getNPlayers(playerId));
 
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             loadPegs(state, playerColours[i]);
         }
     }
@@ -162,7 +162,7 @@ public class CCForwardModel extends StandardForwardModel {
 
         state.setGameStatus(CoreConstants.GameResult.GAME_END);
         state.setPlayerResult(WIN_GAME, state.getCurrentPlayer());
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             if (i != state.getCurrentPlayer()) {
                 state.setPlayerResult(LOSE_GAME, i);
             }
@@ -173,7 +173,7 @@ public class CCForwardModel extends StandardForwardModel {
     protected void _afterAction(AbstractGameState currentState, AbstractAction action) {
         CCGameState state = (CCGameState) currentState;
 
-        for (int p = 0; p < state.getNPlayers(); p++) {
+        for (int p = 0; p < state.getNPlayers(playerId); p++) {
             if (checkWinCondition(state, p)) {
                 endGame(state);
             }

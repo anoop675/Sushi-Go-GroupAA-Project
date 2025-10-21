@@ -111,9 +111,8 @@ public class SellProjects extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SellProjects)) return false;
+        if (!(o instanceof SellProjects that)) return false;
         if (!super.equals(o)) return false;
-        SellProjects that = (SellProjects) o;
         return complete == that.complete && Objects.equals(cardIDsSold, that.cardIDsSold);
     }
 

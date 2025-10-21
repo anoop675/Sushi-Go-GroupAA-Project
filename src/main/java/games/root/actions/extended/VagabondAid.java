@@ -71,7 +71,7 @@ public class VagabondAid extends AbstractAction implements IExtendedSequence {
     private List<AbstractAction> getChooseTargetPlayerActions(RootGameState gs) {
         List<AbstractAction> actions = new ArrayList<>();
         RootBoardNodeWithRootEdges clearing = gs.getGameMap().getVagabondClearing();
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             if (i != playerID && clearing.isAttackable(gs.getPlayerFaction(i))) {
                 actions.add(new ChooseNumber(playerID, i));
             }

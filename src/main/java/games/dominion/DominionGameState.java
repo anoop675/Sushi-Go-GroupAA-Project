@@ -446,7 +446,8 @@ public class DominionGameState extends AbstractGameState implements IPrintable {
         for (Map.Entry<CardType, Integer> s : cardsIncludedInGame.entrySet()) {
             retValue.append(String.format("\t%2d %s%n", s.getValue(), s.getKey()));
         }
-        for (int p = 0; p < getNPlayers(); p++) {
+        int playerId = 0;
+        for (int p = 0; p < getNPlayers(playerId); p++) {
             retValue.append(String.format("Player: %d, Score: %2.0f, Hand: %d, Deck: %d, Discard: %d, Actions: %d, Buys: %d%n",
                     p, getGameScore(p), playerHands[p].getSize(), playerDrawPiles[p].getSize(), playerDiscards[p].getSize(),
                     p == getCurrentPlayer() ? actionsLeftForCurrentPlayer : 0,

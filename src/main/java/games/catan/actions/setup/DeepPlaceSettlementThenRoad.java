@@ -113,9 +113,8 @@ public class DeepPlaceSettlementThenRoad extends PlaceSettlementWithRoad impleme
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DeepPlaceSettlementThenRoad)) return false;
+        if (!(o instanceof DeepPlaceSettlementThenRoad that)) return false;
         if (!super.equals(o)) return false;
-        DeepPlaceSettlementThenRoad that = (DeepPlaceSettlementThenRoad) o;
         return executed == that.executed;
     }
 

@@ -116,7 +116,7 @@ public class UnoGameState extends AbstractGameState implements IPrintable {
     public int calculatePlayerPoints(int playerID, boolean selfOnly) {
         UnoGameParameters ugp = (UnoGameParameters) getGameParameters();
         int nPoints = 0;
-        for (int otherPlayer = 0; otherPlayer < getNPlayers(); otherPlayer++) {
+        for (int otherPlayer = 0; otherPlayer < getNPlayers(playerId); otherPlayer++) {
             if ((selfOnly && otherPlayer == playerID) || (!selfOnly && otherPlayer != playerID)) {
                 for (UnoCard card : playerDecks.get(otherPlayer).getComponents()) {
                     switch (card.type) {
@@ -161,7 +161,7 @@ public class UnoGameState extends AbstractGameState implements IPrintable {
 
     @Override
     protected UnoGameState _copy(int playerId) {
-        UnoGameState copy = new UnoGameState(gameParameters.copy(), getNPlayers());
+        UnoGameState copy = new UnoGameState(gameParameters.copy(), getNPlayers(playerId));
         copy.playerDecks = new ArrayList<>();
 
         for (Deck<UnoCard> d : playerDecks) {
@@ -175,13 +175,13 @@ public class UnoGameState extends AbstractGameState implements IPrintable {
         if (getCoreGameParameters().partialObservable && playerId != -1) {
             // Other player cards and the draw deck are unknown.
             // Combine all into one deck, shuffle, then deal random cards to the other players (hand size kept)
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     copy.drawDeck.add(copy.playerDecks.get(i));
                 }
             }
             copy.drawDeck.shuffle(redeterminisationRnd);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     Deck<UnoCard> d = copy.playerDecks.get(i);
                     int nCards = d.getSize();
@@ -236,7 +236,7 @@ public class UnoGameState extends AbstractGameState implements IPrintable {
         if (ugp.scoringMethod == CHALLENGE) {
             double playerScore = getGameScore(playerId);
             int ordinal = 1;
-            for (int i = 0, n = getNPlayers(); i < n; i++) {
+            for (int i = 0, n = getNPlayers(playerId); i < n; i++) {
                 if (expulsionRound[i] > expulsionRound[playerId]) {
                     ordinal++;
                 } else if (expulsionRound[i] == expulsionRound[playerId]) {
@@ -258,9 +258,8 @@ public class UnoGameState extends AbstractGameState implements IPrintable {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UnoGameState)) return false;
+        if (!(o instanceof UnoGameState that)) return false;
         if (!super.equals(o)) return false;
-        UnoGameState that = (UnoGameState) o;
         return skipTurn == that.skipTurn && direction == that.direction && Objects.equals(playerDecks, that.playerDecks) && Objects.equals(drawDeck, that.drawDeck) && Objects.equals(discardDeck, that.discardDeck) && Objects.equals(currentCard, that.currentCard) && Objects.equals(currentColor, that.currentColor) && Arrays.equals(playerScore, that.playerScore) && Arrays.equals(expulsionRound, that.expulsionRound);
     }
 

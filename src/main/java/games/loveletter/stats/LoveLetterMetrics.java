@@ -1,7 +1,6 @@
 package games.loveletter.stats;
 
 import core.AbstractPlayer;
-import core.CoreConstants;
 import core.actions.AbstractAction;
 import core.actions.LogEvent;
 import core.interfaces.IGameEvent;
@@ -37,8 +36,7 @@ public class LoveLetterMetrics implements IMetricsCollection {
 
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            if (e.action instanceof PlayCard) {
-                PlayCard pc = (PlayCard) e.action;
+            if (e.action instanceof PlayCard pc) {
                 String playerName = listener.getGame().getPlayers().get(e.playerID).toString();
                 boolean record = false;
 
@@ -201,8 +199,7 @@ public class LoveLetterMetrics implements IMetricsCollection {
 
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
-            if (e.action instanceof PlayCard) {
-                PlayCard pc = (PlayCard) e.action;
+            if (e.action instanceof PlayCard pc) {
                 for (int i = 0; i < listener.getGame().getPlayers().size(); i++) {
                     if (i == e.state.getCurrentPlayer())
                         records.put("Player-" + e.state.getCurrentPlayer(), pc.getCardType().toString());
@@ -241,8 +238,7 @@ public class LoveLetterMetrics implements IMetricsCollection {
                 return false;
             } else {
                 AbstractAction action = e.state.getHistory().get(e.state.getHistory().size() - 1).b;  // Last action played
-                if (action instanceof PlayCard) {
-                    PlayCard pc = (PlayCard) action;
+                if (action instanceof PlayCard pc) {
                     if (killer != -1) {
                         // An elimination happened as a result of the last action played
                         records.put("WinCause", killer == victim ? pc.getCardType().name() + ".opp" : pc.getCardType().name());
@@ -269,7 +265,7 @@ public class LoveLetterMetrics implements IMetricsCollection {
 
             boolean sameCardInHand = false;
             CardType cardType = null;
-            for (int i = 0; i < llgs.getNPlayers(); ++i) {
+            for (int i = 0; i < llgs.getNPlayers(playerId); ++i) {
                 if (llgs.isCurrentlyActive(i)) {
                     if (cardType == null) {
                         cardType = llgs.getPlayerHandCards().get(i).peek().cardType;
@@ -304,11 +300,11 @@ public class LoveLetterMetrics implements IMetricsCollection {
         public boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             int nCards = 0;
             LoveLetterGameState llgs = (LoveLetterGameState) e.state;
-            for (int i = 0; i < e.state.getNPlayers(); i++) {
+            for (int i = 0; i < e.state.getNPlayers(playerId); i++) {
                 nCards += llgs.getPlayerDiscardCards().get(i).getSize();
             }
             records.put("# actions", nCards);
-            records.put("# actions (avg)", nCards / (double) e.state.getNPlayers());
+            records.put("# actions (avg)", nCards / (double) e.state.getNPlayers(playerId));
             return true;
         }
 

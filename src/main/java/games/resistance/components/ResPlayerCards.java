@@ -35,9 +35,8 @@ public class ResPlayerCards extends Card {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResPlayerCards)) return false;
+        if (!(o instanceof ResPlayerCards resCard)) return false;
         if (!super.equals(o)) return false;
-        ResPlayerCards resCard = (ResPlayerCards) o;
         return cardType == resCard.cardType;
     }
 

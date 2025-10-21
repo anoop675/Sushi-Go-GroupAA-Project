@@ -5,7 +5,6 @@ import core.interfaces.IStateFeatureJSON;
 import core.interfaces.IStateFeatureVector;
 import games.sushigo.cards.SGCard;
 import org.json.simple.JSONObject;
-import utilities.Pair;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,12 +21,12 @@ public class SGFeatures implements IStateFeatureVector, IStateFeatureJSON {
         SGGameState sggs = (SGGameState) gameState;
         JSONObject json = new JSONObject();
         json.put("PlayerID", playerID);
-        json.put("nPlayers", sggs.getNPlayers());
+        json.put("nPlayers", sggs.getNPlayers(playerId));
         json.put("rounds", sggs.getRoundCounter());
         json.put("cardsInHand", sggs.getPlayerHands().get(playerID).toString());
         json.put("playedCards", sggs.getPlayedCards().get(playerID).toString());
         json.put("playerScore", sggs.playerScore[playerID]);
-        for (int i = 0; i < sggs.getNPlayers(); i++){
+        for (int i = 0; i < sggs.getNPlayers(playerId); i++){
             if (i != playerID){
                 json.put("opp" + i + "playedCards", sggs.getPlayedCards().get(i).toString());
                 json.put("opp" + i + "score", sggs.playerScore[i]);
@@ -44,7 +43,7 @@ public class SGFeatures implements IStateFeatureVector, IStateFeatureJSON {
         SGGameState sggs = (SGGameState) state;
         int maxCardsInHand = ((SGParameters)sggs.getGameParameters()).nCards;
         int nUnique = Arrays.stream(SGCard.SGCardType.values()).map(e -> e.getIconCountVariation().length).mapToInt(i -> i).sum();
-        String uniqueCards[] = new String[nUnique];
+        String[] uniqueCards = new String[nUnique];
         int counter = 0;
         for (SGCard.SGCardType cardType: SGCard.SGCardType.values()){
             if (cardType.getIconCountVariation().length == 1){
@@ -63,14 +62,14 @@ public class SGFeatures implements IStateFeatureVector, IStateFeatureJSON {
         // player score
 
         // encode player hand - note that this could be one hot encoded
-        int playerHand[] = new int[maxCardsInHand];
+        int[] playerHand = new int[maxCardsInHand];
         List<SGCard> cardsInHand = sggs.playerHands.get(playerID).getComponents();
         for (int i = 0; i < cardsInHand.size(); i++){
             playerHand[i] = Arrays.asList(uniqueCards).indexOf(cardsInHand.get(i).toString());
         }
 
         // played cards
-        for (int i = 0; i < sggs.getNPlayers(); i++){
+        for (int i = 0; i < sggs.getNPlayers(playerId); i++){
             List<SGCard> playedCards = sggs.getPlayedCards().get(i).getComponents();
 //            Arrays.asList(uniqueCards).indexOf(cardsInHand.get(i).toString());
         }

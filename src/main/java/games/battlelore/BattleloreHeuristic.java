@@ -55,7 +55,7 @@ public class BattleloreHeuristic extends TunableParameters implements IStateHeur
                         playerUnitPower += tile.GetUnits().size() * tile.GetUnits().get(0).getTotalStrength() * tile.GetUnits().get(0).getTotalHealth();
 
                         //Checking the next step for result
-                        if ((BattleloreGameState.BattleloreGamePhase)gameState.getGamePhase() == BattleloreGameState.BattleloreGamePhase.MoveStep) {
+                        if (gameState.getGamePhase() == BattleloreGameState.BattleloreGamePhase.MoveStep) {
                             orderableUnitCount += tile.GetUnits().get(0).CanAttack() && tile.GetUnits().get(0).CanMove() ? 1 : 0;
                         }
                     }
@@ -89,8 +89,7 @@ public class BattleloreHeuristic extends TunableParameters implements IStateHeur
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof BattleloreHeuristic) {
-            BattleloreHeuristic other = (BattleloreHeuristic) o;
+        if (o instanceof BattleloreHeuristic other) {
             return other.FACTOR_ENEMY_POWER == FACTOR_ENEMY_POWER &&
                     other.FACTOR_PLAYER_POWER == FACTOR_PLAYER_POWER &&
                     other.FACTOR_ORDERABLE_UNITS == FACTOR_ORDERABLE_UNITS;

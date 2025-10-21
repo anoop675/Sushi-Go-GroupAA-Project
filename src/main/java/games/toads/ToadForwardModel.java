@@ -29,13 +29,13 @@ public class ToadForwardModel extends StandardForwardModel {
         state.roundWinners = new int[8][2];
         state.battlesWon[0][0] = params.firstRoundHandicap;
         state.battlesWon[1][0] = params.firstRoundHandicap;
-        state.fieldCards = new ToadCard[state.getNPlayers()];
-        state.hiddenFlankCards = new ToadCard[state.getNPlayers()];
-        state.tieBreakers = new ToadCard[state.getNPlayers()];
+        state.fieldCards = new ToadCard[state.getNPlayers(playerId)];
+        state.hiddenFlankCards = new ToadCard[state.getNPlayers(playerId)];
+        state.tieBreakers = new ToadCard[state.getNPlayers(playerId)];
         state.playerDiscards = new ArrayList<>();
         state.playerHands = new ArrayList<>();
         state.playerDecks = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++) {
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
             state.playerDecks.add(new PartialObservableDeck<>("Player " + i + " Deck", i, 2, CoreConstants.VisibilityMode.HIDDEN_TO_ALL));
             state.playerHands.add(new PartialObservableDeck<>("Player " + i + " Hand", i, 2, CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
             state.playerDiscards.add(new Deck<>("Player " + i + " Discard", CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
@@ -160,13 +160,13 @@ public class ToadForwardModel extends StandardForwardModel {
             state.playerDiscards.get(1).add(state.fieldCards[1]);
             state.playerDiscards.get(1).add(state.hiddenFlankCards[1]);
             // reset field and flank cards
-            state.fieldCards = new ToadCard[state.getNPlayers()];
-            state.hiddenFlankCards = new ToadCard[state.getNPlayers()];
+            state.fieldCards = new ToadCard[state.getNPlayers(playerId)];
+            state.hiddenFlankCards = new ToadCard[state.getNPlayers(playerId)];
 
             // we then process any actions that need to be done after the battle
             // but first we draw up cards (as these are important for some of the post-battle actions)
             // Draw 2 cards for each player
-            for (int player = 0; player < state.getNPlayers(); player++) {
+            for (int player = 0; player < state.getNPlayers(playerId); player++) {
                 int cardsToDraw = Math.min(2, state.playerDecks.get(player).getSize());
                 for (int i = 0; i < cardsToDraw; i++) {
                     state.playerHands.get(player).add(state.playerDecks.get(player).draw());

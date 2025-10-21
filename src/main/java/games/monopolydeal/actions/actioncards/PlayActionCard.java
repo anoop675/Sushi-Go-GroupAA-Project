@@ -137,7 +137,7 @@ public class PlayActionCard extends AbstractAction implements IExtendedSequence 
                     case Hotel:
                         break;
                     default:
-                        throw new AssertionError(type.toString() + " not yet Implemented");
+                        throw new AssertionError(type + " not yet Implemented");
                 }
             }
         }

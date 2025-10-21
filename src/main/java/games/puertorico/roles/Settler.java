@@ -17,8 +17,8 @@ public class Settler extends PuertoRicoRole<Settler> {
 
     public Settler(PuertoRicoGameState state) {
         super(state, PuertoRicoConstants.Role.SETTLER);
-        haciendaStep = new boolean[state.getNPlayers()];
-        for (int p = 0; p < state.getNPlayers(); p++)
+        haciendaStep = new boolean[state.getNPlayers(playerId)];
+        for (int p = 0; p < state.getNPlayers(playerId); p++)
             haciendaStep[p] = state.hasActiveBuilding(p, HACIENDA);
     }
 

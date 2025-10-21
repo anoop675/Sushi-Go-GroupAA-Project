@@ -1,52 +1,40 @@
 package core.actions;
 
 import core.AbstractGameState;
-
-import java.util.Objects;
+import games.loveletter.LoveLetterForwardModel;
 
 /**
- * <p>See {@link games.loveletter.LoveLetterForwardModel#_computeAvailableActions(AbstractGameState, ActionSpace)}
+ * <p>See {@link LoveLetterForwardModel#_computeAvailableActions(AbstractGameState, ActionSpace)}
  * for example implementations of structured action spaces.</p>
  *
  * <p>These are used within the forward model to compute the available actions for a given game state.
  * Each call to this function can request different lists of actions for different types of action spaces.
  * Ideally, the same action space should be kept throughout a game (otherwise deep action spaces might not receive the
  * correct sequence of decisions required).</p>
+ *
+ * @param flexibility TODO: no agents to take advantage of this yet, not supported in any games
  */
-public class ActionSpace {
-    public final Structure structure;
-    public final Flexibility flexibility;  // TODO: no agents to take advantage of this yet, not supported in any games
-    public final Context context;
-
+public record ActionSpace(Structure structure, Flexibility flexibility, Context context) {
     public static ActionSpace Default = new ActionSpace();
+
     public final boolean isDefault() {
         return this.equals(Default);
     }
 
     public ActionSpace() {
-        this.structure = Structure.Default;
-        this.flexibility = Flexibility.Default;
-        this.context = Context.Default;
+        this(Structure.Default, Flexibility.Default, Context.Default);
     }
-    public ActionSpace(Structure structure, Flexibility flexibility, Context context) {
-        this.structure = structure;
-        this.flexibility = flexibility;
-        this.context = context;
-    }
+
     public ActionSpace(Structure structure) {
-        this.structure = structure;
-        this.flexibility = Flexibility.Default;
-        this.context = Context.Default;
+        this(structure, Flexibility.Default, Context.Default);
     }
+
     public ActionSpace(Flexibility flexibility) {
-        this.structure = Structure.Default;
-        this.flexibility = flexibility;
-        this.context = Context.Default;
+        this(Structure.Default, flexibility, Context.Default);
     }
+
     public ActionSpace(Context context) {
-        this.structure = Structure.Default;
-        this.flexibility = Flexibility.Default;
-        this.context = context;
+        this(Structure.Default, Flexibility.Default, context);
     }
 
     /**
@@ -95,13 +83,8 @@ public class ActionSpace {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ActionSpace)) return false;
-        ActionSpace that = (ActionSpace) o;
+        if (!(o instanceof ActionSpace that)) return false;
         return structure == that.structure && flexibility == that.flexibility && context == that.context;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(structure, flexibility, context);
-    }
 }

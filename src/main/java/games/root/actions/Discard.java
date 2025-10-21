@@ -59,6 +59,6 @@ public class Discard extends AbstractAction {
     public String getString(AbstractGameState gameState) {
         RootGameState gs = (RootGameState) gameState;
         RootCard card = (RootCard) gs.getComponentById(cardId);
-        return gs.getPlayerFaction(playerID).toString() + " discards " + card.suit.toString() + " card " + card.toString();
+        return gs.getPlayerFaction(playerID).toString() + " discards " + card.suit.toString() + " card " + card;
     }
 }

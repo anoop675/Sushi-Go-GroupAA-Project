@@ -6,7 +6,7 @@ public class Hash
 {
     private static Hash hash;
 
-    private HashMap<String, Integer> hashmap;
+    private final HashMap<String, Integer> hashmap;
 
     public static Hash GetInstance()
     {

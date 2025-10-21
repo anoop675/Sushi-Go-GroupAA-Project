@@ -3,10 +3,7 @@ package evaluation.heuristics;
 import core.Game;
 import core.interfaces.IGameHeuristic;
 
-public class TargetGameLength implements IGameHeuristic {
-
-    public final int target;
-    public final LengthType type;
+public record TargetGameLength(LengthType type, int target) implements IGameHeuristic {
 
     public TargetGameLength(String type, int target) {
         this.target = target;

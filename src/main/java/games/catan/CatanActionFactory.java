@@ -17,15 +17,12 @@ import games.catan.actions.trade.*;
 import games.catan.components.Building;
 import games.catan.components.CatanCard;
 import games.catan.components.CatanTile;
-import games.puertorico.roles.Settler;
-import org.antlr.v4.runtime.misc.IntSet;
 import utilities.Utils;
 
 import java.util.*;
 
 import static games.catan.CatanConstants.HEX_SIDES;
 import static games.catan.components.Building.Type.Settlement;
-import static java.util.stream.Collectors.toList;
 
 public class CatanActionFactory {
     /**
@@ -49,7 +46,7 @@ public class CatanActionFactory {
                         if (!settlementsAdded.contains(settlement.getComponentID()) && settlement.getOwnerId() == -1) {
                             if (gs.checkSettlementPlacement(settlement, gs.getCurrentPlayer())) {
                                 settlementsAdded.add(settlement.getComponentID());
-                                if (actionSpace.structure != ActionSpace.Structure.Deep) {  // Flat is default
+                                if (actionSpace.structure() != ActionSpace.Structure.Deep) {  // Flat is default
                                     int[][] coords = tile.getNeighboursOnVertex(i);
                                     int edge = (HEX_SIDES + i - 1) % HEX_SIDES;
                                     Edge edgeObj = gs.getRoad(settlement, tile, edge);
@@ -116,7 +113,7 @@ public class CatanActionFactory {
     public static List<AbstractAction> getPlayerTradeOfferActions(CatanGameState gs, ActionSpace actionSpace, int playerID, OfferPlayerTrade tradeOffer) {
         ArrayList<AbstractAction> actions = new ArrayList<>();
         Map<CatanParameters.Resource, Counter> resources = gs.getPlayerResources(playerID);
-        int n_players = gs.getNPlayers();
+        int n_players = gs.getNPlayers(playerId);
         if (tradeOffer == null) {
             // Construct new offer
             List<AbstractAction> offers = new ArrayList<>();
@@ -139,7 +136,7 @@ public class CatanActionFactory {
                     }
                 }
             }
-            if (actionSpace.structure != ActionSpace.Structure.Deep) {  // Default is flat
+            if (actionSpace.structure() != ActionSpace.Structure.Deep) {  // Default is flat
                 actions.addAll(offers);
             } else if (offers.size() > 0) {
                 // Deep new offer construct
@@ -157,7 +154,7 @@ public class CatanActionFactory {
                         tradeOffer.stage == OfferPlayerTrade.Stage.Offer ? OfferPlayerTrade.Stage.CounterOffer : OfferPlayerTrade.Stage.Offer);
             }
             if (!allCounterOffers.isEmpty()) {
-                if (actionSpace.structure != ActionSpace.Structure.Deep) {  // Default is flat
+                if (actionSpace.structure() != ActionSpace.Structure.Deep) {  // Default is flat
                     actions.addAll(allCounterOffers);
                 } else {
                     // Deep counter-offer construct. Only add if there exists a counter-offer, we still need to calculate all options
@@ -208,7 +205,7 @@ public class CatanActionFactory {
      */
     public static List<AbstractAction> getDiscardActions(CatanGameState gs, ActionSpace actionSpace, int player, int nToDiscard) {
         ArrayList<AbstractAction> actions = new ArrayList<>();
-        if (actionSpace.structure != ActionSpace.Structure.Deep) {  // Flat is default
+        if (actionSpace.structure() != ActionSpace.Structure.Deep) {  // Flat is default
             int nResources = gs.getNResourcesInHand(player);
             int[] resIdx = new int[nResources];
             for (int i = 0; i < nResources; i++) resIdx[i] = i;
@@ -244,7 +241,7 @@ public class CatanActionFactory {
             for (int y = 0; y < board[x].length; y++) {
                 CatanTile tile = board[x][y];
                 if (!(tile.getTileType().equals(CatanTile.TileType.SEA))) {
-                    if (actionSpace.structure != ActionSpace.Structure.Deep) { // Flat is default
+                    if (actionSpace.structure() != ActionSpace.Structure.Deep) { // Flat is default
                         Set<Integer> targets = new LinkedHashSet<>();
                         Building[] settlements = gs.getBuildings(tile);
                         for (Building settlement : settlements) {
@@ -284,7 +281,7 @@ public class CatanActionFactory {
         List<AbstractAction> buyRoadActions = getBuyRoadActions(gs, player, false);
         List<AbstractAction> buySettlementActions = getBuySettlementActions(gs, player);
         // Road, Settlement or City
-        if (actionSpace.structure != ActionSpace.Structure.Deep) {
+        if (actionSpace.structure() != ActionSpace.Structure.Deep) {
             actions.addAll(buyRoadActions);
             actions.addAll(buySettlementActions);
         } else {
@@ -390,7 +387,7 @@ public class CatanActionFactory {
             if (c.roundCardWasBought == gs.getTurnCounter() || c.cardType == CatanCard.CardType.VICTORY_POINT_CARD) {  // We don't play VP cards
                 continue;
             }
-            if (actionSpace.structure != ActionSpace.Structure.Deep) { // Flat is default
+            if (actionSpace.structure() != ActionSpace.Structure.Deep) { // Flat is default
                 actions.addAll(getDevCardActions(gs, actionSpace, player, c.cardType));
             } else {
                 // Deep: play dev card of type X. Then compute for the card type the variations possible, potentially in a deep way if available
@@ -422,7 +419,7 @@ public class CatanActionFactory {
             }
 
             if (resourcesAvailable.size() >= ((CatanParameters) gs.getGameParameters()).nResourcesYoP) {
-                if (actionSpace.structure != ActionSpace.Structure.Deep) {
+                if (actionSpace.structure() != ActionSpace.Structure.Deep) {
 
                     int[] resIdx = new int[resourcesAvailable.size()];
                     for (int i = 0; i < resourcesAvailable.size(); i++) {
@@ -449,7 +446,7 @@ public class CatanActionFactory {
 
                 List<AbstractAction> roads = getBuyRoadActions(gs, player, true);
                 int nRoads = Math.min(gs.playerTokens.get(player).get(BuyAction.BuyType.Road).getValue(), ((CatanParameters) gs.getGameParameters()).nRoadsRB);
-                if (actionSpace.structure != ActionSpace.Structure.Deep && roads.size() >= nRoads) {  // Flat is default
+                if (actionSpace.structure() != ActionSpace.Structure.Deep && roads.size() >= nRoads) {  // Flat is default
 
                     // Identify all combinations of possible roads to build
                     int[] roadsIdx = new int[roads.size()];
@@ -501,7 +498,7 @@ public class CatanActionFactory {
                     }
                 }
                 if (trades.size() > 0) {
-                    if (actionSpace.structure != ActionSpace.Structure.Deep) {  // Flat is default
+                    if (actionSpace.structure() != ActionSpace.Structure.Deep) {  // Flat is default
                         actions.addAll(trades);
                     } else {
                         actions.add(new DeepDefaultTrade(resToGive, nGive, player));

@@ -44,10 +44,10 @@ public class PlayCard extends DrawCard implements IPrintable {
         Deck<UnoCard> discardDeck = ugs.getDiscardDeck();
         List<Deck<UnoCard>> playerDecks = ugs.getPlayerDecks();
 
-        int players = ugs.getNPlayers();
+        int players = ugs.getNPlayers(playerId);
         if (ugp.scoringMethod == CHALLENGE) {
             players = 0;
-            for (int p = 0; p < ugs.getNPlayers(); p++) {
+            for (int p = 0; p < ugs.getNPlayers(playerId); p++) {
                 if (ugs.getPlayerResults()[p] == CoreConstants.GameResult.GAME_ONGOING)
                     players++;
             }
@@ -141,9 +141,8 @@ public class PlayCard extends DrawCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayCard)) return false;
+        if (!(o instanceof PlayCard playCard)) return false;
         if (!super.equals(o)) return false;
-        PlayCard playCard = (PlayCard) o;
         return Objects.equals(color, playCard.color);
     }
 

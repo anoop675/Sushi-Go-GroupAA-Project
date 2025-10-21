@@ -273,7 +273,8 @@ public class Wonder7Card extends Card {
                                 (state, player) -> {
                                     int retValue = 0;
                                     for (int i = -1; i <= 1; i++) {
-                                        retValue += (state.getPlayerWonderBoard((player + i + state.getNPlayers()) % state.getNPlayers()).wonderStage - 1) * params.builderMultiplier;
+                                        int playerId = 0;
+                                        retValue += (state.getPlayerWonderBoard((player + i + state.getNPlayers(playerId)) % state.getNPlayers(playerId)).wonderStage - 1) * params.builderMultiplier;
                                     }
                                     return retValue;
                                 })
@@ -297,8 +298,8 @@ public class Wonder7Card extends Card {
 
     // A card with a card effect (either instantaneous, or end of game VP)
     public Wonder7Card(CardType cardType, Type type,
-                       Map<Wonders7Constants.Resource, Integer> constructionCost,
-                       Map<Wonders7Constants.Resource, Integer> resourcesProduced,
+                       Map<Resource, Integer> constructionCost,
+                       Map<Resource, Integer> resourcesProduced,
                        List<CardEffect> instantEffects,
                        List<CardEffect> endGameEffects,
                        List<CardType> prerequisiteCard) {
@@ -313,14 +314,14 @@ public class Wonder7Card extends Card {
     }
 
     public Wonder7Card(CardType cardType, Type type,
-                       Map<Wonders7Constants.Resource, Integer> constructionCost,
-                       Map<Wonders7Constants.Resource, Integer> resourcesProduced) {
+                       Map<Resource, Integer> constructionCost,
+                       Map<Resource, Integer> resourcesProduced) {
         this(cardType, type, constructionCost, resourcesProduced, emptyList(), emptyList(), emptyList());
     }
 
     public Wonder7Card(CardType cardType, Type type,
-                       Map<Wonders7Constants.Resource, Integer> constructionCost,
-                       Map<Wonders7Constants.Resource, Integer> resourcesProduced,
+                       Map<Resource, Integer> constructionCost,
+                       Map<Resource, Integer> resourcesProduced,
                        List<CardType> prerequisiteCard) {
         this(cardType, type, constructionCost, resourcesProduced, emptyList(), emptyList(), prerequisiteCard);
     }
@@ -357,7 +358,7 @@ public class Wonder7Card extends Card {
         int vp = 0;
         for (CardEffect e : endGameEffects) {
             if (e instanceof GainResourceEffect gre) {
-                if (gre.resource == Resource.Victory)
+                if (gre.resource == Victory)
                     vp += gre.gain(state, playerId);
             }
         }
@@ -479,8 +480,9 @@ public class Wonder7Card extends Card {
         }
 
         // get neighbour resources (that would help satisfy our requirements)
-        int leftNeighbour = (wgs.getNPlayers() + player - 1) % wgs.getNPlayers();
-        int rightNeighbour = (player + 1) % wgs.getNPlayers();
+        int playerId = 0;
+        int leftNeighbour = (wgs.getNPlayers(playerId) + player - 1) % wgs.getNPlayers(playerId);
+        int rightNeighbour = (player + 1) % wgs.getNPlayers(playerId);
         List<TradeSource> leftNeighbourHas = extractNeighbourTradeOptions(player, wgs, remainingRequirements, leftNeighbour);
         List<TradeSource> rightNeighbourHas = extractNeighbourTradeOptions(player, wgs, remainingRequirements, rightNeighbour);
 

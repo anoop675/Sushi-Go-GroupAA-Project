@@ -41,12 +41,13 @@ public abstract class AbstractForwardModel {
      * @param firstState - initial state.
      */
     protected void abstractSetup(AbstractGameState firstState) {
-        firstState.gameStatus = CoreConstants.GameResult.GAME_ONGOING;
-        firstState.playerResults = new CoreConstants.GameResult[firstState.getNPlayers()];
-        Arrays.fill(firstState.playerResults, CoreConstants.GameResult.GAME_ONGOING);
+        firstState.gameStatus = GAME_ONGOING;
+        int playerId = 0;
+        firstState.playerResults = new CoreConstants.GameResult[firstState.getNPlayers(playerId)];
+        Arrays.fill(firstState.playerResults, GAME_ONGOING);
         firstState.gamePhase = CoreConstants.DefaultGamePhase.Main;
-        firstState.playerTimer = new ElapsedCpuChessTimer[firstState.getNPlayers()];
-        for (int i = 0; i < firstState.getNPlayers(); i++) {
+        firstState.playerTimer = new ElapsedCpuChessTimer[firstState.getNPlayers(playerId)];
+        for (int i = 0; i < firstState.getNPlayers(playerId); i++) {
             firstState.playerTimer[i] = new ElapsedCpuChessTimer(firstState.gameParameters.thinkingTimeMins,
                     firstState.gameParameters.incrementActionS, firstState.gameParameters.incrementTurnS,
                     firstState.gameParameters.incrementRoundS, firstState.gameParameters.incrementMilestoneS);
@@ -113,7 +114,7 @@ public abstract class AbstractForwardModel {
      */
     protected final AbstractAction disqualifyOrRandomAction(boolean flag, AbstractGameState gameState) {
         if (flag) {
-            gameState.setPlayerResult(CoreConstants.GameResult.DISQUALIFY, gameState.getCurrentPlayer());
+            gameState.setPlayerResult(DISQUALIFY, gameState.getCurrentPlayer());
             endPlayerTurn(gameState);
             return new DoNothing();
         } else {
@@ -193,10 +194,11 @@ public abstract class AbstractForwardModel {
      * The last thing to be called in the game loop, after the game is finished.
      */
     protected void endGame(AbstractGameState gs) {
-        gs.setGameStatus(CoreConstants.GameResult.GAME_END);
+        gs.setGameStatus(GAME_END);
         // If we have more than one person in Ordinal position of 1, then this is a draw
-        boolean drawn = IntStream.range(0, gs.getNPlayers()).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
-        for (int p = 0; p < gs.getNPlayers(); p++) {
+        int playerId = 0;
+        boolean drawn = IntStream.range(0, gs.getNPlayers(playerId)).map(gs::getOrdinalPosition).filter(i -> i == 1).count() > 1;
+        for (int p = 0; p < gs.getNPlayers(playerId); p++) {
             int o = gs.getOrdinalPosition(p);
             if (o == 1 && drawn)
                 gs.setPlayerResult(DRAW_GAME, p);

@@ -41,7 +41,7 @@ public class RHEAPlayer extends AbstractPlayer implements IAnyTimePlayer {
     @Override
     public void initializePlayer(AbstractGameState state) {
         MASTStatistics = new ArrayList<>();
-        for (int i = 0; i < state.getNPlayers(); i++)
+        for (int i = 0; i < state.getNPlayers(playerId); i++)
             MASTStatistics.add(new HashMap<>());
         population = new ArrayList<>();
     }
@@ -60,7 +60,7 @@ public class RHEAPlayer extends AbstractPlayer implements IAnyTimePlayer {
         if (params.useMAST) {
             if (MASTStatistics == null) {
                 MASTStatistics = new ArrayList<>();
-                for (int i = 0; i < stateObs.getNPlayers(); i++)
+                for (int i = 0; i < stateObs.getNPlayers(playerId); i++)
                     MASTStatistics.add(new HashMap<>());
             } else {
                 MASTStatistics = MASTStatistics.stream()

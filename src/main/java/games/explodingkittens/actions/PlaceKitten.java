@@ -21,7 +21,8 @@ public class PlaceKitten extends AbstractAction {
                 .filter(c -> c.cardType == ExplodingKittensCard.CardType.EXPLODING_KITTEN).findFirst()
                 .orElseThrow(() -> new AssertionError("No Exploding Kitten found"));
         state.getPlayerHand(player).remove(card);
-        boolean[] visibility = new boolean[state.getNPlayers()];
+        int playerId = 0;
+        boolean[] visibility = new boolean[state.getNPlayers(playerId)];
         visibility[state.getCurrentPlayer()] = true;
         state.getDrawPile().add(card, index, visibility);
         state.setSkip(true);

@@ -11,11 +11,11 @@ import games.virus.components.VirusBody;
 import java.util.Objects;
 
 public class PlayTransplant extends PlayVirusCard implements IPrintable {
-    private int                 playerId;
-    private int                 otherPlayerId;
-    private int                 otherBodyId;
-    private VirusCard.OrganType myOrganType;
-    private VirusCard.OrganType otherOrganType;
+    private final int                 playerId;
+    private final int                 otherPlayerId;
+    private final int                 otherBodyId;
+    private final VirusCard.OrganType myOrganType;
+    private final VirusCard.OrganType otherOrganType;
 
     public PlayTransplant(int deckFrom, int deckTo, int fromIndex, int bodyId, int otherBodyId, int playerId, int otherPlayerId,
                           VirusCard.OrganType myOrganType, VirusCard.OrganType otherOrganType) {
@@ -58,9 +58,8 @@ public class PlayTransplant extends PlayVirusCard implements IPrintable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayTransplant)) return false;
+        if (!(o instanceof PlayTransplant that)) return false;
         if (!super.equals(o)) return false;
-        PlayTransplant that = (PlayTransplant) o;
         return playerId == that.playerId && otherPlayerId == that.otherPlayerId && otherBodyId == that.otherBodyId
                 && myOrganType == that.myOrganType && otherOrganType == that.otherOrganType;
     }

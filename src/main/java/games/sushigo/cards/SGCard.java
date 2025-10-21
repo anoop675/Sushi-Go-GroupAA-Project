@@ -85,7 +85,7 @@ public class SGCard extends Card {
                 int secondMost = 0;
                 HashSet<Integer> mostPlayers = new HashSet<>();
                 HashSet<Integer> secondPlayers = new HashSet<>();
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     int nMakiRolls = gs.getPlayedCardTypes()[i].get(Maki).getValue();
 
                     if (nMakiRolls > most) {
@@ -139,7 +139,7 @@ public class SGCard extends Card {
                 int worst = best;
                 HashSet<Integer> mostPlayers = new HashSet<>();
                 HashSet<Integer> leastPlayers = new HashSet<>();
-                for (int i = 0; i < gs.getNPlayers(); i++) {
+                for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                     int nPuddings = gs.getPlayedCardTypes()[i].get(Pudding).getValue();
 
                     if (nPuddings > best) {
@@ -168,7 +168,7 @@ public class SGCard extends Card {
                             }
                         }
                     }
-                    if (!leastPlayers.isEmpty() && gs.getNPlayers() > 2) {
+                    if (!leastPlayers.isEmpty() && gs.getNPlayers(playerId) > 2) {
                         // Least score is split among the tied players with no remainder, only awarded in games with more than 2 players
                         leastScore /= leastPlayers.size();
                         for (Integer leastPlayer : leastPlayers) {
@@ -247,9 +247,8 @@ public class SGCard extends Card {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SGCard)) return false;
+        if (!(o instanceof SGCard sgCard)) return false;
         if (!super.equals(o)) return false;
-        SGCard sgCard = (SGCard) o;
         return count == sgCard.count && type == sgCard.type;
     }
 

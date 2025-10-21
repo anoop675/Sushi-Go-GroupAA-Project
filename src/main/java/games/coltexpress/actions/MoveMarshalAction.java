@@ -42,9 +42,8 @@ public class MoveMarshalAction extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MoveMarshalAction)) return false;
+        if (!(o instanceof MoveMarshalAction that)) return false;
         if (!super.equals(o)) return false;
-        MoveMarshalAction that = (MoveMarshalAction) o;
         return sourceCompartment == that.sourceCompartment &&
                 targetCompartment == that.targetCompartment;
     }

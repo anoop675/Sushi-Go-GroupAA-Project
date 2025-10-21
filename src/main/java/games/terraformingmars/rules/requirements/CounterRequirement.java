@@ -46,7 +46,7 @@ public class CounterRequirement implements Requirement<TMGameState> {
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return max;
     }
 
@@ -123,8 +123,7 @@ public class CounterRequirement implements Requirement<TMGameState> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CounterRequirement)) return false;
-        CounterRequirement that = (CounterRequirement) o;
+        if (!(o instanceof CounterRequirement that)) return false;
         return that.counterCode.equals(counterCode) && max == that.max;
     }
 

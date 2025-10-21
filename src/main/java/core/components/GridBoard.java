@@ -467,7 +467,7 @@ public class GridBoard extends Component implements IComponentContainer<BoardNod
         // Add all cells as board nodes connected to each other
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                BoardNode bn = (BoardNode) getElement(j, i);
+                BoardNode bn = getElement(j, i);
                 if (bn != null) {
                     bn.setProperty(new PropertyVector2D("coordinates", new Vector2D(j, i)));
                     bnMapping.put(new Vector2D(j, i), bn);

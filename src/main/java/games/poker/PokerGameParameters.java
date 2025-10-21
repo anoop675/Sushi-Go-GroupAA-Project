@@ -72,8 +72,7 @@ public class PokerGameParameters extends TunableParameters {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PokerGameParameters)) return false;
-        PokerGameParameters that = (PokerGameParameters) o;
+        if (!(o instanceof PokerGameParameters that)) return false;
         return nStartingMoney == that.nStartingMoney && nWinMoney == that.nWinMoney && nFlopCards == that.nFlopCards && nTurnCards == that.nTurnCards && nRiverCards == that.nRiverCards && nCardsPerPlayer == that.nCardsPerPlayer && smallBlind == that.smallBlind && bigBlind == that.bigBlind && bet == that.bet && endMinMoney == that.endMinMoney && Objects.equals(dataPath, that.dataPath) && Arrays.equals(raiseMultipliers, that.raiseMultipliers);
     }
 

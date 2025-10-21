@@ -61,10 +61,9 @@ public abstract class AbstractRuleBasedForwardModel extends AbstractForwardModel
     @Override
     protected void _next(AbstractGameState state, AbstractAction action) {
         if (state.getGameStatus() != CoreConstants.GameResult.GAME_ONGOING) return;
-        if (!(state instanceof AbstractGameStateWithTurnOrder))
+        if (!(state instanceof AbstractGameStateWithTurnOrder currentState))
             throw new AssertionError("Rules Based Forward Model is only usable with AbstractGameStateWithTurnOrder");
 
-        AbstractGameStateWithTurnOrder currentState = (AbstractGameStateWithTurnOrder) state;
         if (nextRule == null) {
             nextRule = lastRule.getNext();  // Go back to parent, skip it and go to next rule
             if (nextRule == null) nextRule = root;

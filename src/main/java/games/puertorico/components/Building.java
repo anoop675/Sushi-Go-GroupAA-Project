@@ -53,8 +53,7 @@ public class Building extends Component {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj instanceof Building) {
-            Building building = (Building) obj;
+        if (obj instanceof Building building) {
             return super.equals(building) && this.buildingType == building.buildingType && this.occupation == building.occupation &&
                     this.used == building.used;
         }

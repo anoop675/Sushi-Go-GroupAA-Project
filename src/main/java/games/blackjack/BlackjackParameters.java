@@ -62,8 +62,7 @@ public class BlackjackParameters extends TunableParameters {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BlackjackParameters)) return false;
-        BlackjackParameters that = (BlackjackParameters) o;
+        if (!(o instanceof BlackjackParameters that)) return false;
         return nCardsPerPlayer == that.nCardsPerPlayer && jackCard == that.jackCard && queenCard == that.queenCard && kingCard == that.kingCard && aceCardBelowThreshold == that.aceCardBelowThreshold && aceCardAboveThreshold == that.aceCardAboveThreshold && pointThreshold == that.pointThreshold && winScore == that.winScore && dealerStand == that.dealerStand && nDealerCardsHidden == that.nDealerCardsHidden && Objects.equals(dataPath, that.dataPath);
     }
 

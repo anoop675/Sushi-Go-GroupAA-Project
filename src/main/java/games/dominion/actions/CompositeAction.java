@@ -28,8 +28,7 @@ public class CompositeAction extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof CompositeAction) {
-            CompositeAction other = (CompositeAction) obj;
+        if (obj instanceof CompositeAction other) {
             if (components.size() != other.components.size())
                 return false;
             for (int i = 0; i < components.size(); i++) {

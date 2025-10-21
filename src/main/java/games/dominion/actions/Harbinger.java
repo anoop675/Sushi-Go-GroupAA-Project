@@ -75,8 +75,7 @@ public class Harbinger extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Harbinger) {
-            Harbinger other = (Harbinger) obj;
+        if (obj instanceof Harbinger other) {
             return executed == other.executed && super.equals(obj);
         }
         return false;

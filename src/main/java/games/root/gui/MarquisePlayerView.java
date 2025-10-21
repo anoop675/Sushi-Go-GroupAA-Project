@@ -27,7 +27,7 @@ public class MarquisePlayerView extends JComponent {
     int sawmills;
     int warriors;
 
-    private List<String> craftedItems = new ArrayList<>();
+    private final List<String> craftedItems = new ArrayList<>();
 
     int border = 5;
     int textHeight = 15;

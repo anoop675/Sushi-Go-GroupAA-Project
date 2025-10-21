@@ -70,8 +70,7 @@ public class DiscardResourcesPhase extends AbstractAction implements IExtendedSe
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DiscardResourcesPhase)) return false;
-        DiscardResourcesPhase that = (DiscardResourcesPhase) o;
+        if (!(o instanceof DiscardResourcesPhase that)) return false;
         return playerID == that.playerID && nDiscards == that.nDiscards && nDiscarded == that.nDiscarded;
     }
 

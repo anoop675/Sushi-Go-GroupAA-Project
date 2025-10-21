@@ -49,7 +49,7 @@ public class UnoGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 3.5;
                 this.width = playerAreaWidth * nHorizAreas;
@@ -135,7 +135,7 @@ public class UnoGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             UnoGameState ugs = (UnoGameState)gameState;
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update((UnoGameState) gameState);
                 if (i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
                         || humanPlayerIds.contains(i)

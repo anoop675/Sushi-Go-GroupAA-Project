@@ -28,7 +28,7 @@ public class ClaimableAwardMilestoneRequirement implements Requirement<TMGameSta
     }
 
     @Override
-    public boolean isMax() {
+    public boolean max() {
         return false;
     }
 
@@ -72,8 +72,7 @@ public class ClaimableAwardMilestoneRequirement implements Requirement<TMGameSta
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ClaimableAwardMilestoneRequirement)) return false;
-        ClaimableAwardMilestoneRequirement that = (ClaimableAwardMilestoneRequirement) o;
+        if (!(o instanceof ClaimableAwardMilestoneRequirement that)) return false;
         return awardMilestoneID == that.awardMilestoneID && player == that.player;
     }
 

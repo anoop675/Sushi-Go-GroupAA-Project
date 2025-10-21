@@ -4,7 +4,6 @@ import core.AbstractGameState;
 import core.components.Counter;
 import games.terraformingmars.TMGameState;
 import games.terraformingmars.TMTypes;
-import games.terraformingmars.rules.effects.Bonus;
 import games.terraformingmars.rules.effects.Effect;
 import games.terraformingmars.rules.effects.GlobalParameterEffect;
 import games.terraformingmars.rules.requirements.CounterRequirement;
@@ -36,7 +35,7 @@ public class ModifyGlobalParameter extends TMModifyCounter {
         if (counterID == -1) counterID = c.getComponentID();
         if (change > 0 && !c.isMaximum() || change < 0 && !c.isMinimum()) {
             // Check persisting global param effects for all players
-            for (int i = 0; i < gs.getNPlayers(); i++) {
+            for (int i = 0; i < gs.getNPlayers(playerId); i++) {
                 for (Effect e: gs.getPlayerPersistingEffects()[i]) {
                     if (!(e instanceof GlobalParameterEffect)) continue;
                     e.execute(gs, this, i);
@@ -59,9 +58,8 @@ public class ModifyGlobalParameter extends TMModifyCounter {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModifyGlobalParameter)) return false;
+        if (!(o instanceof ModifyGlobalParameter that)) return false;
         if (!super.equals(o)) return false;
-        ModifyGlobalParameter that = (ModifyGlobalParameter) o;
         return param == that.param;
     }
 

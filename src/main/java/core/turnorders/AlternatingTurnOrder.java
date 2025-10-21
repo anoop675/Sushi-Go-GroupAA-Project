@@ -47,9 +47,8 @@ public class AlternatingTurnOrder extends TurnOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AlternatingTurnOrder)) return false;
+        if (!(o instanceof AlternatingTurnOrder that)) return false;
         if (!super.equals(o)) return false;
-        AlternatingTurnOrder that = (AlternatingTurnOrder) o;
         return direction == that.direction;
     }
 

@@ -33,23 +33,14 @@ public class DiamantGameState extends AbstractGameState implements IPrintable {
     List<Boolean> playerInCave;
 
     public List<Integer> getPlayersInCave() {
-        return IntStream.range(0, getNPlayers())
+        return IntStream.range(0, getNPlayers(playerId))
                 .filter(i -> playerInCave.get(i))
                 .boxed()
                 .collect(Collectors.toList());
     }
 
     // helper data class to store interesting information
-    static class PlayerTurnRecord {
-        public final int player;
-        public final int round;
-        public final int turnLeft;
-
-        PlayerTurnRecord(int player, int round, int turn) {
-            this.player = player;
-            this.round = round;
-            this.turnLeft = turn;
-        }
+        record PlayerTurnRecord(int player, int round, int turnLeft) {
     }
 
     List<PlayerTurnRecord> recordOfPlayerActions = new ArrayList<>();
@@ -94,7 +85,7 @@ public class DiamantGameState extends AbstractGameState implements IPrintable {
     @Override
     protected AbstractGameState _copy(int playerId)
     {
-        DiamantGameState dgs = new DiamantGameState(gameParameters.copy(), getNPlayers());
+        DiamantGameState dgs = new DiamantGameState(gameParameters.copy(), getNPlayers(playerId));
 
         dgs.mainDeck    = mainDeck.copy();
         dgs.discardDeck = discardDeck.copy();
@@ -117,7 +108,7 @@ public class DiamantGameState extends AbstractGameState implements IPrintable {
             dgs.treasureChests.add(c.copy());
 
         // If there is an action played for a player, then copy it
-        for (int i=0; i<getNPlayers(); i++)
+        for (int i = 0; i<getNPlayers(playerId); i++)
         {
             if (actionsPlayed.containsKey(i))
                 dgs.actionsPlayed.put(i, actionsPlayed.get(i).copy());
@@ -197,10 +188,8 @@ public class DiamantGameState extends AbstractGameState implements IPrintable {
     protected boolean _equals(Object o)
     {
         if (this == o)                        return true;
-        if (!(o instanceof DiamantGameState)) return false;
+        if (!(o instanceof DiamantGameState that)) return false;
         if (!super.equals(o))                 return false;
-
-        DiamantGameState that = (DiamantGameState) o;
 
         return
                nCave                   == that.nCave                   &&

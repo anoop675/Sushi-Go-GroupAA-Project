@@ -44,8 +44,7 @@ public class Build extends AbstractAction {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Build) {
-            Build other = (Build) obj;
+        if (obj instanceof Build other) {
             return type == other.type && cost == other.cost;
         }
         return false;

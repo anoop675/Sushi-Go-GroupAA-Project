@@ -44,7 +44,7 @@ public enum Surge {
 
     public void apply(MeleeAttack attack, DescentGameState state) {
         if (surgesUsed > attack.surgesToSpend) {
-            throw new AssertionError(String.format("%s: Requires %d surges and we only have %d to spend.", toString(), surgesUsed, attack.surgesToSpend));
+            throw new AssertionError(String.format("%s: Requires %d surges and we only have %d to spend.", this, surgesUsed, attack.surgesToSpend));
         }
 
         // TODO: Record which Surges have been used to avoid re-use!

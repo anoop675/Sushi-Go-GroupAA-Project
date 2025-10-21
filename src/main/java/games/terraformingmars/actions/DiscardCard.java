@@ -107,9 +107,8 @@ public class DiscardCard extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DiscardCard)) return false;
+        if (!(o instanceof DiscardCard that)) return false;
         if (!super.equals(o)) return false;
-        DiscardCard that = (DiscardCard) o;
         return cardChoice == that.cardChoice;
     }
 

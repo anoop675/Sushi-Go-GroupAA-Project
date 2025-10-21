@@ -22,6 +22,6 @@ public interface IPrintable {
      * Prints itself to console.
      */
     default void printToConsole() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 }

@@ -35,8 +35,7 @@ public class ModifyCounter extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ModifyCounter)) return false;
-        ModifyCounter that = (ModifyCounter) o;
+        if (!(o instanceof ModifyCounter that)) return false;
         return counterID == that.counterID &&
                 change == that.change;
     }

@@ -53,7 +53,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
                 activePlayer = gameState.getCurrentPlayer();
 
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 3.5;
                 this.width = playerWidth * nHorizAreas;
@@ -207,7 +207,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
             // Update decks and visibility
             BlackjackGameState bjgs = (BlackjackGameState) gameState;
-            for (int i = 0; i < gameState.getNPlayers(); i++) {
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update(bjgs);
 
                 // Highlight active player

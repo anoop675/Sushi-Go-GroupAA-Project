@@ -54,7 +54,8 @@ public class DealBreakerAction extends AbstractAction implements IExtendedSequen
         List<AbstractAction> availableActions = new ArrayList<>();
         switch (actionState){
             case Target:
-                for(int i=0;i<MDGS.getNPlayers();i++){
+                int playerId = 0;
+                for(int i = 0; i<MDGS.getNPlayers(playerId); i++){
                     if(playerID!=i)
                         if(MDGS.playerDealBreaker(i))
                             availableActions.add(new TargetPlayer(i));

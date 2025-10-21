@@ -40,8 +40,7 @@ public class GlobalParameterEffect extends Effect {
 
     @Override
     public boolean canExecute(TMGameState gameState, TMAction actionTaken, int player) {
-        if (!(actionTaken instanceof ModifyGlobalParameter) || !super.canExecute(gameState, actionTaken, player)) return false;
-        ModifyGlobalParameter action = (ModifyGlobalParameter) actionTaken;
+        if (!(actionTaken instanceof ModifyGlobalParameter action) || !super.canExecute(gameState, actionTaken, player)) return false;
         return action.param == globalParameter;
     }
 }

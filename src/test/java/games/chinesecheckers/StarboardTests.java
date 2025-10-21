@@ -47,7 +47,7 @@ public class StarboardTests {
 
     @Test
     public void pegColoursTest(){
-        if (state.getNPlayers() == 2) {
+        if (state.getNPlayers(playerId) == 2) {
             for (int i = 0; i <= 9; i++) {
                 assertEquals("Peg at index " + i + " should be PURPLE for a two-player game",
                         Peg.Colour.purple,
@@ -59,7 +59,7 @@ public class StarboardTests {
                         state.getStarBoard().getBoardNodes().get(i).getOccupiedPeg().getColour());
             }
         }
-        if (state.getNPlayers() == 3) {
+        if (state.getNPlayers(playerId) == 3) {
             // Check for PURPLE pegs
             for (int i = 0; i <= 9; i++) {
                 assertEquals("Peg at index " + i + " should be PURPLE for a three-player game",
@@ -81,7 +81,7 @@ public class StarboardTests {
                         state.getStarBoard().getBoardNodes().get(index).getOccupiedPeg().getColour());
             }
         }
-        if (state.getNPlayers() == 4) {
+        if (state.getNPlayers(playerId) == 4) {
             // Check for PURPLE pegs
             for (int i = 0; i <= 9; i++) {
                 assertEquals("Peg at index " + i + " should be PURPLE for a four-player game",
@@ -109,7 +109,7 @@ public class StarboardTests {
                         state.getStarBoard().getBoardNodes().get(index).getOccupiedPeg().getColour());
             }
         }
-        if (state.getNPlayers() == 6) {
+        if (state.getNPlayers(playerId) == 6) {
             // Check for PURPLE pegs
             for (int i = 0; i <= 9; i++) {
                 assertEquals("Peg at index " + i + " should be PURPLE for a six-player game",

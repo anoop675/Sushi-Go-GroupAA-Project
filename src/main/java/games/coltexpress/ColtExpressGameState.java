@@ -85,7 +85,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
 
     @Override
     protected AbstractGameStateWithTurnOrder __copy(int playerId) {
-        ColtExpressGameState copy = new ColtExpressGameState(gameParameters.copy(), getNPlayers());
+        ColtExpressGameState copy = new ColtExpressGameState(gameParameters.copy(), getNPlayers(playerId));
 
         ColtExpressParameters cep = (ColtExpressParameters) gameParameters;
         // These are always visible
@@ -116,7 +116,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
         copy.playerHandRnd = new Random(redeterminisationRnd.nextLong());
 
         if (getCoreGameParameters().partialObservable && playerId != -1) {
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     // Other player hands are hidden, but it's known what's in a player's deck
                     // Shuffle together and deal new hands for opponents (same hand size)
@@ -263,9 +263,8 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ColtExpressGameState)) return false;
+        if (!(o instanceof ColtExpressGameState gameState)) return false;
         if (!super.equals(o)) return false;
-        ColtExpressGameState gameState = (ColtExpressGameState) o;
         return playerPlayingBelle == gameState.playerPlayingBelle &&
                 Objects.equals(playerHandCards, gameState.playerHandCards) &&
                 Objects.equals(playerDecks, gameState.playerDecks) &&
@@ -326,7 +325,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
         ColtExpressParameters cep = (ColtExpressParameters) gameParameters;
         List<Integer> playersWithMostSuccessfulShots = new LinkedList<>();
         int bestValue = cep.nBulletsPerPlayer;
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (bulletsLeft[i] < bestValue) {
                 bestValue = bulletsLeft[i];
                 playersWithMostSuccessfulShots.clear();
@@ -339,7 +338,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
     }
 
     void distributeCards(){
-        for (int playerIndex = 0; playerIndex < getNPlayers(); playerIndex++) {
+        for (int playerIndex = 0; playerIndex < getNPlayers(playerId); playerIndex++) {
             Deck<ColtExpressCard> playerHand = playerHandCards.get(playerIndex);
             Deck<ColtExpressCard> playerDeck = playerDecks.get(playerIndex);
 
@@ -421,7 +420,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
 
         int currentPlayer = turnOrder.getCurrentPlayer(this);
 
-        for (int i = 0; i < getNPlayers(); i++) {
+        for (int i = 0; i < getNPlayers(playerId); i++) {
             if (currentPlayer == i)
                 System.out.print(">>> ");
             System.out.print("Player " + i + " = " + playerCharacters.get(i).name() + ":  ");
@@ -492,7 +491,7 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
                 .filter(rc -> !namesToExclude.contains(rc.name())).collect(toList());
         int nRoundCards = availableTypes.size();
         int choice = rnd.nextInt(nRoundCards);
-        return getRoundCard(availableTypes.get(choice), getNPlayers());
+        return getRoundCard(availableTypes.get(choice), getNPlayers(playerId));
     }
 
     public RoundCard getRoundCard(ColtExpressTypes.RegularRoundCard cardType, int nPlayers) {

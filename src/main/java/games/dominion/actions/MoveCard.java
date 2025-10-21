@@ -44,10 +44,10 @@ public class MoveCard extends AbstractAction {
             DominionCard card = cardToMove.get();
             state.moveCard(card, playerFrom, fromDeck, playerTo, toDeck);
             PartialObservableDeck<DominionCard> destination = (PartialObservableDeck<DominionCard>) state.getDeck(toDeck, playerTo);
-            boolean[] cardVisibility = new boolean[state.getNPlayers()];
+            boolean[] cardVisibility = new boolean[state.getNPlayers(playerId)];
             cardVisibility[playerFrom] = true;
             if (isPubliclyVisible) {
-                for (int i = 0; i < state.getNPlayers(); i++)
+                for (int i = 0; i < state.getNPlayers(playerId); i++)
                     cardVisibility[i] = true;
             }
             destination.setVisibilityOfComponent(0, cardVisibility);
@@ -84,8 +84,7 @@ public class MoveCard extends AbstractAction {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof MoveCard) {
-            MoveCard dc = (MoveCard) other;
+        if (other instanceof MoveCard dc) {
             return dc.playerFrom == playerFrom && dc.type == type && dc.playerTo == playerFrom
                     && dc.toDeck == toDeck && dc.fromDeck == fromDeck && dc.isPubliclyVisible == isPubliclyVisible;
         }

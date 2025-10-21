@@ -56,7 +56,7 @@ public class ShootPlayerAction extends DrawCard {
                 movementIndex = target.getCompartmentID() - 1;
             }
 
-            if (movementIndex > 0 && movementIndex <= cegs.getNPlayers())
+            if (movementIndex > 0 && movementIndex <= cegs.getNPlayers(playerId))
             {
                 Compartment movementCompartment = cegs.getTrainCompartments().get(movementIndex);
 
@@ -79,9 +79,8 @@ public class ShootPlayerAction extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ShootPlayerAction)) return false;
+        if (!(o instanceof ShootPlayerAction that)) return false;
         if (!super.equals(o)) return false;
-        ShootPlayerAction that = (ShootPlayerAction) o;
         return targetID == that.targetID &&
                 playerCompartment == that.playerCompartment &&
                 targetCompartment == that.targetCompartment &&

@@ -25,9 +25,9 @@ public class TakeFromDiscard extends AbstractAction {
         if (state.getCurrentPlayer() == playerID){
             PartialObservableDeck<RootCard> hand = state.getPlayerHand(playerID);
             Deck<RootCard> discard = state.getDiscardPile();
-            boolean[] visibility = new boolean[state.getNPlayers()];
+            boolean[] visibility = new boolean[state.getNPlayers(playerId)];
             // Fill the array with true values
-            for (int i = 0; i < state.getNPlayers(); i++) {
+            for (int i = 0; i < state.getNPlayers(playerId); i++) {
                 visibility[i] = true;
             }
             RootCard card = discard.pick(cardIdx);

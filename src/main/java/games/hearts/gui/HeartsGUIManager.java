@@ -62,7 +62,7 @@ public class HeartsGUIManager extends AbstractGUIManager {
 
                 activePlayer = gameState.getCurrentPlayer();
 
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
                 double nVertAreas = 3.5;
                 this.width = playerWidth * nHorizAreas;
@@ -248,7 +248,7 @@ public class HeartsGUIManager extends AbstractGUIManager {
             }
 
 
-            for(int i = 0; i < gameState.getNPlayers(); i++) {
+            for(int i = 0; i < gameState.getNPlayers(playerId); i++) {
                 playerHands[i].update(this.gameState);
 
 

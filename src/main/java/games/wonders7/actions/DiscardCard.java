@@ -50,9 +50,8 @@ public class DiscardCard extends DrawCard {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DiscardCard)) return false;
+        if (!(o instanceof DiscardCard that)) return false;
         if (!super.equals(o)) return false;
-        DiscardCard that = (DiscardCard) o;
         return player == that.player && cardType == that.cardType;
     }
 

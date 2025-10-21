@@ -21,7 +21,7 @@ public class RHEAIndividual implements Comparable<RHEAIndividual> {
     double discountFactor;            // Discount factor for calculating rewards
     IStateHeuristic heuristic;
     AbstractPlayer rolloutPolicy;
-    private Random gen;               // Random generator
+    private final Random gen;               // Random generator
 
     RHEAIndividual(int L, double discountFactor, AbstractForwardModel fm, AbstractGameState gs,
                    int playerID, Random gen, IStateHeuristic heuristic,
@@ -191,10 +191,9 @@ public class RHEAIndividual implements Comparable<RHEAIndividual> {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof RHEAIndividual)) return false;
+        if (!(o instanceof RHEAIndividual b)) return false;
 
         RHEAIndividual a = this;
-        RHEAIndividual b = (RHEAIndividual) o;
 
         for (int i = 0; i < actions.length; i++) {
             if (!a.actions[i].equals(b.actions[i])) return false;
@@ -205,7 +204,7 @@ public class RHEAIndividual implements Comparable<RHEAIndividual> {
 
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder("" + value + ": ");
+        StringBuilder s = new StringBuilder(value + ": ");
         for (AbstractAction action : actions) s.append(action).append(" ");
         return s.toString();
     }

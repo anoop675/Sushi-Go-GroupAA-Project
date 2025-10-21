@@ -64,9 +64,8 @@ public class HeartsParameters extends AbstractParameters {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof HeartsParameters)) return false;
+        if (!(o instanceof HeartsParameters that)) return false;
         if (!super.equals(o)) return false;
-        HeartsParameters that = (HeartsParameters) o;
         return Objects.equals(dataPath, that.dataPath);
     }
 

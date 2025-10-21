@@ -114,7 +114,7 @@ public class ItsMyBirthdayAction extends AbstractAction implements IExtendedSequ
 
     @Override
     public boolean execute(AbstractGameState gs) {
-        collectedRent = new boolean[gs.getNPlayers()];
+        collectedRent = new boolean[gs.getNPlayers(playerId)];
         collectedRent[playerID] = true;
         // Discard card used
         MonopolyDealGameState MDGS = (MonopolyDealGameState) gs;

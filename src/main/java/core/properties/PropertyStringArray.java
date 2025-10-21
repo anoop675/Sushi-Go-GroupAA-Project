@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class PropertyStringArray extends Property
 {
-    private String[] values;
+    private final String[] values;
 
     public PropertyStringArray(String hashString, JSONArray values)
     {

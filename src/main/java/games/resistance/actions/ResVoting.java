@@ -30,8 +30,7 @@ public class ResVoting extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ResVoting)) return false;
-        ResVoting that = (ResVoting) o;
+        if (!(o instanceof ResVoting that)) return false;
         return playerId == that.playerId && cardType == that.cardType;
     }
 

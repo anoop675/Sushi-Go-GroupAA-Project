@@ -110,14 +110,14 @@ public class MaxNSearchPlayer extends AbstractPlayer implements IHasStateHeurist
             // when valuing a state, we need to record the full vector of values for each player
             // as all of these need to be back-propagated up so that the relevant one can be used for decision-making
             // if paranoid and this action belongs to another player, we assume they try to minimise our score
-            double[] values = new double[state.getNPlayers()];
+            double[] values = new double[state.getNPlayers(playerId)];
             if (params.paranoid) {
                 double value = params.heuristic.evaluateState(state, getPlayerID());
-                for (int i = 0; i < state.getNPlayers(); i++) {
+                for (int i = 0; i < state.getNPlayers(playerId); i++) {
                     values[i] = i == getPlayerID() ? value : -value;
                 }
             } else {
-                for (int i = 0; i < state.getNPlayers(); i++) {
+                for (int i = 0; i < state.getNPlayers(playerId); i++) {
                     values[i] = params.heuristic.evaluateState(state, i);
                 }
             }
@@ -125,14 +125,14 @@ public class MaxNSearchPlayer extends AbstractPlayer implements IHasStateHeurist
         }
 
         // otherwise we recurse to find the best action and value
-        double[] bestValues = new double[state.getNPlayers()];
+        double[] bestValues = new double[state.getNPlayers(playerId)];
         double bestValue = Double.NEGATIVE_INFINITY;
         AbstractAction bestAction = null;
         // we shuffle the actions so that ties are broken at random
         if (params.expandByEstimatedValue) {
             // sort actions based on actionValueEstimates (with highest value first)
             actions.sort(Comparator.comparingDouble(a -> -actionValueEstimates.get(searchDepth - 1)
-                    .getOrDefault(a, new ActionStats(state.getNPlayers()))
+                    .getOrDefault(a, new ActionStats(state.getNPlayers(playerId)))
                     .totValue[state.getCurrentPlayer()]));
         } else {
             Collections.shuffle(actions, getRnd());
@@ -158,7 +158,7 @@ public class MaxNSearchPlayer extends AbstractPlayer implements IHasStateHeurist
             if (params.expandByEstimatedValue) {
                 // we store the value estimates for each action
                 if (!statsMap.containsKey(action)) {
-                    statsMap.put(action, new ActionStats(state.getNPlayers()));
+                    statsMap.put(action, new ActionStats(state.getNPlayers(playerId)));
                 }
                 statsMap.get(action).update(result.value);
             }

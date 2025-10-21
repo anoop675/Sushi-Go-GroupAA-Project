@@ -23,7 +23,7 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
         ExplodingKittensParameters ekp = (ExplodingKittensParameters) firstState.getGameParameters();
         ekgs.playerHandCards = new ArrayList<>();
         // Set up draw pile deck
-        PartialObservableDeck<ExplodingKittensCard> drawPile = new PartialObservableDeck<>("Draw Pile", -1, firstState.getNPlayers(), CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
+        PartialObservableDeck<ExplodingKittensCard> drawPile = new PartialObservableDeck<>("Draw Pile", -1, firstState.getNPlayers(playerId), CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         ekgs.drawPile = drawPile;
         ekgs.inPlay = new Deck<>("In Play", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
 
@@ -39,9 +39,9 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
         ekgs.drawPile.shuffle(ekgs.getRnd());
 
         // Set up player hands
-        List<PartialObservableDeck<ExplodingKittensCard>> playerHandCards = new ArrayList<>(firstState.getNPlayers());
-        for (int i = 0; i < firstState.getNPlayers(); i++) {
-            boolean[] visible = new boolean[firstState.getNPlayers()];
+        List<PartialObservableDeck<ExplodingKittensCard>> playerHandCards = new ArrayList<>(firstState.getNPlayers(playerId));
+        for (int i = 0; i < firstState.getNPlayers(playerId); i++) {
+            boolean[] visible = new boolean[firstState.getNPlayers(playerId)];
             visible[i] = true;
             PartialObservableDeck<ExplodingKittensCard> playerCards = new PartialObservableDeck<>("Player Cards", i, visible);
             playerHandCards.add(playerCards);
@@ -62,17 +62,17 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
         ekgs.discardPile = new Deck<>("Discard Pile", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
 
         // Add remaining defuse cards and exploding kitten cards to the deck and shuffle again
-        for (int i = ekgs.getNPlayers(); i < ekp.cardCounts.get(DEFUSE); i++) {
+        for (int i = ekgs.getNPlayers(playerId); i < ekp.cardCounts.get(DEFUSE); i++) {
             ExplodingKittensCard defuse = new ExplodingKittensCard(DEFUSE);
             drawPile.add(defuse);
         }
-        for (int i = 0; i < ekgs.getNPlayers() + ekp.cardCounts.get(EXPLODING_KITTEN); i++) {
+        for (int i = 0; i < ekgs.getNPlayers(playerId) + ekp.cardCounts.get(EXPLODING_KITTEN); i++) {
             ExplodingKittensCard explodingKitten = new ExplodingKittensCard(EXPLODING_KITTEN);
             drawPile.add(explodingKitten);
         }
         drawPile.shuffle(ekgs.getRnd());
 
-        ekgs.orderOfPlayerDeath = new int[ekgs.getNPlayers()];
+        ekgs.orderOfPlayerDeath = new int[ekgs.getNPlayers(playerId)];
         ekgs.currentPlayerTurnsLeft = 1;
         ekgs.setGamePhase(CoreConstants.DefaultGamePhase.Main);
     }
@@ -146,7 +146,7 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
                 return Set.of();
             }
         });
-        int players = ekgs.getNPlayers();
+        int players = ekgs.getNPlayers(playerId);
         int nPlayersActive = 0;
         for (int i = 0; i < players; i++) {
             if (ekgs.getPlayerResults()[i] == CoreConstants.GameResult.GAME_ONGOING) nPlayersActive++;
@@ -187,7 +187,7 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
         for (ExplodingKittensCard.CardType type : playableTypes) {
             switch (type) {
                 case FAVOR:
-                    for (int i = 0; i < ekgs.getNPlayers(); i++) {
+                    for (int i = 0; i < ekgs.getNPlayers(playerId); i++) {
                         if (i != playerID) {
                             if (ekgs.isNotTerminalForPlayer(i) && ekgs.getPlayerHand(i).getSize() > 0)
                                 actions.add(new PlayEKCard(FAVOR, i));
@@ -199,7 +199,7 @@ public class ExplodingKittensForwardModel extends StandardForwardModel {
                     break;
                 default:
                     // for Cat Cards we need a pair
-                    for (int i = 0; i < ekgs.getNPlayers(); i++) {
+                    for (int i = 0; i < ekgs.getNPlayers(playerId); i++) {
                         if (i != playerID) {
                             if (ekgs.isNotTerminalForPlayer(i) && ekgs.getPlayerHand(i).getSize() > 0)
                                 if (ekgs.playerHandCards.get(playerID).stream().filter(c -> c.cardType == type).count() > 1)

@@ -137,7 +137,7 @@ public class TMHeuristic extends TunableParameters implements IStateHeuristic {
         int nEventsPlayed = gs.playerCardsPlayedTypes[playerId].get(TMTypes.CardType.Event).getValue();
 
         boolean shouldTerraform = false;
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             if (i != playerId && gs.playerCardsPlayedTypes[i].get(TMTypes.CardType.Active).getValue() >= nActiveCardsPlayed + nActiveCardsDiffForTerraform) {
                 shouldTerraform = true;
                 break;
@@ -320,9 +320,8 @@ public class TMHeuristic extends TunableParameters implements IStateHeuristic {
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TMHeuristic)) return false;
+        if (!(o instanceof TMHeuristic that)) return false;
         if (!super.equals(o)) return false;
-        TMHeuristic that = (TMHeuristic) o;
         return Double.compare(that.cardsPlayedWeight, cardsPlayedWeight) == 0 && Double.compare(that.productionWeight, productionWeight) == 0 && Double.compare(that.bonusRewardWeight, bonusRewardWeight) == 0 && Double.compare(that.bonusPenaltyWeight, bonusPenaltyWeight) == 0 && Double.compare(that.milestoneRewardWeight, milestoneRewardWeight) == 0 && Double.compare(that.milestonePenaltyWeight, milestonePenaltyWeight) == 0 && Double.compare(that.milestoneUnclaimedWeight, milestoneUnclaimedWeight) == 0 && Double.compare(that.awardFundPenaltyWeight, awardFundPenaltyWeight) == 0 && Double.compare(that.awardFundRewardWeight, awardFundRewardWeight) == 0 && Double.compare(that.awardScoreWeight, awardScoreWeight) == 0 && Double.compare(that.unplayableCardWeight, unplayableCardWeight) == 0 && Double.compare(that.expensiveCardWeight, expensiveCardWeight) == 0 && Double.compare(that.unnecessaryEventCardWeight, unnecessaryEventCardWeight) == 0 && Double.compare(that.unnecessaryAutomatedCardWeight, unnecessaryAutomatedCardWeight) == 0 && nActiveCardsDiffForTerraform == that.nActiveCardsDiffForTerraform && maxProduction == that.maxProduction && maxAwardScore == that.maxAwardScore && expensiveCardThreshold == that.expensiveCardThreshold && Objects.equals(resourceProductionWeight, that.resourceProductionWeight);
     }
 

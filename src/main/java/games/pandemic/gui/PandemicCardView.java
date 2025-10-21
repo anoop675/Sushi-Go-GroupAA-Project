@@ -128,11 +128,8 @@ public class PandemicCardView extends CardView {
 
         if (card != null) {
             Property name = card.getProperty(nameHash);
-            boolean event = false;
-            if (card.getProperty(effectHash) != null) {
-                // Event card
-                event = true;
-            }
+            boolean event = card.getProperty(effectHash) != null;
+            // Event card
             PropertyColor col = (PropertyColor)card.getProperty(colorHash);
             if (col != null) {
                 Color c = Utils.stringToColor(col.valueStr);

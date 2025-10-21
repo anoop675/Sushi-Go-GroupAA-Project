@@ -79,8 +79,7 @@ public class Chapel extends DominionAction implements IExtendedSequence {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Chapel) {
-            Chapel other = (Chapel) obj;
+        if (obj instanceof Chapel other) {
             return super.equals(obj) && other.executed == executed;
         }
         return false;

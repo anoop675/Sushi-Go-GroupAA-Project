@@ -36,8 +36,7 @@ public class Plantation extends Component {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Plantation) {
-            Plantation p = (Plantation) obj;
+        if (obj instanceof Plantation p) {
             return this.crop == p.crop && this.occupied == p.occupied && super.equals(obj);
         }
         return false;

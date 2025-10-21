@@ -118,9 +118,8 @@ public class ChoiceAction extends TMAction implements IExtendedSequence {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChoiceAction)) return false;
+        if (!(o instanceof ChoiceAction that)) return false;
         if (!super.equals(o)) return false;
-        ChoiceAction that = (ChoiceAction) o;
         return finished == that.finished && Arrays.equals(actions, that.actions);
     }
 

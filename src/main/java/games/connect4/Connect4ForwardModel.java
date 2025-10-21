@@ -70,7 +70,7 @@ public class Connect4ForwardModel extends SequentialActionForwardModel {
         GridBoard gridBoard = gameState.getGridBoard();
         Connect4GameParameters c4gp = (Connect4GameParameters) gameState.getGameParameters();
         boolean gap = false;
-        LinkedList<Pair<Integer, Integer>> winning = new LinkedList<>();;
+        LinkedList<Pair<Integer, Integer>> winning = new LinkedList<>();
 
         // Check columns
         for (int x = 0; x < gridBoard.getWidth(); x++) {

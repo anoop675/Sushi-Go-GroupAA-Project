@@ -115,7 +115,7 @@ public class LoveLetterPlayerView extends JPanel {
         discardCards.setToolTipText(text);
 
         nPoints = gameState.getAffectionTokens()[playerId];
-        nPointsWin = (gameState.getNPlayers() == 2? params.nTokensWin2 : gameState.getNPlayers() == 3? params.nTokensWin3 : params.nTokensWin4);
+        nPointsWin = (gameState.getNPlayers(playerId) == 2? params.nTokensWin2 : gameState.getNPlayers(playerId) == 3? params.nTokensWin3 : params.nTokensWin4);
 
     }
 }

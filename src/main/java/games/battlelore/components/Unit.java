@@ -17,7 +17,7 @@ public class Unit extends Component {
 
     //Each unit consist of 3 soldiers. Since a unit can only have one type of soldier, there is no need to create different classes.
     //Variables
-    private String id;
+    private final String id;
     public String name;
     public String shortName;
     public Faction faction;
@@ -29,7 +29,7 @@ public class Unit extends Component {
     public boolean isMelee;
 
     public enum Faction {
-        Uthuk_Yllan, Dakhan_Lords, NA;
+        Uthuk_Yllan, Dakhan_Lords, NA
     }
 
     public Unit() {
@@ -112,7 +112,7 @@ public class Unit extends Component {
             return true;
         }
 
-        if (!(o instanceof Unit)) {
+        if (!(o instanceof Unit unit)) {
             return false;
         }
 
@@ -120,7 +120,6 @@ public class Unit extends Component {
             return false;
         }
 
-        Unit unit = (Unit) o;
         return id.equals(unit.id) &&
                 componentID == unit.componentID &&
                 type == unit.type &&
@@ -137,19 +136,18 @@ public class Unit extends Component {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unit: Name=");
-        sb.append(name.toString());
-        sb.append("; MoveRange=");
-        sb.append(moveRange);
-        sb.append("; CanMove=");
-        sb.append(canMove);
-        sb.append("; CanAttack=");
-        sb.append(canAttack);
-        sb.append("; Health=");
-        sb.append(health);
+        String sb = "Unit: Name=" +
+                name +
+                "; MoveRange=" +
+                moveRange +
+                "; CanMove=" +
+                canMove +
+                "; CanAttack=" +
+                canAttack +
+                "; Health=" +
+                health;
 
-        return sb.toString();
+        return sb;
     }
 
     public static List<Unit> loadUnits(String filename) {

@@ -48,7 +48,7 @@ public class SGGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
 
                 // Find required size of window. nxn grid of player areas
-                int nPlayers = gameState.getNPlayers();
+                int nPlayers = gameState.getNPlayers(playerId);
                 int perColumn = (int)Math.ceil(Math.sqrt(nPlayers));
                 int nVertAreas = (int)Math.ceil((double)nPlayers / perColumn);
                 this.width = playerAreaWidth * perColumn;
@@ -171,7 +171,7 @@ public class SGGUIManager extends AbstractGUIManager {
 
                 // Update decks and visibility
                 SGGameState parsedGameState = (SGGameState) gameState;
-                for (int i = 0; i < gameState.getNPlayers(); i++) {
+                for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                     playerHands[i].update(parsedGameState);
                     if (i == gameState.getCurrentPlayer()
                             || humanPlayerIds.contains(i)) {
@@ -193,7 +193,7 @@ public class SGGUIManager extends AbstractGUIManager {
             } else {
                 // Highlight winner
                 Set<Integer> winner = gameState.getWinners();
-                for (int i = 0; i < gameState.getNPlayers(); i++) {
+                for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                     if (winner.contains(i)) {
                         Border compound = BorderFactory.createCompoundBorder(
                                 highlightWin, playerViewWinBorders[i]);

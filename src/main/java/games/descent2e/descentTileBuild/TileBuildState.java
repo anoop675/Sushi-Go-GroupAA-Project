@@ -40,7 +40,7 @@ public class TileBuildState extends AbstractGameState {
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        TileBuildState copy = new TileBuildState(gameParameters, getNPlayers());
+        TileBuildState copy = new TileBuildState(gameParameters, getNPlayers(playerId));
         copy.tile = tile.copy();
         return copy;
     }

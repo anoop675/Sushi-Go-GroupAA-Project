@@ -87,12 +87,11 @@ public class JSONUtils {
             }
 
             // 2. now look for a constructor that takes a set of args
-            if (json.containsKey("args") && json.get("args") instanceof JSONArray) {
+            if (json.containsKey("args") && json.get("args") instanceof JSONArray argArray) {
                 // we have a set of args, so we need to find the constructor that matches
                 // first we need to get the args
                 // this is a JSONArray, so we need to convert it to an array of objects
                 // and then find the constructor that matches
-                JSONArray argArray = (JSONArray) json.get("args");
 
                 Class<?>[] argClasses = new Class[argArray.size()];
                 Object[] args = new Object[argArray.size()];

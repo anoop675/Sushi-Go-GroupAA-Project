@@ -35,16 +35,16 @@ public class UnoHeuristic extends TunableParameters implements IStateHeuristic {
         if (playerResult == CoreConstants.GameResult.WIN_GAME)
             return 1;
 
-        int nColors = ugp.colors.length;
+        int nColors = UnoGameParameters.colors.length;
         int deckSize = ugp.nDrawCards * ugp.specialDrawCards.length * nColors
                 + ugp.nReverseCards * nColors
                 + ugp.nSkipCards * nColors
                 + ugp.nNumberCards * nColors
                 + ugp.nWildCards * ugp.specialWildDrawCards.length;
 
-        double F_OPPONENT = FACTOR_OPPONENT / (ugs.getNPlayers() - 1);
+        double F_OPPONENT = FACTOR_OPPONENT / (ugs.getNPlayers(playerId) - 1);
         double rawScore = 0;
-        for (int i = 0; i < ugs.getNPlayers(); i++) {
+        for (int i = 0; i < ugs.getNPlayers(playerId); i++) {
             double s = 1.0 * ugs.calculatePlayerPoints(i, true) / (ugp.nWinPoints * 2);
             if (i == playerId) {
                 rawScore += s * FACTOR_PLAYER;
@@ -80,8 +80,7 @@ public class UnoHeuristic extends TunableParameters implements IStateHeuristic {
      */
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof UnoHeuristic) {
-            UnoHeuristic other = (UnoHeuristic) o;
+        if (o instanceof UnoHeuristic other) {
             return other.FACTOR_OPPONENT == FACTOR_OPPONENT && other.FACTOR_PLAYER == FACTOR_PLAYER &&
                     other.FACTOR_N_CARDS == FACTOR_N_CARDS;
         }

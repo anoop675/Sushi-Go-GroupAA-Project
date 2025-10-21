@@ -172,7 +172,7 @@ public enum PlayerType {
     }
 
     // Properties of this AI player type
-    private ArrayList<Property> properties;
+    private final ArrayList<Property> properties;
     PlayerType(ArrayList<Property> properties) {
         this.properties = properties;
     }

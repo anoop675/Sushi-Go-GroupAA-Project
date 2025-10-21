@@ -52,8 +52,7 @@ public abstract class PlayCardDeep extends PlayCard implements IExtendedSequence
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlayCardDeep)) return false;
-        PlayCardDeep that = (PlayCardDeep) o;
+        if (!(o instanceof PlayCardDeep that)) return false;
         return playerID == that.playerID && executed == that.executed && cardType == that.cardType;
     }
 

@@ -20,7 +20,7 @@ public class RootDeckView extends DeckView<RootCard> {
         super(player, d, visible, cardWidth, cardHeight, rect);
         this.dataPath = dataPath;
         this.front = visible;
-        backOfCard = ImageIO.GetInstance().getImage(dataPath + "back.png");;
+        backOfCard = ImageIO.GetInstance().getImage(dataPath + "back.png");
     }
 
     @Override

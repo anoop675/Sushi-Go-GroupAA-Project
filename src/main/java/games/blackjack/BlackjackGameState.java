@@ -96,7 +96,7 @@ public class BlackjackGameState extends AbstractGameState implements IPrintable 
 
     @Override
     protected AbstractGameState _copy(int playerId) {
-        BlackjackGameState copy = new BlackjackGameState(gameParameters.copy(), getNPlayers());
+        BlackjackGameState copy = new BlackjackGameState(gameParameters.copy(), getNPlayers(playerId));
         copy.playerDecks = new ArrayList<>();
         for (PartialObservableDeck<FrenchCard> d : playerDecks) {
             copy.playerDecks.add(d.copy());
@@ -158,9 +158,8 @@ public class BlackjackGameState extends AbstractGameState implements IPrintable 
     @Override
     public boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BlackjackGameState)) return false;
+        if (!(o instanceof BlackjackGameState that)) return false;
         if (!super.equals(o)) return false;
-        BlackjackGameState that = (BlackjackGameState) o;
         return dealerPlayer == that.dealerPlayer && Objects.equals(playerDecks, that.playerDecks) && Objects.equals(drawDeck, that.drawDeck);
     }
 

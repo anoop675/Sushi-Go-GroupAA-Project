@@ -22,8 +22,7 @@ public class DBCell extends Component {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DBCell)) return false;
-        DBCell dbCell = (DBCell) o;
+        if (!(o instanceof DBCell dbCell)) return false;
         return Objects.equals(position, dbCell.position);
     }
 

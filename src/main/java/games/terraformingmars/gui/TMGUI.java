@@ -191,7 +191,7 @@ public class TMGUI extends AbstractGUIManager {
         jLabel1.setFont(defaultFont);
         jLabel1.setForeground(fontColor);
         playerFlipButtons.add(jLabel1);
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             String text = "p" + i;
             JButton jb = new JButton(text);
             jb.setFont(defaultFont);
@@ -497,7 +497,7 @@ public class TMGUI extends AbstractGUIManager {
     private String getInvalidActionReason(TMAction action, TMGameState gs) {
         String reason = "<html>Reasons:<br/>";
         for (Requirement<TMGameState> req: action.requirements) {
-            if (req.testCondition(gs)) reason += "OK: " + req.toString() + "<br/>";
+            if (req.testCondition(gs)) reason += "OK: " + req + "<br/>";
             else reason += "FAIL: " + req.getReasonForFailure(gs).replace("\n", "<br/>") + "<br/>";
         }
         reason += "</html>";
@@ -515,7 +515,7 @@ public class TMGUI extends AbstractGUIManager {
             if (gameState.getGameStatus() == CoreConstants.GameResult.GAME_END) {
                 int win = -1;
                 String displayText = "<html><table><tr><td>Player</td><td>TR</td><td>Milestones</td><td>Awards</td><td>Board</td><td>Cards</td><td>Total</td></tr>";
-                for (int i = 0; i < gameState.getNPlayers(); i++) {
+                for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
                     if (gameState.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME) win = i;
 
                     int tr = gs.getPlayerResources()[i].get(TMTypes.Resource.TR).getValue();

@@ -80,9 +80,8 @@ public class PandemicTurnOrder extends ReactiveTurnOrder {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PandemicTurnOrder)) return false;
+        if (!(o instanceof PandemicTurnOrder that)) return false;
         if (!super.equals(o)) return false;
-        PandemicTurnOrder that = (PandemicTurnOrder) o;
         return nStepsPerTurn == that.nStepsPerTurn &&
                 turnStep == that.turnStep;
     }

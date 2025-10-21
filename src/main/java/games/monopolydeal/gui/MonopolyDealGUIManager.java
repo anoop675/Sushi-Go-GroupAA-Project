@@ -59,7 +59,7 @@ public class MonopolyDealGUIManager extends AbstractGUIManager {
             activePlayer = gameState.getCurrentPlayer();
 
             // Find required size of window
-            int nPlayers = gameState.getNPlayers();
+            int nPlayers = gameState.getNPlayers(playerId);
             this.width = playerAreaWidth + 20;
             this.height = defaultInfoPanelHeight + defaultActionPanelHeight + MonopolyDealCardHeight * 4;
 
@@ -155,7 +155,7 @@ public class MonopolyDealGUIManager extends AbstractGUIManager {
                 activePlayer = gameState.getCurrentPlayer();
             }
             // Clearing all properties
-            for(int i=0;i<gameState.getNPlayers();i++){
+            for(int i = 0; i<gameState.getNPlayers(playerId); i++){
                 for(int j=0;j<10;j++){
                     playerViews[i].properties[j].updateComponent(new Deck<MonopolyDealCard>("PropertySet", CoreConstants.VisibilityMode.VISIBLE_TO_ALL));
                 }
@@ -164,7 +164,7 @@ public class MonopolyDealGUIManager extends AbstractGUIManager {
             // Update decks and visibility
             MonopolyDealGameState mdgs = (MonopolyDealGameState) gameState;
 
-            for (int i = 0; i < gameState.getNPlayers(); i++){
+            for (int i = 0; i < gameState.getNPlayers(playerId); i++){
                 playerViews[i].hand.updateComponent(mdgs.getPlayerHand(i));
                 playerViews[i].hand.setFront(false);
                 mdgs.getPlayerBank(i).setComponentName("Bank: " + mdgs.getBankValue(i) + "M");

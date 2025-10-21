@@ -52,7 +52,7 @@ public class ChessGameState extends AbstractGameState {
 
     @Override
     protected ChessGameState _copy(int playerId) {
-        ChessGameState copy = new ChessGameState(getGameParameters(), getNPlayers());
+        ChessGameState copy = new ChessGameState(getGameParameters(), getNPlayers(playerId));
         copy.whitePieces = new ArrayList<>();
         copy.whitePieces.addAll(whitePieces.stream().map(ChessPiece::copy).toList());
         copy.blackPieces = new ArrayList<>();
@@ -132,7 +132,7 @@ public class ChessGameState extends AbstractGameState {
         if (isNotTerminal()) {
             return 0;
         } else {
-            return (double) (getPlayerResults()[playerId].value+1) / 2.0;
+            return (getPlayerResults()[playerId].value+1) / 2.0;
         }
     }
 
@@ -379,9 +379,7 @@ public class ChessGameState extends AbstractGameState {
         int boardHash = Objects.hash(board.hashCode(), getCurrentPlayer());
         if (gameStateCounts.containsKey(boardHash)) {
             gameStateCounts.put(boardHash, gameStateCounts.get(boardHash) + 1);
-            if (gameStateCounts.get(boardHash) >= 3) { 
-                return true; // Draw by repetition
-            }
+            return gameStateCounts.get(boardHash) >= 3; // Draw by repetition
         } else {
             gameStateCounts.put(boardHash, 1); // Add the new board state to the map
         }
@@ -406,13 +404,12 @@ public class ChessGameState extends AbstractGameState {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Chess Game State Hash:").append(hashCode()).append("\n");
-        sb.append("White Pieces: ").append(whitePieces.hashCode()).append("\n");
-        sb.append("Black Pieces: ").append(blackPieces.hashCode()).append("\n");
-        sb.append("Game State Counts: ").append(gameStateCounts.hashCode()).append("\n");
-        sb.append("Half Move Clock: ").append(halfMoveClock).append("\n");
-        sb.append("Board:\n").append(board.hashCode()).append("\n");
-        return sb.toString();
+        String sb = "Chess Game State Hash:" + hashCode() + "\n" +
+                "White Pieces: " + whitePieces.hashCode() + "\n" +
+                "Black Pieces: " + blackPieces.hashCode() + "\n" +
+                "Game State Counts: " + gameStateCounts.hashCode() + "\n" +
+                "Half Move Clock: " + halfMoveClock + "\n" +
+                "Board:\n" + board.hashCode() + "\n";
+        return sb;
     }
 }

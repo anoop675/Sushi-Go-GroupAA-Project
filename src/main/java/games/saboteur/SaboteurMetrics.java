@@ -33,7 +33,7 @@ public class SaboteurMetrics implements IMetricsCollection {
         @Override
         protected boolean _run(MetricsGameListener listener, Event e, Map<String, Object> records) {
             SaboteurGameState sgs = (SaboteurGameState) e.state;
-            for (int p = 0; p < sgs.getNPlayers(); p++) {
+            for (int p = 0; p < sgs.getNPlayers(playerId); p++) {
                 RoleCard card = (RoleCard) sgs.roleDeck.get(p);
                 records.put("Player" + p + "_Role", card.type.name());
             }

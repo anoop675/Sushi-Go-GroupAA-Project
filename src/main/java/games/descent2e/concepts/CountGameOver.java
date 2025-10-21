@@ -3,7 +3,6 @@ package games.descent2e.concepts;
 import core.CoreConstants;
 import games.descent2e.DescentGameState;
 import org.json.simple.JSONObject;
-import utilities.Utils;
 
 import java.util.Objects;
 
@@ -47,7 +46,7 @@ public class CountGameOver extends GameOverCondition {
 
     private CoreConstants.GameResult endGame(DescentGameState gs) {
         gs.setGameStatus(CoreConstants.GameResult.GAME_END);
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             if (gs.getOverlordPlayer() == i) gs.setPlayerResult(resultOverlord, i);
             else gs.setPlayerResult(resultHeroes, i);
         }

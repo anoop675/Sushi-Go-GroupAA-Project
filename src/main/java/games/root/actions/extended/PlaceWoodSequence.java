@@ -38,11 +38,7 @@ public class PlaceWoodSequence extends AbstractAction implements IExtendedSequen
                     }
                 }
             }
-            if (currentState.getWood() >= sawmills){
-                canPlaceEverywhere = true;
-            }else {
-                canPlaceEverywhere = false;
-            }
+            canPlaceEverywhere = currentState.getWood() >= sawmills;
             currentState.increaseActionsPlayed();
             currentState.setActionInProgress(this);
             return true;

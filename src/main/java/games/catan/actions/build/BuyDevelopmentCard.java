@@ -45,8 +45,7 @@ public class BuyDevelopmentCard extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BuyDevelopmentCard)) return false;
-        BuyDevelopmentCard that = (BuyDevelopmentCard) o;
+        if (!(o instanceof BuyDevelopmentCard that)) return false;
         return player == that.player;
     }
 

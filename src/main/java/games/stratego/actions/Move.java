@@ -32,8 +32,7 @@ public abstract class Move extends AbstractAction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Move)) return false;
-        Move move = (Move) o;
+        if (!(o instanceof Move move)) return false;
         return movedPieceID == move.movedPieceID && Objects.equals(position, move.position);
     }
 

@@ -56,8 +56,7 @@ public class HanabiParameters extends TunableParameters {
     @Override
     protected boolean _equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof HanabiParameters)) return false;
-        HanabiParameters that = (HanabiParameters) o;
+        if (!(o instanceof HanabiParameters that)) return false;
 
         return nNumberCards == that.nNumberCards &&
                 hintCounter == that.hintCounter &&

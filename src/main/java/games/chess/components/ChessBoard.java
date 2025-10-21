@@ -8,7 +8,7 @@ import core.CoreConstants;
 public class ChessBoard extends Component {
 
     private ChessPiece[][] board = new ChessPiece[8][8]; // 8x8 chess board
-    private int size = 8; // Standard chess board size
+    private final int size = 8; // Standard chess board size
 
     public ChessBoard() {
         super(CoreConstants.ComponentType.BOARD, "ChessBoard");

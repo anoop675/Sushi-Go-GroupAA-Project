@@ -91,8 +91,8 @@ public class CatanGUI extends AbstractGUIManager implements IScreenHighlight {
         mainPanel.setOpaque(false);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         // each player have their own panel
-        playerPanels = new PlayerPanel[gs.getNPlayers()];
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        playerPanels = new PlayerPanel[gs.getNPlayers(playerId)];
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             playerPanels[i] = new PlayerPanel(this, i, game.getPlayers().get(i).toString());
             playerPanels[i].setOpaque(false);
         }
@@ -235,67 +235,56 @@ public class CatanGUI extends AbstractGUIManager implements IScreenHighlight {
                 // Trim what the set of actions currently require
                 filtersAvailable.clear();
                 for (AbstractAction aa : actions) {
-                    if (aa instanceof DeepPlaceSettlementThenRoad) {
-                        DeepPlaceSettlementThenRoad a = (DeepPlaceSettlementThenRoad) aa;
+                    if (aa instanceof DeepPlaceSettlementThenRoad a) {
                         Filter f = Filter.Vertex;
                         f.ref = new Pair<>(new Point(a.x, a.y), a.vertex);
                         filtersAvailable.add(f);
-                    } else if (aa instanceof BuildRoad) {
-                        BuildRoad a = (BuildRoad) aa;
+                    } else if (aa instanceof BuildRoad a) {
                         Filter f = Filter.Edge;
                         f.ref = new Pair<>(new Point(a.x, a.y), a.edge);
                         filtersAvailable.add(f);
-                    } else if (aa instanceof BuildCity) {
-                        BuildCity a = (BuildCity) aa;
+                    } else if (aa instanceof BuildCity a) {
                         Filter f = Filter.Vertex;
                         f.ref = new Pair<>(new Point(a.col, a.row), a.vertex);
                         filtersAvailable.add(f);
-                    } else if (aa instanceof BuildSettlement) {
-                        BuildSettlement a = (BuildSettlement) aa;
+                    } else if (aa instanceof BuildSettlement a) {
                         Filter f = Filter.Vertex;
                         f.ref = new Pair<>(new Point(a.x, a.y), a.vertex);
                         filtersAvailable.add(f);
-                    } else if (aa instanceof MoveRobberAndSteal) {
-                        MoveRobberAndSteal a = (MoveRobberAndSteal) aa;
+                    } else if (aa instanceof MoveRobberAndSteal a) {
                         Filter f1 = Filter.Player;
                         f1.ref = a.targetPlayer;
                         filtersAvailable.add(f1);
                         Filter f2 = Filter.Tile;
                         f2.ref = new Point(a.x, a.y);
                         filtersAvailable.add(f2);
-                    } else if (aa instanceof MoveRobber) {
-                        MoveRobber a = (MoveRobber) aa;
+                    } else if (aa instanceof MoveRobber a) {
                         Filter f2 = Filter.Tile;
                         f2.ref = new Point(a.x, a.y);
                         filtersAvailable.add(f2);
-                    } else if (aa instanceof PlaceSettlementWithRoad) {
-                        PlaceSettlementWithRoad a = (PlaceSettlementWithRoad) aa;
+                    } else if (aa instanceof PlaceSettlementWithRoad a) {
                         Filter f = Filter.Vertex;
                         f.ref = new Pair<>(new Point(a.x, a.y), a.vertex);
                         filtersAvailable.add(f);
                         Filter f2 = Filter.Edge;
                         f2.ref = new Pair<>(new Point(a.x, a.y), a.edge);
                         filtersAvailable.add(f2);
-                    } else if (aa instanceof DiscardResources) {
-                        DiscardResources a = (DiscardResources) aa;
+                    } else if (aa instanceof DiscardResources a) {
                         Filter f = Filter.Resource;
                         f.ref = a.resourcesToDiscard;
                         filtersAvailable.add(f);
-                    } else if (aa instanceof DefaultTrade) {
-                        DefaultTrade a = (DefaultTrade) aa;
+                    } else if (aa instanceof DefaultTrade a) {
                         Filter f = Filter.Resource;
                         f.ref = new CatanParameters.Resource[] {a.resourceOffer, a.resourceToGet};
                         filtersAvailable.add(f);
-                    } else if (aa instanceof OfferPlayerTrade) {
-                        OfferPlayerTrade a = (OfferPlayerTrade) aa;
+                    } else if (aa instanceof OfferPlayerTrade a) {
                         Filter f = Filter.Resource;
                         f.ref = new CatanParameters.Resource[] {a.resourceOffered, a.resourceRequested};
                         filtersAvailable.add(f);
                         Filter f1 = Filter.Player;
                         f1.ref = a.otherPlayerID;
                         filtersAvailable.add(f1);
-                    } else if (aa instanceof StealResource) {
-                        StealResource a = (StealResource) aa;
+                    } else if (aa instanceof StealResource a) {
                         Filter f1 = Filter.Player;
                         f1.ref = a.targetPlayerID;
                         filtersAvailable.add(f1);
@@ -361,7 +350,7 @@ public class CatanGUI extends AbstractGUIManager implements IScreenHighlight {
         currentOffer.setText("Trade offered: " + (gs.getTradeOffer() != null? gs.getTradeOffer().getString(gameState) : "(none)"));
         resourcePool = new JLabel("Resource pool: " + resourcePrint(gs.getResourcePool(), (CatanParameters) gs.getGameParameters()));
 
-        for (int i = 0; i < gameState.getNPlayers(); i++) {
+        for (int i = 0; i < gameState.getNPlayers(playerId); i++) {
             playerPanels[i]._update((CatanGameState) gameState);
         }
 

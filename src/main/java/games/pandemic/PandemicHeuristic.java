@@ -99,8 +99,7 @@ public class PandemicHeuristic extends TunableParameters implements IStateHeuris
 
     @Override
     protected boolean _equals(Object o) {
-        if (o instanceof PandemicHeuristic) {
-            PandemicHeuristic other = (PandemicHeuristic) o;
+        if (o instanceof PandemicHeuristic other) {
             return other.FACTOR_RS == FACTOR_RS && other.FACTOR_OUTBREAKS == FACTOR_OUTBREAKS &&
                     other.FACTOR_CARDS_IN_HAND == FACTOR_CARDS_IN_HAND && other.FACTOR_CARDS_IN_PILE == FACTOR_CARDS_IN_PILE &&
                     other.FACTOR_CUBES == FACTOR_CUBES && other.FACTOR_CURES == FACTOR_CURES;

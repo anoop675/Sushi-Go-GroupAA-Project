@@ -150,7 +150,8 @@ public abstract class AbstractMetric {
     public void addDefaultData(Event e) {
         dataLogger.addData("GameID", String.valueOf(e.state.getGameID()));
         dataLogger.addData("GameName", e.state.getGameType().name());
-        dataLogger.addData("PlayerCount", String.valueOf(e.state.getNPlayers()));
+        int playerId = 0;
+        dataLogger.addData("PlayerCount", String.valueOf(e.state.getNPlayers(playerId)));
         dataLogger.addData("GameSeed", String.valueOf(e.state.getGameParameters().getRandomSeed()));
         dataLogger.addData("Tick", e.state.getGameTick());
         dataLogger.addData("Turn", e.state.getTurnCounter());
@@ -281,8 +282,7 @@ public abstract class AbstractMetric {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractMetric)) return false;
-        AbstractMetric that = (AbstractMetric) o;
+        if (!(o instanceof AbstractMetric that)) return false;
         return Objects.equals(eventTypes, that.eventTypes) && Arrays.equals(args, that.args) && Objects.equals(columnNames, that.columnNames);
     }
 

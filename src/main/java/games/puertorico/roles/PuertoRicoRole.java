@@ -8,7 +8,6 @@ import games.puertorico.PuertoRicoConstants;
 import games.puertorico.PuertoRicoGameState;
 import games.puertorico.actions.SelectRole;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.*;
 
 public abstract class PuertoRicoRole<T extends PuertoRicoRole<T>> implements IExtendedSequence {
@@ -21,7 +20,8 @@ public abstract class PuertoRicoRole<T extends PuertoRicoRole<T>> implements IEx
     public PuertoRicoRole(PuertoRicoGameState state, PuertoRicoConstants.Role roleType) {
         this.roleOwner = state.getCurrentPlayer();
         currentPlayer = roleOwner;
-        hasFinished = new boolean[state.getNPlayers()];
+        int playerId = 0;
+        hasFinished = new boolean[state.getNPlayers(playerId)];
         this.roleType = roleType;
         if (!roleType.allPlayers) {  // only the roleOwner takes an action
             for (int i = 0; i < hasFinished.length; i++) {
@@ -67,7 +67,8 @@ public abstract class PuertoRicoRole<T extends PuertoRicoRole<T>> implements IEx
             }
             // we move the currentPlayer on by one, until we find a player who has not finished
             // if all players have finished, then we have completed this action
-            setNextPlayerWithAvailableAction(state, (currentPlayer + 1) % state.getNPlayers());
+            int playerId = 0;
+            setNextPlayerWithAvailableAction(state, (currentPlayer + 1) % state.getNPlayers(playerId));
         }
 
         if (executionComplete(state)) {
@@ -85,8 +86,9 @@ public abstract class PuertoRicoRole<T extends PuertoRicoRole<T>> implements IEx
     private void setNextPlayerWithAvailableAction(PuertoRicoGameState state, int fromPlayer) {
         // we move the currentPlayer on by one, until we find a player who has not finished
         // if all players have finished, then we have completed this action
-        for (int i = 0; i < state.getNPlayers(); i++) {
-            int nextPlayer = (fromPlayer + i) % state.getNPlayers();
+        int playerId = 0;
+        for (int i = 0; i < state.getNPlayers(playerId); i++) {
+            int nextPlayer = (fromPlayer + i) % state.getNPlayers(playerId);
             if (!hasFinished[nextPlayer]) {
                 currentPlayer = nextPlayer;
                 List<AbstractAction> availableActions = _computeAvailableActions(state);
@@ -135,8 +137,7 @@ public abstract class PuertoRicoRole<T extends PuertoRicoRole<T>> implements IEx
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof PuertoRicoRole<?>) {
-            PuertoRicoRole<?> c = (PuertoRicoRole<?>) obj;
+        if (obj instanceof PuertoRicoRole<?> c) {
             return this.roleOwner == c.roleOwner && c.currentPlayer == currentPlayer &&
                     roleType == c.roleType &&
                     Arrays.equals(this.hasFinished, c.hasFinished);

@@ -21,8 +21,7 @@ public class DBEdge extends Component {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DBEdge)) return false;
-        DBEdge dbEdge = (DBEdge) o;
+        if (!(o instanceof DBEdge dbEdge)) return false;
         // from -> to == to -> from (and we don't care about owner for this comparison)
         return Objects.equals(from, dbEdge.from) && Objects.equals(to, dbEdge.to) ||
                 Objects.equals(from, dbEdge.to) && Objects.equals(to, dbEdge.from);

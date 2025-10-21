@@ -59,7 +59,7 @@ public class ExplodingKittensGameState extends AbstractGameState {
 
     @Override
     protected ExplodingKittensGameState _copy(int playerId) {
-        ExplodingKittensGameState ekgs = new ExplodingKittensGameState(gameParameters.copy(), getNPlayers());
+        ExplodingKittensGameState ekgs = new ExplodingKittensGameState(gameParameters.copy(), getNPlayers(playerId));
         ekgs.discardPile = discardPile.copy();
         ekgs.currentPlayerTurnsLeft = currentPlayerTurnsLeft;
         ekgs.nextAttackLevel = nextAttackLevel;
@@ -74,7 +74,7 @@ public class ExplodingKittensGameState extends AbstractGameState {
             // Other player hands + draw deck are hidden, combine in draw pile and shuffle
             // Note: this considers the agent to track opponent's cards that are known to him by itself
             // e.g. in case the agent has previously given a favor card to its opponent
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     // Take all cards the player can't see from other players and put them in the draw pile.
                     ArrayList<ExplodingKittensCard> cs = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ExplodingKittensGameState extends AbstractGameState {
             // Shuffles only hidden cards in draw pile, if player knows what's on top those will stay in place
             ekgs.drawPile.redeterminiseUnknown(redeterminisationRnd, playerId);
             Deck<ExplodingKittensCard> explosive = new Deck<>("tmp", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
-            for (int i = 0; i < getNPlayers(); i++) {
+            for (int i = 0; i < getNPlayers(playerId); i++) {
                 if (i != playerId) {
                     for (int j = 0; j < playerHandCards.get(i).getSize(); j++) {
                         // Add back random cards for all components not visible to this player
@@ -178,7 +178,7 @@ public class ExplodingKittensGameState extends AbstractGameState {
                     nextAttackLevel == other.nextAttackLevel &&
                     inPlay.equals(other.inPlay) &&
                     drawPile.equals(other.drawPile);
-        };
+        }
         return false;
     }
 

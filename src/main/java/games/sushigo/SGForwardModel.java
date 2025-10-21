@@ -25,11 +25,11 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
         SGParameters parameters = (SGParameters) gs.getGameParameters();
         gs.nCardsInHand = 0;
         gs.deckRotations = 0;
-        gs.playerScore = new Counter[firstState.getNPlayers()];
-        gs.cardChoices = new ArrayList<>(firstState.getNPlayers());
-        gs.playedCardTypes = new HashMap[firstState.getNPlayers()];
-        gs.playedCardTypesAllGame = new HashMap[firstState.getNPlayers()];
-        gs.pointsPerCardType = new HashMap[firstState.getNPlayers()];
+        gs.playerScore = new Counter[firstState.getNPlayers(playerId)];
+        gs.cardChoices = new ArrayList<>(firstState.getNPlayers(playerId));
+        gs.playedCardTypes = new HashMap[firstState.getNPlayers(playerId)];
+        gs.playedCardTypesAllGame = new HashMap[firstState.getNPlayers(playerId)];
+        gs.pointsPerCardType = new HashMap[firstState.getNPlayers(playerId)];
         gs.playedCards = new ArrayList<>();
 
         // Setup draw & discard piles
@@ -39,8 +39,8 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
 
         // Setup player-specific variables
         gs.playerHands = new ArrayList<>();
-        gs.nCardsInHand = parameters.nCards - firstState.getNPlayers() + 2;
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        gs.nCardsInHand = parameters.nCards - firstState.getNPlayers(playerId) + 2;
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             gs.playerScore[i] = new Counter(0, 0, Integer.MAX_VALUE, "Player " + i + " score");
             gs.playerHands.add(new Deck<>("Player " + i + " hand", CoreConstants.VisibilityMode.VISIBLE_TO_OWNER));
             gs.playedCards.add(new Deck<>("Player " + i + " played cards", CoreConstants.VisibilityMode.VISIBLE_TO_ALL));
@@ -90,7 +90,7 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
         // Check if all players made their choice
         int nextPlayer = gs.getCurrentPlayer();
         do {
-            nextPlayer = (nextPlayer + 1) % gs.getNPlayers();
+            nextPlayer = (nextPlayer + 1) % gs.getNPlayers(playerId);
         } while (nextPlayer != gs.getCurrentPlayer() && !gs.cardChoices.get(nextPlayer).isEmpty());
 
         if (nextPlayer == gs.getCurrentPlayer()) {
@@ -143,7 +143,7 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
         }
 
         // Clear played hands if they get discarded between rounds, they go in the discard pile
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             // We think this copy may be for the properties
             Deck<SGCard> cardsToKeep = gs.playedCards.get(i).copy();
             cardsToKeep.clear();
@@ -162,7 +162,7 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
 
     public void _startRound(SGGameState gs) {
         //Draw new hands for players
-        for (int i = 0; i < gs.getNPlayers(); i++){
+        for (int i = 0; i < gs.getNPlayers(playerId); i++){
             for (int j = 0; j < gs.nCardsInHand; j++)
             {
                 if (gs.drawPile.getSize() == 0) {
@@ -182,7 +182,7 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
      * @param gs - game state
      */
     void revealCards(SGGameState gs) {
-        for (int i = 0; i < gs.getNPlayers(); i++) {
+        for (int i = 0; i < gs.getNPlayers(playerId); i++) {
             Deck<SGCard> hand = gs.getPlayerHands().get(i);
             for (ChooseCard cc: gs.cardChoices.get(i)) {
                 SGCard cardToReveal = hand.get(cc.cardIdx);
@@ -201,7 +201,7 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
             }
         }
         int expectedPlayerCards = gs.getPlayerHands().get(0).getSize();
-        for (int i = 1; i < gs.getNPlayers(); i++) {
+        for (int i = 1; i < gs.getNPlayers(playerId); i++) {
             if (gs.getPlayerHands().get(i).getSize() != expectedPlayerCards) {
                 throw new AssertionError("Player " + i + " has " + gs.getPlayerHands().get(i).getSize() + " cards, expected " + expectedPlayerCards);
             }
@@ -248,10 +248,10 @@ public class SGForwardModel extends StandardForwardModel implements ITreeActionS
         gs.deckRotations++;
         Deck<SGCard> tempDeck;
         tempDeck = gs.getPlayerHands().get(0).copy();
-        for (int i = 1; i < gs.getNPlayers(); i++) {
+        for (int i = 1; i < gs.getNPlayers(playerId); i++) {
             gs.getPlayerHands().set(i - 1, gs.getPlayerHands().get(i).copy());
         }
-        gs.getPlayerHands().set(gs.getNPlayers() - 1, tempDeck.copy());
+        gs.getPlayerHands().set(gs.getNPlayers(playerId) - 1, tempDeck.copy());
     }
 
     @Override
