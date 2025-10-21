@@ -1,6 +1,8 @@
 package groupAA;
 
 import java.util.*;
+import java.util.logging.Logger;
+
 import core.AbstractGameState;
 import core.actions.AbstractAction;
 import players.PlayerConstants;
@@ -16,6 +18,9 @@ import static utilities.Utils.noise;
 //import players.basicMCTS.BasicTreeNode;
 
 class GroupAATreeNode {
+
+    private static final Logger LOGGER = Logger.getLogger(GroupAATreeNode.class.getName());
+
     GroupAATreeNode root; //root node of the tree
     GroupAATreeNode parent; //parent of the current node
     Map<AbstractAction, GroupAATreeNode> children = new HashMap<>(); //children of current node
@@ -41,6 +46,7 @@ class GroupAATreeNode {
         setState(state); //setting current state
         this.rand = rand;
         randomPlayer.setForwardModel(player.getForwardModel());
+        LOGGER.info("GroupAATreeNode initialized!");
     }
 
     private AbstractAction ucb() {
@@ -48,6 +54,8 @@ class GroupAATreeNode {
         AbstractAction bestAction = null;
         double bestValue = Double.MAX_VALUE;
         PlayerParameters params = player.getParameters();
+
+        LOGGER.info("Performing selection using UCB");
 
         for (AbstractAction action : children.keySet()) {
             GroupAATreeNode child = children.get(action);
@@ -77,6 +85,7 @@ class GroupAATreeNode {
             // Assign value
             if (uctValue > bestValue) {
                 bestAction = action;
+                LOGGER.info("Selecting best action: " + bestAction);
                 bestValue = uctValue;
             }
         }
@@ -106,7 +115,7 @@ class GroupAATreeNode {
 
         boolean stop = false;
 
-        System.out.println("SushiGoAgentGroupAA doing search");
+        LOGGER.info("SushiGoAgentGroupAA performing search iteration: " + numIters+1);
         while (!stop) {
             // New timer for this iteration
             ElapsedCpuTimer elapsedTimerIteration = new ElapsedCpuTimer();
@@ -140,6 +149,8 @@ class GroupAATreeNode {
 
     private GroupAATreeNode treePolicy() {
         GroupAATreeNode currentNode = this;
+
+        LOGGER.info("Executing rollout policy");
         //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
         while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
             if (!currentNode.unexpandedActions().isEmpty()) {
