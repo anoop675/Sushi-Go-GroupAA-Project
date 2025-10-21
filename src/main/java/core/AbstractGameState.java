@@ -126,6 +126,12 @@ public abstract class AbstractGameState {
         return this.gameParameters;
     }
     public int getNPlayers(int playerId) { return nPlayers; }
+    /**
+     * Backwards-compatible convenience method: return the number of players in the game.
+     * Some call sites previously used getNPlayers(playerId) without having a playerId in scope,
+     * so provide a no-arg overload for those cases.
+     */
+    public int getNPlayers() { return nPlayers; }
     public int getNTeams() { return nTeams; }
     /**
      * Returns the team number the specified player is on.

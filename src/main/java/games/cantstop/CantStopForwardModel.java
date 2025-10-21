@@ -26,7 +26,7 @@ public class CantStopForwardModel extends StandardForwardModel {
         CantStopGameState state = (CantStopGameState) firstState;
         CantStopParameters params = (CantStopParameters) state.getGameParameters();
         state.completedColumns = new boolean[13];
-        state.playerMarkerPositions = new int[state.getNPlayers(playerId)][13];
+    state.playerMarkerPositions = new int[state.getNPlayers()][13];
         state.temporaryMarkerPositions = new HashMap<>();
         state.dice = new ArrayList<>();
         for (int i = 0; i < params.DICE_NUMBER; i++) {

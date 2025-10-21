@@ -30,10 +30,10 @@ public class VirusForwardModel extends StandardForwardModel {
 
         VirusGameState vgs = (VirusGameState) firstState;
 
-        vgs.playerBodies = new ArrayList<>(vgs.getNPlayers(playerId));
+    vgs.playerBodies = new ArrayList<>(vgs.getNPlayers());
 
         // Create an empty body for each player
-        for (int i = 0; i < vgs.getNPlayers(playerId); i++) {
+        for (int i = 0; i < vgs.getNPlayers(); i++) {
             vgs.playerBodies.add(new VirusBody());
         }
 
@@ -47,7 +47,7 @@ public class VirusForwardModel extends StandardForwardModel {
         vgs.discardDeck = new Deck<>("DiscardDeck", -1, VisibilityMode.VISIBLE_TO_ALL);
 
         // Draw initial cards to each player
-        vgs.playerDecks = new ArrayList<>(vgs.getNPlayers(playerId));
+    vgs.playerDecks = new ArrayList<>(vgs.getNPlayers());
         drawCardsToPlayers(vgs);
     }
 
@@ -119,7 +119,7 @@ public class VirusForwardModel extends StandardForwardModel {
      */
     private void drawCardsToPlayers(VirusGameState vgs) {
         int nCards = ((VirusGameParameters) vgs.getGameParameters()).nCardsPlayerHand;
-        for (int i = 0; i < vgs.getNPlayers(playerId); i++) {
+        for (int i = 0; i < vgs.getNPlayers(); i++) {
             String playerDeckName = "Player" + i + "Deck";
             vgs.playerDecks.add(new Deck<>(playerDeckName, i, VisibilityMode.VISIBLE_TO_OWNER));
             for (int j = 0; j < nCards; j++) {
@@ -134,7 +134,7 @@ public class VirusForwardModel extends StandardForwardModel {
      * @param vgs - Virus game state
      */
     public void checkGameEnd(VirusGameState vgs) {
-        for (int i = 0; i < vgs.getNPlayers(playerId); i++) {
+        for (int i = 0; i < vgs.getNPlayers(); i++) {
             if (vgs.playerBodies.get(i).getNOrganHealthy() >= VirusCard.OrganType.values().length - 2) {
                 endGame(vgs);
                 break;

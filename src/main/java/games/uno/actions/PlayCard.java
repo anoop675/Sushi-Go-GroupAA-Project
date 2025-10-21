@@ -44,10 +44,10 @@ public class PlayCard extends DrawCard implements IPrintable {
         Deck<UnoCard> discardDeck = ugs.getDiscardDeck();
         List<Deck<UnoCard>> playerDecks = ugs.getPlayerDecks();
 
-        int players = ugs.getNPlayers(playerId);
+        int players = ugs.getNPlayers();
         if (ugp.scoringMethod == CHALLENGE) {
             players = 0;
-            for (int p = 0; p < ugs.getNPlayers(playerId); p++) {
+            for (int p = 0; p < ugs.getNPlayers(); p++) {
                 if (ugs.getPlayerResults()[p] == CoreConstants.GameResult.GAME_ONGOING)
                     players++;
             }

@@ -27,17 +27,18 @@ public class MultiTreeNode extends SingleTreeNode {
         this.decisionPlayer = player.getPlayerID();
         this.params = player.getParameters();
         this.forwardModel = player.getForwardModel();
-        if (params.information == MCTSEnums.Information.Closed_Loop)
-           params.information = MCTSEnums.Information.Open_Loop;
-        // Closed Loop is not yet supported for MultiTree search
-        // TODO: implement this (not too difficult, but some tricky bits as we shift from tree to rollout and back again)
+        if (params.information == MCTSEnums.Information.Closed_Loop) {
+            // Closed-loop MCTS is not supported for MultiTree search yet.
+            // Fall back to open-loop behaviour to keep MultiTree working.
+            params.information = MCTSEnums.Information.Open_Loop;
+        }
 
         this.rnd = rnd;
         mctsPlayer = player;
         // only root node maintains MAST statistics
         MASTStatistics = new ArrayList<>();
         int playerId = 0;
-        for (int i = 0; i < state.getNPlayers(playerId); i++)
+        for (int i = 0; i < state.getNPlayers(); i++)
             MASTStatistics.add(new HashMap<>());
         if (params.useMASTAsActionHeuristic) {
             params.actionHeuristic = new MASTActionHeuristic(params.MASTActionKey, params.MASTDefaultValue);
@@ -45,11 +46,11 @@ public class MultiTreeNode extends SingleTreeNode {
         }
         instantiate(null, null, state);
 
-        roots = new SingleTreeNode[state.getNPlayers(playerId)];
+    roots = new SingleTreeNode[state.getNPlayers()];
         roots[this.decisionPlayer] = SingleTreeNode.createRootNode(player, state, rnd, player.getFactory());
         if (params.paranoid)
             roots[this.decisionPlayer].paranoidPlayer = decisionPlayer;
-        currentLocation = new SingleTreeNode[state.getNPlayers(playerId)];
+    currentLocation = new SingleTreeNode[state.getNPlayers()];
         currentLocation[this.decisionPlayer] = roots[decisionPlayer];
     }
     /**
@@ -127,7 +128,7 @@ public class MultiTreeNode extends SingleTreeNode {
 
         // Evaluate final state and return normalised score
         int playerId = 0;
-        double[] finalValues = new double[state.getNPlayers(playerId)];
+    double[] finalValues = new double[state.getNPlayers()];
 
         for (int i = 0; i < finalValues.length; i++) {
             finalValues[i] = params.heuristic.evaluateState(currentState, i);

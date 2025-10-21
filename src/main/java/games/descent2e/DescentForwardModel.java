@@ -103,7 +103,7 @@ public class DescentForwardModel extends StandardForwardModel {
         List<Archetype> archetypes = new ArrayList<>(List.of(Archetype.values()));
         Random rnd = dgs.getRnd();
         dgs.heroes = new ArrayList<>();
-        for (int i = 1; i < Math.max(3, dgs.getNPlayers(playerId)); i++) {
+    for (int i = 1; i < Math.max(3, dgs.getNPlayers()); i++) {
 
             Hero figure;
             if (descentParameters.heroesToBePlayed.size() >= i) {
@@ -125,7 +125,7 @@ public class DescentForwardModel extends StandardForwardModel {
             Archetype archetype = Archetype.valueOf(archetypeName);
             archetypes.remove(archetype);
 
-            if (dgs.getNPlayers(playerId) == 2) {
+            if (dgs.getNPlayers() == 2) {
                 // In 2-player games, 1 player controls overlord, the other 2 heroes
                 figure.setOwnerId(1 - dgs.overlordPlayer);
             } else {

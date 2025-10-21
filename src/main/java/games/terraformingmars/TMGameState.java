@@ -1,8 +1,6 @@
-
 package games.terraformingmars;
 
 import core.AbstractGameStateWithTurnOrder;
-import core.AbstractParameters;
 import core.components.*;
 import core.interfaces.IGamePhase;
 import core.turnorders.TurnOrder;
@@ -795,25 +793,34 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
     }
 
     public Pair<HashSet<Integer>, HashSet<Integer>> awardWinner(Award a) {
-        if (a.isClaimed()) {
-            int best = -1;
-            int secondBest = -1;
-            HashSet<Integer> bestPlayer = new HashSet<>();
-            HashSet<Integer> secondBestPlayer = new HashSet<>();
-            for (int i = 0; i < getNPlayers(0); i++) {
-                int playerPoints = a.checkProgress(this, i);
-                if (playerPoints >= best) {
-                    if (playerPoints > best) {
-                        secondBestPlayer = new HashSet<>(bestPlayer);
-                        secondBest = best;
-                        bestPlayer.clear();
-                        bestPlayer.add(i);
-                        best = playerPoints;
-                    }
-                } else if (playerPoints > secondBest) {
-                    secondBestPlayer.clear();
-                    secondBestPlayer.add(i);
-                    secondBest = playerPoints;
-                }
+        if (!a.isClaimed()) return null;
+
+        int best = Integer.MIN_VALUE;
+        int secondBest = Integer.MIN_VALUE;
+        HashSet<Integer> bestPlayers = new HashSet<>();
+        HashSet<Integer> secondBestPlayers = new HashSet<>();
+
+        for (int i = 0; i < getNPlayers(0); i++) {
+            int playerPoints = a.checkProgress(this, i);
+            if (playerPoints > best) {
+                // shift current best to secondBest
+                secondBest = best;
+                secondBestPlayers = new HashSet<>(bestPlayers);
+
+                best = playerPoints;
+                bestPlayers.clear();
+                bestPlayers.add(i);
+            } else if (playerPoints == best) {
+                bestPlayers.add(i);
+            } else if (playerPoints > secondBest) {
+                secondBest = playerPoints;
+                secondBestPlayers.clear();
+                secondBestPlayers.add(i);
             }
-            return new Pair<>(bestPlayer, secondBestPlayer);
+        }
+        return new Pair<>(bestPlayers, secondBestPlayers);
+    }
+
+    public class ResourceMapping {
+    }
+}

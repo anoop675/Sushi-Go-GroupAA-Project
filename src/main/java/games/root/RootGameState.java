@@ -139,7 +139,7 @@ public class RootGameState extends AbstractGameState {
         for (List<Item> list : craftedItems) {
             l.addAll(list);
         }
-        if (getNPlayers(playerId) > 1) {
+        if (getNPlayers() > 1) {
             l.addAll(eyrieDecree);
             l.add(viziers);
             if (activeRuler != null) {
@@ -147,10 +147,10 @@ public class RootGameState extends AbstractGameState {
             }
             l.add(rulers);
         }
-        if (getNPlayers(playerId) > 2) {
+        if (getNPlayers() > 2) {
             l.add(supporters);
         }
-        if (getNPlayers(playerId) > 3) {
+        if (getNPlayers() > 3) {
             l.addAll(startingItems);
             l.addAll(ruinItems);
             if (vagabondCharacter != null) {
@@ -171,7 +171,7 @@ public class RootGameState extends AbstractGameState {
     //Returns a deep copy of the game state from the viewpoints of a player
     @Override
     protected RootGameState _copy(int playerId) {
-        RootGameState copy = new RootGameState(gameParameters, getNPlayers(playerId));
+    RootGameState copy = new RootGameState(gameParameters, getNPlayers());
         copy.gameMap = gameMap.copy();
         copy.mapType = mapType;
         copy.playerFactions = new ArrayList<>(playerFactions);
