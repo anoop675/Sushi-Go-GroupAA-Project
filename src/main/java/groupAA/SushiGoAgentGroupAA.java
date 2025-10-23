@@ -13,6 +13,9 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     public SushiGoAgentGroupAA(AMAF_Params params) {
         super(params, "GroupAA MCTS Agent");
         initRandom();
+        params.heuristic = new GroupAAHeuristic();
+        params.setParameterValue("heuristic", this.getParameters().heuristic);
+
         System.out.println("SushiGoAgentGroupAA initialized and ready!");
     }
 
@@ -41,6 +44,9 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
         params.epsilon = 1e-6;
+        params.heuristic = new GroupAAHeuristic();
+        params.setParameterValue("heuristic", this.getParameters().heuristic);
+
         LOGGER.info("AMAF Parameters initialized!");
     }
 

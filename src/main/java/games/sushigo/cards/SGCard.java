@@ -154,7 +154,6 @@ public class SGCard extends Card {
                     } else if (nPuddings == worst) leastPlayers.add(i);
                 }
                 if (best > worst) {
-
                     // Calculate the score each player gets, only if there's a difference in number of puddings, otherwise no one gets points
                     int mostScore = parameters.valuePuddingMost;
                     int leastScore = parameters.valuePuddingLeast;

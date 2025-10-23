@@ -31,9 +31,10 @@ class GroupAATreeNode {
 
     private SushiGoAgentGroupAA player;
     private Random rand;
-    private RandomPlayer randomPlayer = new RandomPlayer(); //TODO: Use a heuristic instead of random rollouts
+    private RandomPlayer randomPlayer = new RandomPlayer();
 
     private AbstractGameState state; //current state for this current node
+    private GroupAARolloutPolicy rolloutPolicy;
 
     protected GroupAATreeNode(SushiGoAgentGroupAA player, GroupAATreeNode  parent,
                               AbstractGameState state, Random rand) {
@@ -45,6 +46,7 @@ class GroupAATreeNode {
         t = 0.0; //init total value of this node as 0
         setState(state); //setting current state
         this.rand = rand;
+        this.rolloutPolicy = new GroupAAGreedyRolloutPolicy(player);
         randomPlayer.setForwardModel(player.getForwardModel());
         LOGGER.info("GroupAATreeNode initialized!");
     }
@@ -52,13 +54,13 @@ class GroupAATreeNode {
     private AbstractAction ucb() {
         // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
-        double bestValue = Double.MAX_VALUE;
-        PlayerParameters params = player.getParameters();
+        double bestValue = -Double.MAX_VALUE; //has to be negative inorder to select children with better (positive) ucb values in future iterations
+        AMAF_Params params = player.getParameters();
 
         LOGGER.info("Performing selection using UCB");
 
-        for (AbstractAction action : children.keySet()) {
-            GroupAATreeNode child = children.get(action);
+        for (AbstractAction action : children.keySet()) { //for every action that can be taken from this node
+            GroupAATreeNode child = children.get(action); //get a child
             if (child == null)
                 throw new AssertionError("Should not be here");
             else if (bestAction == null)
@@ -84,8 +86,8 @@ class GroupAATreeNode {
 
             // Assign value
             if (uctValue > bestValue) {
+                LOGGER.info("Selecting node");
                 bestAction = action;
-                LOGGER.info("Selecting best action: " + bestAction);
                 bestValue = uctValue;
             }
         }
@@ -150,7 +152,7 @@ class GroupAATreeNode {
     private GroupAATreeNode treePolicy() {
         GroupAATreeNode currentNode = this;
 
-        LOGGER.info("Executing rollout policy");
+        LOGGER.info("---------Performing tree policy - selection then expansion----------");
         //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
         while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
             if (!currentNode.unexpandedActions().isEmpty()) {
@@ -193,6 +195,7 @@ class GroupAATreeNode {
 
         // then instantiate a new node
         GroupAATreeNode tn = new GroupAATreeNode(player, this, nextState, rand);
+        LOGGER.info("Expanding node");
         children.put(chosen, tn);
         return tn;
     }
@@ -209,16 +212,25 @@ class GroupAATreeNode {
     }
 
     //Performs the rollout phase in MCTS
-    //TODO: Use heuristic field in AMAF_Params, in this function
     private double rollOut() {
         int rolloutDepth = 0; // counting from end of tree
+
+        LOGGER.info("-------Performing rollout policy--------");
 
         // If rollouts are enabled, select actions for the rollout in line with the rollout policy
         AbstractGameState rolloutState = state.copy();
         if (player.getParameters().rolloutLength > 0) {
             while (!finishRollout(rolloutState, rolloutDepth)) {
-                //TODO: Use a heuristic rollout policy instead of random rollouts
-                AbstractAction next = randomPlayer.getAction(rolloutState, randomPlayer.getForwardModel().computeAvailableActions(rolloutState, randomPlayer.parameters.actionSpace));
+                List<AbstractAction> availableActions = player.getForwardModel().computeAvailableActions(rolloutState, player.getParameters().actionSpace); //for one simulation-step lookahead
+                AbstractAction next;
+                if (rolloutPolicy != null) {
+                    LOGGER.info("Performing rollout using heuristic");
+                    next = rolloutPolicy.chooseAction(rolloutState, availableActions, player.getPlayerID(), rand);
+                } else { //if the rolloutPolicy (heuristic rollout policy) is not defined then fallback to random rollout
+                    LOGGER.info("Performing random rollout");
+                    next = randomPlayer.getAction(rolloutState, randomPlayer.getForwardModel().computeAvailableActions(rolloutState, randomPlayer.parameters.actionSpace));
+                }
+                if (next == null) break;
                 advance(rolloutState, next);
                 rolloutDepth++;
             }
