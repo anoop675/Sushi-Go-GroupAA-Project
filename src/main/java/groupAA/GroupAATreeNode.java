@@ -54,7 +54,7 @@ class GroupAATreeNode {
         // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
         double bestValue = -Double.MAX_VALUE;
-        AMAF_Params params = player.getParameters();
+        GroupAAParams params = player.getParameters();
 
         LOGGER.info("Performing selection using UCB with progressive bias");
 

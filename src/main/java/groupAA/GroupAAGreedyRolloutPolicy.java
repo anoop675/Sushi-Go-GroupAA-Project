@@ -13,7 +13,7 @@ public class GroupAAGreedyRolloutPolicy implements GroupAARolloutPolicy {
     private static final Logger LOGGER = Logger.getLogger(GroupAAGreedyRolloutPolicy.class.getName());
 
     private final SushiGoAgentGroupAA player;
-    private final AMAF_Params params;
+    private final GroupAAParams params;
 
     public GroupAAGreedyRolloutPolicy(SushiGoAgentGroupAA player) {
         this.player = player;

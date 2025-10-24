@@ -6,7 +6,7 @@ import players.PlayerParameters;
 
 import java.util.Arrays;
 
-public class AMAF_Params extends PlayerParameters {
+public class GroupAAParams extends PlayerParameters {
 
     public double K = Math.sqrt(2);
     public int rolloutLength = 10; // default
@@ -19,7 +19,7 @@ public class AMAF_Params extends PlayerParameters {
     public GroupAARolloutPolicy rolloutPolicy = null; // default to null => use RandomPlayer or fallback
     //public double rolloutEpsilon = 0.05; // for epsilon-rollouts (small randomisation) [ALREADY USED IN GroupAATreeNode rollOut()]
 
-    public AMAF_Params() {
+    public GroupAAParams() {
         addTunableParameter("K", Math.sqrt(2), Arrays.asList(0.0, 0.1, 1.0, Math.sqrt(2), 3.0, 10.0));
         addTunableParameter("rolloutLength", rolloutLength, Arrays.asList(0, 3, 5, 10, 30, 100));
         addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 10, 30, 100));
@@ -52,8 +52,8 @@ public class AMAF_Params extends PlayerParameters {
     }
 
     @Override
-    protected AMAF_Params _copy() {
-        return new AMAF_Params();
+    protected GroupAAParams _copy() {
+        return new GroupAAParams();
     }
 
     @Override
@@ -74,6 +74,6 @@ public class AMAF_Params extends PlayerParameters {
 
     @Override
     public SushiGoAgentGroupAA instantiate() {
-        return new SushiGoAgentGroupAA((AMAF_Params) this.copy());
+        return new SushiGoAgentGroupAA((GroupAAParams) this.copy());
     }
 }
