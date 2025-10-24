@@ -84,6 +84,8 @@ public abstract class AbstractGameState {
         this.coreGameParameters = new CoreParameters();
     }
 
+    public abstract int getNPlayers(Object ignored);
+
     protected abstract GameType _getGameType();
 
     /**

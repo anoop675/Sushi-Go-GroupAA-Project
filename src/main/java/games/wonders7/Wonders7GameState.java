@@ -44,6 +44,11 @@ public class Wonders7GameState extends AbstractGameState {
     }
 
     @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
+    @Override
     protected void reset() {
         super.reset();
         // if either wonder or card distribution seeds are set to something other than -1,

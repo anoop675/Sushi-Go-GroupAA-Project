@@ -76,6 +76,12 @@ public class TMGameState extends AbstractGameStateWithTurnOrder {
     public TMGameState(AbstractParameters gameParameters, int nPlayers) {
         super(gameParameters, nPlayers);
     }
+
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     @Override
     protected TurnOrder _createTurnOrder(int nPlayers) {
         return new TMTurnOrder(nPlayers, ((TMGameParameters) gameParameters).nActionsPerPlayer);

@@ -113,6 +113,11 @@ public class RootGameState extends AbstractGameState {
         Arrays.fill(playerVictoryConditions, RootParameters.VictoryCondition.Score);
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     /**
      * @return the enum value corresponding to this game, declared in {@link GameType}.
      */

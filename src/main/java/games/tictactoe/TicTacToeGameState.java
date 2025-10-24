@@ -15,6 +15,10 @@ import java.util.Objects;
 
 
 public class TicTacToeGameState extends AbstractGameState implements IPrintable, IGridGameState {
+    @Override
+    public int getNPlayers(Object ignored) {
+        return getNPlayers();
+    }
 
     GridBoard gridBoard;
 

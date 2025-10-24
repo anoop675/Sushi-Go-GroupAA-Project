@@ -27,6 +27,11 @@ public class GTGameState extends AbstractGameState {
         super(gameParameters, nPlayers);
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     /**
      * @return the enum value corresponding to this game, declared in {@link GameType}.
      */

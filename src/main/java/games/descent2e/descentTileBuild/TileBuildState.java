@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class TileBuildState extends AbstractGameState {
+    @Override
+    public int getNPlayers(Object ignored) {
+        return getNPlayers();
+    }
 
     GridBoard tile;
 

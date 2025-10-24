@@ -156,6 +156,12 @@ public class PandemicGameState extends AbstractGameStateWithTurnOrder implements
     public PandemicGameState(AbstractParameters pp, int nPlayers) {
         super(pp, nPlayers);
     }
+
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     @Override
     protected TurnOrder _createTurnOrder(int nPlayers) {
         return new PandemicTurnOrder(nPlayers, ((PandemicParameters)gameParameters).nActionsPerTurn);

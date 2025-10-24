@@ -19,6 +19,11 @@ public class ToadGameState extends AbstractGameState {
         super(gameParameters, nPlayers);
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     List<PartialObservableDeck<ToadCard>> playerDecks;
     List<PartialObservableDeck<ToadCard>> playerHands;
     int discardOptions;

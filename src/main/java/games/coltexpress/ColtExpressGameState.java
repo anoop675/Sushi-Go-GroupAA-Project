@@ -56,6 +56,11 @@ public class ColtExpressGameState extends AbstractGameStateWithTurnOrder impleme
     }
 
     @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
+    @Override
     public void reset() {
         super.reset();
         int playerSeed = ((ColtExpressParameters) gameParameters).playerHandShuffleSeed;

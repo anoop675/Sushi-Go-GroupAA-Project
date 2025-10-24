@@ -24,6 +24,11 @@ public class MMGameState extends AbstractGameState {
     }
 
     @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
+    @Override
     protected GameType _getGameType() {
         return GameType.Mastermind;
     }

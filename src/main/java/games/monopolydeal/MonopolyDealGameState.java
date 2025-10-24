@@ -54,6 +54,11 @@ public class MonopolyDealGameState extends AbstractGameState {
         }
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     /**
      * @return the enum value corresponding to this game, declared in {@link GameType}.
      */

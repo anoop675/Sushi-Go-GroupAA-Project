@@ -53,6 +53,11 @@ public class LoveLetterGameState extends AbstractGameState implements IPrintable
     }
 
     @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
+    @Override
     protected GameType _getGameType() {
         return GameType.LoveLetter;
     }

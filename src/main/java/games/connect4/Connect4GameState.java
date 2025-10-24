@@ -27,6 +27,11 @@ public class Connect4GameState extends AbstractGameState implements IPrintable, 
         gridBoard = null;
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     /**
      * This returns the player id of the token at the given position. Or -1 if this is empty.
      */

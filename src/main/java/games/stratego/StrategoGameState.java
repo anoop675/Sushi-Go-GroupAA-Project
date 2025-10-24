@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StrategoGameState extends AbstractGameState{
+    @Override
+    public int getNPlayers() {
+        return 2;  // Stratego is a 2-player game
+    }
+
     GridBoard gridBoard;
 
     /**
@@ -21,6 +26,11 @@ public class StrategoGameState extends AbstractGameState{
      */
     public StrategoGameState(AbstractParameters gameParameters, int nPlayers) {
         super(gameParameters, nPlayers);
+    }
+
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
     }
 
     @Override

@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.*;
 
 public class BlackjackGameState extends AbstractGameState implements IPrintable {
+    @Override
+    public int getNPlayers(Object ignored) {
+        return getNPlayers();
+    }
+
     List<PartialObservableDeck<FrenchCard>> playerDecks;
     Deck<FrenchCard> drawDeck;
     int dealerPlayer;

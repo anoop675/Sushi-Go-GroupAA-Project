@@ -23,6 +23,11 @@ public class CCGameState extends AbstractGameState {
         }
     }
 
+    @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
     public StarBoard getStarBoard()
     {
         return starBoard;

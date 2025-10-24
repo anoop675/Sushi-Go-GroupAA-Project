@@ -81,6 +81,11 @@ public class CatanGameState extends AbstractGameState {
     }
 
     @Override
+    public int getNPlayers(Object ignored) {
+        return 0;
+    }
+
+    @Override
     protected GameType _getGameType() {
         return GameType.Catan;
     }
