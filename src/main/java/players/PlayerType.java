@@ -18,6 +18,10 @@ import java.util.Random;
 import static core.CoreConstants.*;
 import static players.PlayerType.Property.*;
 
+// Added imports for GroupAA agent (only new lines)
+import groupAA.SushiGoAgentGroupAA;
+import groupAA.AMAF_Params;
+
 /**
  * Encapsulates all players available in the framework.
  * All player types further include a list of features, which can be used to filter the player collection.
@@ -34,7 +38,8 @@ public enum PlayerType {
     Random (new ArrayList<Property>() {{ add(Simple); add(Stochastic); }}),
     OSLA (new ArrayList<Property>() {{ add(Simple); add(Stochastic); add(ForwardPlanning); add(Greedy); }}),
     MCTS (new ArrayList<Property>() {{ add(Stochastic); add(ForwardPlanning); add(TreeSearch); }}),
-    RMHC (new ArrayList<Property>() {{ add(Stochastic); add(ForwardPlanning); add(EvolutionaryAlgorithm); }});
+    RMHC (new ArrayList<Property>() {{ add(Stochastic); add(ForwardPlanning); add(EvolutionaryAlgorithm); }}),
+    GroupAA (new ArrayList<Property>() {{ add(Stochastic); add(ForwardPlanning); add(TreeSearch); }});  // <<-- ADDED
 
     /**
      * Converts a given string to the enum type corresponding to the player.
@@ -52,6 +57,8 @@ public enum PlayerType {
                 return MCTS;
             case "rmhc":
                 return RMHC;
+            case "groupaa":
+                return GroupAA;            // <<-- ADDED
             case "console":
                 return HumanConsolePlayer;
             case "gui":
@@ -101,6 +108,20 @@ public enum PlayerType {
                 }
                 player = new RMHCPlayer((RMHCParams) params);
                 break;
+            case GroupAA: // <<-- ADDED
+                // Ensure we have AMAF_Params for this agent
+                if (params == null) {
+                    params = new AMAF_Params();
+                } else if (!(params instanceof AMAF_Params)) {
+                    // If caller passed a generic PlayerParameters, replace with an AMAF_Params preserving seed
+                    AMAF_Params newParams = new AMAF_Params();
+                    // copy seed into new params if present
+                    newParams.setRandomSeed(seed);
+                    params = newParams;
+                }
+                // params.setRandomSeed(seed); // already done at top, but safe
+                player = new SushiGoAgentGroupAA((AMAF_Params) params);
+                break;
         }
 
         return player;
@@ -112,6 +133,8 @@ public enum PlayerType {
                 return new MCTSParams();
             case RMHC:
                 return new RMHCParams();
+            case GroupAA: // <<-- ADDED
+                return new AMAF_Params();
             default:
                 return null;
         }
