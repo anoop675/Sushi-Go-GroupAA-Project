@@ -6,16 +6,15 @@ import java.util.logging.Logger;
 import core.AbstractGameState;
 import core.actions.AbstractAction;
 import players.PlayerConstants;
-//import players.basicMCTS.BasicTreeNode;
 import players.PlayerParameters;
 import players.simple.RandomPlayer;
 import utilities.ElapsedCpuTimer;
 
 import static java.util.stream.Collectors.toList;
 import static players.PlayerConstants.*;
+import core.interfaces.IStateHeuristic;
 import static utilities.Utils.noise;
-//import players.basicMCTS.BasicMCTSPlayer;
-//import players.basicMCTS.BasicTreeNode;
+
 
 class GroupAATreeNode {
 
@@ -54,40 +53,55 @@ class GroupAATreeNode {
     private AbstractAction ucb() {
         // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
-        double bestValue = -Double.MAX_VALUE; //has to be negative inorder to select children with better (positive) ucb values in future iterations
+        double bestValue = -Double.MAX_VALUE;
         AMAF_Params params = player.getParameters();
 
-        LOGGER.info("Performing selection using UCB");
+        LOGGER.info("Performing selection using UCB with progressive bias");
 
-        for (AbstractAction action : children.keySet()) { //for every action that can be taken from this node
-            GroupAATreeNode child = children.get(action); //get a child
+        for (AbstractAction action : children.keySet()) {
+            GroupAATreeNode child = children.get(action);
             if (child == null)
                 throw new AssertionError("Should not be here");
             else if (bestAction == null)
                 bestAction = action;
 
-            // Find child value
+            // Find child value (average reward)
             double hvVal = child.t;
             double childValue = hvVal / (child.n + params.epsilon);
 
-            // default to standard UCB
-            double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1) / (child.n + params.epsilon));
-            // unless we are using a variant
+            // Heuristic progressive-bias: evaluate child's state using configured heuristic
+            double heuristicBias = 0.0;
+            try {
+                // access child's state (allowed since same class)
+                IStateHeuristic h = params.getStateHeuristic();
+                if (h != null && child.state != null) {
+                    heuristicBias = h.evaluateState(child.state, player.getPlayerID());
+                }
+            } catch (Throwable e) {
+                // swallow; keep heuristicBias = 0
+            }
 
-            // Find 'UCB' value
-            // If 'we' are taking a turn we use classic UCB
-            // If it is an opponent's turn, then we assume they are trying to minimise our score (with exploration)
+            // Decay bias as child gets visited: effective weight = biasWeight / (1 + visits)
+            double biasWeight = params.biasWeight; // default set in AMAF_Params
+            double effectiveBias = biasWeight / (1.0 + child.n);
+
+            // Mix heuristic bias and childValue (both should be on similar scale: average reward in [-1,1])
+            double mixedValue = (1.0 - effectiveBias) * childValue + effectiveBias * heuristicBias;
+
+            // default to standard UCB exploration term
+            double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1.0) / (child.n + params.epsilon));
+
+            // If 'we' are taking a turn we use classic UCB, else opponent tries to minimize
             boolean iAmMoving = state.getCurrentPlayer() == player.getPlayerID();
-            double uctValue = iAmMoving ? childValue : -childValue;
+            double uctValue = iAmMoving ? mixedValue : -mixedValue;
             uctValue += explorationTerm;
 
             // Apply small noise to break ties randomly
-            uctValue = noise(uctValue,params.epsilon, player.getRnd().nextDouble());
+            uctValue = noise(uctValue, params.epsilon, player.getRnd().nextDouble());
 
-            // Assign value
             if (uctValue > bestValue) {
-                LOGGER.info("Selecting node");
                 bestAction = action;
+                LOGGER.info("Selecting best action: " + bestAction);
                 bestValue = uctValue;
             }
         }
@@ -98,6 +112,7 @@ class GroupAATreeNode {
         root.fmCalls++;  // log one iteration complete
         return bestAction;
     }
+
 
     void mctsSearch() {
         PlayerParameters params = player.getParameters();

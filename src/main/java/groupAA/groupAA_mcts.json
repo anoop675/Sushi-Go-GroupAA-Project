@@ -7,11 +7,14 @@
   "opponentTreePolicy": "OneTree",
   "selectionPolicy": "SIMPLE",
   "information": "Open_Loop",
-  "rolloutType": "RANDOM",
+  "rolloutType": "GREEDY",
+  "rolloutPolicyClass": "groupAA.GroupAAGreedyRolloutPolicy",
   "budgetType": "BUDGET_TIME",
   "budget": 40,
   "breakMS": 0,
   "heuristic": {
     "class": "groupAA.GroupAAHeuristic"
-  }
+  },
+  "biasWeight": 0.10
 }
+

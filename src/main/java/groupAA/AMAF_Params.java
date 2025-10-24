@@ -12,6 +12,7 @@ public class AMAF_Params extends PlayerParameters {
     public int rolloutLength = 10; // default
     public int maxTreeDepth = 100;
     public double epsilon = 1e-6; // small numeric noise used in UCT
+    public double biasWeight = 0.1; // default progressive-bias weight (for AMAF)
     public IStateHeuristic heuristic = new GroupAAHeuristic(); // default to your heuristic
 
     // NEW: rollout policy and exploration inside rollout (epsilon-greedy)
@@ -24,6 +25,7 @@ public class AMAF_Params extends PlayerParameters {
         addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 10, 30, 100));
         addTunableParameter("epsilon", epsilon);
         // Keep heuristic tunable (defaults to GroupAAHeuristic)
+        addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2));
         addTunableParameter("heuristic", this.heuristic);
 
         // New tunables for rollout policy
@@ -40,6 +42,7 @@ public class AMAF_Params extends PlayerParameters {
         rolloutLength = (int) getParameterValue("rolloutLength");
         maxTreeDepth = (int) getParameterValue("maxTreeDepth");
         epsilon = (double) getParameterValue("epsilon");
+        biasWeight = (double) getParameterValue("biasWeight");
         heuristic = (IStateHeuristic) getParameterValue("heuristic");
 
         // read rollout extras (safely)
