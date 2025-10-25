@@ -1,29 +1,39 @@
 package groupAA;
 
-import core.AbstractGameState;
+//import core.AbstractGameState;
 import core.interfaces.IStateHeuristic;
 import players.PlayerParameters;
 
 import java.util.Arrays;
 
-
 public class AMAF_Params extends PlayerParameters {
 
     public double K = Math.sqrt(2);
-    public int rolloutLength = 10; // assuming we have a good heuristic
-    public int maxTreeDepth = 100; // effectively no limit
-    public double epsilon = 1e-6;
-    public IStateHeuristic heuristic = AbstractGameState::getHeuristicScore;
+    public int rolloutLength = 10; // default
+    public int maxTreeDepth = 100;
+    public double epsilon = 1e-6; // small numeric noise used in UCT
+    public double biasWeight = 0.1; // default progressive-bias weight (for AMAF)
+    public IStateHeuristic heuristic = new GroupAAHeuristic(); // default to your heuristic
+
+    // NEW: rollout policy and exploration inside rollout (epsilon-greedy)
+    public GroupAARolloutPolicy rolloutPolicy = null; // default to null => use RandomPlayer or fallback
+    //public double rolloutEpsilon = 0.05; // for epsilon-rollouts (small randomisation) [ALREADY USED IN GroupAATreeNode rollOut()]
 
     public AMAF_Params() {
         addTunableParameter("K", Math.sqrt(2), Arrays.asList(0.0, 0.1, 1.0, Math.sqrt(2), 3.0, 10.0));
-        addTunableParameter("rolloutLength", 10, Arrays.asList(0, 3, 10, 30, 100));
-        addTunableParameter("maxTreeDepth", 100, Arrays.asList(1, 3, 10, 30, 100));
-        addTunableParameter("epsilon", 1e-6);
-        addTunableParameter("heuristic", (IStateHeuristic) AbstractGameState::getHeuristicScore);
-    }
+        addTunableParameter("rolloutLength", rolloutLength, Arrays.asList(0, 3, 5, 10, 30, 100));
+        addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 10, 30, 100));
+        addTunableParameter("epsilon", epsilon);
+        // Keep heuristic tunable (defaults to GroupAAHeuristic)
+        addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2));
+        addTunableParameter("heuristic", this.heuristic);
 
-    public int getRolloutDepth() { return rolloutLength; }
+        // New tunables for rollout policy
+        // We store identifier strings or objects; here we expose policy object directly (simplest)
+        //addTunableParameter("rolloutEpsilon", rolloutEpsilon, Arrays.asList(0.0, 0.01, 0.05, 0.1));
+        // rolloutPolicy is not easily enumerated; we still expose as a parameter for completeness
+        addTunableParameter("rolloutPolicy", null);
+    }
 
     @Override
     public void _reset() {
@@ -32,14 +42,17 @@ public class AMAF_Params extends PlayerParameters {
         rolloutLength = (int) getParameterValue("rolloutLength");
         maxTreeDepth = (int) getParameterValue("maxTreeDepth");
         epsilon = (double) getParameterValue("epsilon");
+        biasWeight = (double) getParameterValue("biasWeight");
         heuristic = (IStateHeuristic) getParameterValue("heuristic");
+
+        // read rollout extras (safely)
+        Object rp = getParameterValue("rolloutPolicy");
+        if (rp instanceof GroupAARolloutPolicy) rolloutPolicy = (GroupAARolloutPolicy) rp;
+        //rolloutEpsilon = (double) getParameterValue("rolloutEpsilon");
     }
 
     @Override
     protected AMAF_Params _copy() {
-        // All the copying is done in TunableParameters.copy()
-        // Note that any *local* changes of parameters will not be copied
-        // unless they have been 'registered' with setParameterValue("name", value)
         return new AMAF_Params();
     }
 
@@ -48,9 +61,19 @@ public class AMAF_Params extends PlayerParameters {
         return heuristic;
     }
 
-    @Override
-    public players.basicMCTS.BasicMCTSPlayer instantiate() {
-        return new players.basicMCTS.BasicMCTSPlayer((players.basicMCTS.BasicMCTSParams) new players.basicMCTS.BasicMCTSParams().copy());
+    // convenience getter for the rollout policy
+    public GroupAARolloutPolicy getRolloutPolicy() {
+        return rolloutPolicy;
     }
 
+    // convenience setter
+    public void setRolloutPolicy(GroupAARolloutPolicy p) {
+        setParameterValue("rolloutPolicy", p);
+        this.rolloutPolicy = p;
+    }
+
+    @Override
+    public SushiGoAgentGroupAA instantiate() {
+        return new SushiGoAgentGroupAA((AMAF_Params) this.copy());
+    }
 }
