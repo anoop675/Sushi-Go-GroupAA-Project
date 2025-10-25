@@ -10,5 +10,6 @@ public interface GroupAARolloutPolicy {
             AbstractGameState state,
             List<AbstractAction> actions,
             int playerId, Random rnd
+            //c
     );
 }
