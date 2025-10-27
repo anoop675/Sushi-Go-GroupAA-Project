@@ -1,11 +1,12 @@
 /*
-    Custom Expected Utility Estimation Heuristic with Opponent Modelling for Greedy Rollout Policy
+    Custom Expected Utility Maximization/Estimation (EUM) Heuristic with Opponent Modelling for Greedy Rollout Policy
  */
 package groupAA;
 
 import java.util.*;
 import core.AbstractGameState;
 import core.components.Counter;
+import core.components.Deck;
 import core.interfaces.IStateHeuristic;
 import games.sushigo.cards.SGCard;
 import games.sushigo.SGGameState;
@@ -41,7 +42,6 @@ public class GroupAAHeuristic implements IStateHeuristic {
 
         double myTotalScoreEstimate = myRaw + myPotential + myMakiReward + myPuddingReward;
 
-
         //Calculating the opponent's maximum threat score
         double maxOpponentScoreEstimate = -Double.MAX_VALUE;
 
@@ -69,12 +69,37 @@ public class GroupAAHeuristic implements IStateHeuristic {
             maxOpponentScoreEstimate = Math.max(maxOpponentScoreEstimate, oppTotalScoreEstimate);
         }
 
-        // --- 3. Return the Score Differential against the MAX Threat ---
-        // This heuristic guides the agent to maximize the difference between its score and the best opponent's score.
+        //This is the Expected Utility for our agent in this current state, this heuristic guides the agent to maximize the difference between its score and the best opponent's score.
         double scoreDifferential = myTotalScoreEstimate - maxOpponentScoreEstimate;
 
         return Math.max(-MAX_POSSIBLE, Math.min(MAX_POSSIBLE, scoreDifferential)) / MAX_POSSIBLE;
     }
+
+    /**
+     * Count how many cards of a given SGCardType are currently in the specified player's hand.
+     * Uses direct casting to SGCard and checks the public 'type' field (SGCard has no getCardType()).
+     */
+    private int countInHand(SGGameState state, int player, SGCard.SGCardType type) {
+        try {
+            List<Deck<SGCard>> hands = state.getPlayerHands();
+            if (hands == null || hands.size() <= player) return 0;
+            Deck<SGCard> hand = hands.get(player);
+            if (hand == null) return 0;
+            int cnt = 0;
+            // Deck#getComponents() returns a list of the component cards
+            for (Object o : hand.getComponents()) {
+                if (o instanceof SGCard) {
+                    SGCard c = (SGCard) o;
+                    if (c.type == type) cnt++;
+                }
+            }
+            return cnt;
+        } catch (Throwable t) {
+            // Safe fallback
+            return 0;
+        }
+    }
+
 
     /** Calculates the potential score from incomplete Tempura, Sashimi, Dumpling, and Wasabi for a given player. */
     private double calculateRoundPotential(SGGameState state, Map<SGCard.SGCardType, Counter>[] played, int player) {
@@ -85,43 +110,94 @@ public class GroupAAHeuristic implements IStateHeuristic {
         int sashimiCount = played[player].get(SGCard.SGCardType.Sashimi).getValue();
         int dumplingCount = played[player].get(SGCard.SGCardType.Dumpling).getValue();
         int wasabiCount = played[player].get(SGCard.SGCardType.Wasabi).getValue();
-        int eggNigiri = played[player].get(SGCard.SGCardType.EggNigiri).getValue();
-        int salmonNigiri = played[player].get(SGCard.SGCardType.SalmonNigiri).getValue();
-        int squidNigiri = played[player].get(SGCard.SGCardType.SquidNigiri).getValue();
+        int eggNigiriCount = played[player].get(SGCard.SGCardType.EggNigiri).getValue();
+        int salmonNigiriCount = played[player].get(SGCard.SGCardType.SalmonNigiri).getValue();
+        int squidNigiriCount = played[player].get(SGCard.SGCardType.SquidNigiri).getValue();
+        int chopsticksCount = played[player].get(SGCard.SGCardType.Chopsticks).getValue();
 
-        //Calculating the Expected Value of completing a full tempura set (Tempura Potential) and adding it to the Round Potential
+        // >>> FIX A applied below: use hand-aware checks to avoid over-confident Chopsticks assumptions
+
+        //Calculating the Expected Marginal Value of completing a full tempura set (Tempura Potential) and adding it to the Round Potential
         int tempuraRemainder = tempuraCount % 2;
-        if (tempuraRemainder == 1) { // One away from a pair
-            roundPotential += PROB_ONE_CARD_AWAY * params.valueTempuraPair;
+        if (tempuraRemainder == 1) {
+            // >>> FIX A: If Chopsticks present, only assume near-certain completion if we actually hold a Tempura in hand.
+            int tempInHand = countInHand(state, player, SGCard.SGCardType.Tempura); // >>> FIX A
+            double prob;
+            if (chopsticksCount > 0) {
+                prob = tempInHand > 0 ? 0.95 : PROB_ONE_CARD_AWAY; // >>> FIX A: high certainty only if matching card exists
+            } else {
+                prob = PROB_ONE_CARD_AWAY;
+            }
+            roundPotential += prob * params.valueTempuraPair;
         }
 
-        // --- Sashimi Potential ---
+        //Calculating the Expected Marginal Value of completing a full sashimi set (Sashimi Potential) and adding it to the Round Potential
         int sashimiRemainder = sashimiCount % 3;
-        if (sashimiRemainder == 1) { // Two away from a triple
-            roundPotential += PROB_TWO_CARDS_AWAY * params.valueSashimiTriple;
-        } else if (sashimiRemainder == 2) { // One away from a triple
-            roundPotential += PROB_ONE_CARD_AWAY * params.valueSashimiTriple;
+        if (sashimiRemainder == 1) {
+            // Need two sashimi to complete. If we have Chopsticks, check hand presence.
+            int sashimiInHand = countInHand(state, player, SGCard.SGCardType.Sashimi); // >>> FIX A
+            double prob;
+            if (chopsticksCount > 0) {
+                if (sashimiInHand >= 2) {
+                    prob = 0.95; // likely
+                } else if (sashimiInHand == 1) {
+                    prob = 0.7; // somewhat likely (one in hand + one drawn)
+                } else {
+                    prob = PROB_TWO_CARDS_AWAY; // fallback
+                }
+            } else {
+                prob = PROB_TWO_CARDS_AWAY;
+            }
+            roundPotential += prob * params.valueSashimiTriple;
+        } else if (sashimiRemainder == 2) {
+            // One away from triple
+            int sashimiInHand = countInHand(state, player, SGCard.SGCardType.Sashimi); // >>> FIX A
+            double prob;
+            if (chopsticksCount > 0) {
+                prob = sashimiInHand >= 1 ? 0.95 : PROB_ONE_CARD_AWAY; // >>> FIX A
+            } else {
+                prob = PROB_ONE_CARD_AWAY;
+            }
+            roundPotential += prob * params.valueSashimiTriple;
         }
 
-        // --- Dumpling Potential ---
+        //Calculating the Expected Marginal Value of playing one or two more Dumpling cards (Dumpling Potential) and adding it to the Round Potential
         int[] dumplingVals = params.valueDumpling;
         int currentDIdx = Math.min(dumplingCount, dumplingVals.length - 1);
         int nextDIdx = Math.min(currentDIdx + 1, dumplingVals.length - 1);
-        int currentTheoretical = dumplingVals[currentDIdx];
-        int theoreticalNext = dumplingVals[nextDIdx];
-        int marginal = theoreticalNext - currentTheoretical;
-        if (marginal > 0) {
-            roundPotential += PROB_ONE_CARD_AWAY * marginal;
+        int nextNextDIdx = Math.min(currentDIdx + 2, dumplingVals.length - 1);
+        int marginalOne = dumplingVals[nextDIdx] - dumplingVals[currentDIdx];
+        int marginalTwo = dumplingVals[nextNextDIdx] - dumplingVals[currentDIdx];
+
+        // >>> FIX A: check dumplings actually present in hand before assuming two-card gain via Chopsticks
+        int dumplingsInHand = countInHand(state, player, SGCard.SGCardType.Dumpling); // >>> FIX A
+        if (chopsticksCount > 0) {
+            if (dumplingsInHand >= 2) {
+                roundPotential += marginalTwo * 0.9; // high confidence if 2 dumplings in-hand (>>> FIX A)
+            } else if (dumplingsInHand == 1) {
+                roundPotential += marginalOne * 0.7; // moderate if only one in-hand (>>> FIX A)
+            } else {
+                // no dumpling in hand, fallback to single-card-away heuristic (less optimistic)
+                if (marginalOne > 0) roundPotential += marginalOne * PROB_ONE_CARD_AWAY;
+            }
+        } else {
+            if (marginalOne > 0) roundPotential += marginalOne * PROB_ONE_CARD_AWAY;
         }
 
         // --- Wasabi + Nigiri Potential ---
         if (wasabiCount > 0) {
-            int totalNigiri = eggNigiri + salmonNigiri + squidNigiri;
-            double avgNigiriValue = (double)(eggNigiri * params.valueEggNigiri + salmonNigiri * params.valueSalmonNigiri + squidNigiri * params.valueSquidNigiri);
+            int totalNigiri = eggNigiriCount + salmonNigiriCount + squidNigiriCount;
+            double avgNigiriValue = (double)(eggNigiriCount * params.valueEggNigiri + salmonNigiriCount * params.valueSalmonNigiri + squidNigiriCount * params.valueSquidNigiri);
             avgNigiriValue = totalNigiri > 0 ? (avgNigiriValue / totalNigiri) : (params.valueSalmonNigiri); // Fallback to Salmon value
 
             int wasabiMultiplier = params.multiplierWasabi;
-            roundPotential += wasabiCount * (wasabiMultiplier - 1) * avgNigiriValue * PROB_ONE_CARD_AWAY;
+            // >>> FIX A: only assume a high chance of pairing wasabi with a nigiri if there is at least one nigiri actually in hand
+            int nigiriInHand = countInHand(state, player, SGCard.SGCardType.EggNigiri)
+                    + countInHand(state, player, SGCard.SGCardType.SalmonNigiri)
+                    + countInHand(state, player, SGCard.SGCardType.SquidNigiri); // >>> FIX A
+
+            double prob = (chopsticksCount > 0) ? (nigiriInHand > 0 ? 0.95 : PROB_ONE_CARD_AWAY) : PROB_ONE_CARD_AWAY; // >>> FIX A
+            roundPotential += wasabiCount * (wasabiMultiplier - 1) * avgNigiriValue * prob;
         }
 
         return roundPotential;
@@ -140,33 +216,28 @@ public class GroupAAHeuristic implements IStateHeuristic {
         int mostScore = params.valueMakiMost;
         int secondScore = params.valueMakiSecond;
 
-        double myMakiReward = 0.0;
-        double maxOppMakiReward = 0.0;
+        int chopsticksCount = played[playerId].get(SGCard.SGCardType.Chopsticks).getValue();
+        double chopsticksBoost = 1.0 + 0.2 * chopsticksCount; //small bonus per Chopsticks
 
-        int myMaki = makiCounts[playerId];
-        int max1 = Arrays.stream(makiCounts).max().orElse(0);
-
-        // --- Calculate rewards for ALL players ---
         double[] allRewards = new double[nPlayers];
 
+        int max1 = Arrays.stream(makiCounts).max().orElse(0);
         if (max1 > 0) {
-            // Find top and second scores
             long topCount = Arrays.stream(makiCounts).filter(x -> x == max1).count();
             int max2 = Arrays.stream(makiCounts).filter(x -> x < max1).max().orElse(0);
             long secondCount = Arrays.stream(makiCounts).filter(x -> x == max2).count();
 
             for (int p = 0; p < nPlayers; p++) {
                 if (makiCounts[p] == max1) {
-                    allRewards[p] = (double) mostScore / topCount;
+                    allRewards[p] = ((double) mostScore / topCount) * ((p == playerId) ? chopsticksBoost : 1.0);
                 } else if (makiCounts[p] == max2 && max2 > 0) {
-                    allRewards[p] = (double) secondScore / secondCount;
+                    allRewards[p] = ((double) secondScore / secondCount) * ((p == playerId) ? chopsticksBoost : 1.0);
                 }
             }
         }
 
-        // --- Extract My Reward and Max Opponent Reward ---
-        myMakiReward = allRewards[playerId];
-
+        double myMakiReward = allRewards[playerId];
+        double maxOppMakiReward = 0.0;
         for (int p = 0; p < nPlayers; p++) {
             if (p != playerId) {
                 maxOppMakiReward = Math.max(maxOppMakiReward, allRewards[p]);
@@ -176,10 +247,10 @@ public class GroupAAHeuristic implements IStateHeuristic {
         return new double[]{myMakiReward, maxOppMakiReward};
     }
 
+
     /** Calculates the expected Pudding reward for the current player relative to all others.
      * Returns: [Player's Reward, Max Opponent Reward]
      */
-
     private double[] calculatePuddingRewards(AbstractGameState state, int playerId, int nPlayers) {
         SGGameState sgState = (SGGameState) state;
 
@@ -194,34 +265,32 @@ public class GroupAAHeuristic implements IStateHeuristic {
 
         final double PROB_FINISH = 0.2; //small expected probability multiplier for non-terminal states
 
+        int chopsticksCount = sgState.getPlayedCardTypes()[playerId].get(SGCard.SGCardType.Chopsticks).getValue();
+        double chopsticksBoost = 1.0 + 0.1 * chopsticksCount; //Chopsticks boost
+
         int maxP = Arrays.stream(puddingCounts).max().orElse(0);
         int minP = Arrays.stream(puddingCounts).min().orElse(0);
 
-        double myPuddingReward = 0.0;
-        double maxOppPuddingReward = 0.0;
         double[] allRewards = new double[nPlayers];
 
-        // --- Calculate rewards for ALL players ---
         for (int p = 0; p < nPlayers; p++) {
             double pReward = 0.0;
-            //MOST reward
             if (puddingCounts[p] == maxP && maxP > 0) {
-                pReward += (double)mostScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == maxP).count()) * PROB_FINISH;
+                pReward += ((double) mostScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == maxP).count()) * PROB_FINISH);
+                if (p == playerId) pReward *= chopsticksBoost;
             }
-            //LEAST penalty
             if (puddingCounts[p] == minP && nPlayers > 1) {
-                pReward -= (double)leastScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == minP).count()) * PROB_FINISH;
+                pReward -= ((double) leastScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == minP).count()) * PROB_FINISH);
             }
             allRewards[p] = pReward;
         }
 
-        // --- Extract My Reward and Max Opponent Reward ---
-        myPuddingReward = allRewards[playerId];
+        double myPuddingReward = allRewards[playerId];
+        double maxOppPuddingReward = 0.0;
         for (int p = 0; p < nPlayers; p++) {
-            if (p != playerId) {
-                maxOppPuddingReward = Math.max(maxOppPuddingReward, allRewards[p]);
-            }
+            if (p != playerId) maxOppPuddingReward = Math.max(maxOppPuddingReward, allRewards[p]);
         }
+
         return new double[]{myPuddingReward, maxOppPuddingReward};
     }
 }
