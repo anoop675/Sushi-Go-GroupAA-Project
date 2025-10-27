@@ -1,47 +1,37 @@
 /*
-    custom heuristic based on Expected Utility Estimation with Opponent Modelling for greedy rollout policy
+    Custom Expected Utility Estimation Heuristic with Opponent Modelling for Greedy Rollout Policy
  */
 package groupAA;
 
 import java.util.*;
-
 import core.AbstractGameState;
 import core.components.Counter;
 import core.interfaces.IStateHeuristic;
 import games.sushigo.cards.SGCard;
 import games.sushigo.SGGameState;
-import org.json.simple.JSONObject;
 import games.sushigo.SGParameters;
 
 public class GroupAAHeuristic implements IStateHeuristic {
 
-    // Tweak this to control how strongly the heuristic maps to [-1,1]
-    private static final double MAX_POSSIBLE = 40.0;
-    // Base probability for completing a set when one card away (can be tuned)
-    private static final double PROB_ONE_AWAY = 0.5;
-    // Base probability for completing a set when two cards away
-    private static final double PROB_TWO_AWAY = 0.1;
+    private static final double MAX_POSSIBLE = 40.0; //maximum achievable score (score difference) that a player could get in a round or in the entire game, just an approximation to clamp the heuristic (utility) value within [-1,1]
+    private static final double PROB_ONE_CARD_AWAY = 0.5; //base probability for completing a set when one card away (can be tuned)
+    private static final double PROB_TWO_CARDS_AWAY = 0.1; //base probability for completing a set when two cards away
 
     public GroupAAHeuristic() {
-        // System.out.println("GroupAAHeuristic initialized (no-arg constructor)");
-    }
-
-    public GroupAAHeuristic(JSONObject json) {
-        // System.out.println("GroupAAHeuristic initialized from JSON: " + json.toJSONString());
     }
 
     @Override
     public double evaluateState(AbstractGameState gs, int playerId) {
-        SGGameState state = (SGGameState) gs;
-        int nPlayers = state.getNPlayers();
+        SGGameState state = (SGGameState) gs; //get current game state (rolled out game state)
+        int nPlayers = state.getNPlayers(); //get no.of players in the current game state
 
-        Map<SGCard.SGCardType, Counter>[] played = state.getPlayedCardTypes();
+        Map<SGCard.SGCardType, Counter>[] played = state.getPlayedCardTypes(); //get the played cards of each player on the table for every turn (as it updates)
 
-        double myRaw = state.getPlayerScore()[playerId].getValue(); //returns the root player's raw score
-        double myPotential = calculateRoundPotential(state, played, playerId); //returns the root player's potential score
+        double myRaw = state.getPlayerScore()[playerId].getValue(); //returns the root player's (our MCTS agent's) raw score
+        double myPotential = calculateRoundPotential(state, played, playerId); //returns the root player's (our MCTS agent's) potential score
 
-        double[] myMakiRewards = calculateMakiRewards(state, played, playerId, nPlayers);
-        double myMakiReward = myMakiRewards[0]; // My expected reward is always the first element
+        double[] myMakiRewards = calculateMakiRewards(state, played, playerId, nPlayers); //returns the expected Maki rewards of the highest and second-highest players for the current state
+        double myMakiReward = myMakiRewards[0]; //our agent's expected maki reward is always the first element!
 
         double[] myPuddingRewards = {0.0};
         if (state.isNotTerminal()) {
@@ -83,34 +73,34 @@ public class GroupAAHeuristic implements IStateHeuristic {
         // This heuristic guides the agent to maximize the difference between its score and the best opponent's score.
         double scoreDifferential = myTotalScoreEstimate - maxOpponentScoreEstimate;
 
-        return normalize(scoreDifferential);
+        return Math.max(-MAX_POSSIBLE, Math.min(MAX_POSSIBLE, scoreDifferential)) / MAX_POSSIBLE;
     }
 
     /** Calculates the potential score from incomplete Tempura, Sashimi, Dumpling, and Wasabi for a given player. */
     private double calculateRoundPotential(SGGameState state, Map<SGCard.SGCardType, Counter>[] played, int player) {
-        double potential = 0.0;
+        double roundPotential = 0.0; //Expected Value of completing all sets of each card type, along with wasabi & nigiri combos
         SGParameters params = (SGParameters) state.getGameParameters();
 
-        int tempuraCount = safeGetCounter(played, player, SGCard.SGCardType.Tempura);
-        int sashimiCount = safeGetCounter(played, player, SGCard.SGCardType.Sashimi);
-        int dumplingCount = safeGetCounter(played, player, SGCard.SGCardType.Dumpling);
-        int wasabiCount = safeGetCounter(played, player, SGCard.SGCardType.Wasabi);
-        int eggNigiri = safeGetCounter(played, player, SGCard.SGCardType.EggNigiri);
-        int salmonNigiri = safeGetCounter(played, player, SGCard.SGCardType.SalmonNigiri);
-        int squidNigiri = safeGetCounter(played, player, SGCard.SGCardType.SquidNigiri);
+        int tempuraCount = played[player].get(SGCard.SGCardType.Tempura).getValue();
+        int sashimiCount = played[player].get(SGCard.SGCardType.Sashimi).getValue();
+        int dumplingCount = played[player].get(SGCard.SGCardType.Dumpling).getValue();
+        int wasabiCount = played[player].get(SGCard.SGCardType.Wasabi).getValue();
+        int eggNigiri = played[player].get(SGCard.SGCardType.EggNigiri).getValue();
+        int salmonNigiri = played[player].get(SGCard.SGCardType.SalmonNigiri).getValue();
+        int squidNigiri = played[player].get(SGCard.SGCardType.SquidNigiri).getValue();
 
-        // --- Tempura Potential ---
+        //Calculating the Expected Value of completing a full tempura set (Tempura Potential) and adding it to the Round Potential
         int tempuraRemainder = tempuraCount % 2;
         if (tempuraRemainder == 1) { // One away from a pair
-            potential += PROB_ONE_AWAY * params.valueTempuraPair;
+            roundPotential += PROB_ONE_CARD_AWAY * params.valueTempuraPair;
         }
 
         // --- Sashimi Potential ---
         int sashimiRemainder = sashimiCount % 3;
         if (sashimiRemainder == 1) { // Two away from a triple
-            potential += PROB_TWO_AWAY * params.valueSashimiTriple;
+            roundPotential += PROB_TWO_CARDS_AWAY * params.valueSashimiTriple;
         } else if (sashimiRemainder == 2) { // One away from a triple
-            potential += PROB_ONE_AWAY * params.valueSashimiTriple;
+            roundPotential += PROB_ONE_CARD_AWAY * params.valueSashimiTriple;
         }
 
         // --- Dumpling Potential ---
@@ -121,7 +111,7 @@ public class GroupAAHeuristic implements IStateHeuristic {
         int theoreticalNext = dumplingVals[nextDIdx];
         int marginal = theoreticalNext - currentTheoretical;
         if (marginal > 0) {
-            potential += PROB_ONE_AWAY * marginal;
+            roundPotential += PROB_ONE_CARD_AWAY * marginal;
         }
 
         // --- Wasabi + Nigiri Potential ---
@@ -131,10 +121,10 @@ public class GroupAAHeuristic implements IStateHeuristic {
             avgNigiriValue = totalNigiri > 0 ? (avgNigiriValue / totalNigiri) : (params.valueSalmonNigiri); // Fallback to Salmon value
 
             int wasabiMultiplier = params.multiplierWasabi;
-            potential += wasabiCount * (wasabiMultiplier - 1) * avgNigiriValue * PROB_ONE_AWAY;
+            roundPotential += wasabiCount * (wasabiMultiplier - 1) * avgNigiriValue * PROB_ONE_CARD_AWAY;
         }
 
-        return potential;
+        return roundPotential;
     }
 
     /** Calculates the expected Maki reward for the specified player relative to all others.
@@ -143,7 +133,7 @@ public class GroupAAHeuristic implements IStateHeuristic {
     private double[] calculateMakiRewards(SGGameState state, Map<SGCard.SGCardType, Counter>[] played, int playerId, int nPlayers) {
         int[] makiCounts = new int[nPlayers];
         for (int p = 0; p < nPlayers; p++) {
-            makiCounts[p] = safeGetCounter(played, p, SGCard.SGCardType.Maki);
+            makiCounts[p] = played[p].get(SGCard.SGCardType.Maki).getValue();
         }
 
         SGParameters params = (SGParameters) state.getGameParameters();
@@ -189,20 +179,20 @@ public class GroupAAHeuristic implements IStateHeuristic {
     /** Calculates the expected Pudding reward for the current player relative to all others.
      * Returns: [Player's Reward, Max Opponent Reward]
      */
+
     private double[] calculatePuddingRewards(AbstractGameState state, int playerId, int nPlayers) {
         SGGameState sgState = (SGGameState) state;
 
         int[] puddingCounts = new int[nPlayers];
         for (int p = 0; p < nPlayers; p++) {
-            puddingCounts[p] = safeGetCounter(sgState.getPlayedCardTypesAllGame(), p, SGCard.SGCardType.Pudding);
+            puddingCounts[p] = sgState.getPlayedCardTypesAllGame()[p].get(SGCard.SGCardType.Pudding).getValue();
         }
 
         SGParameters params = (SGParameters) state.getGameParameters();
         int mostScore = params.valuePuddingMost;
         int leastScore = params.valuePuddingLeast;
 
-        // Use a small expected probability multiplier for non-terminal states
-        final double PROB_FINISH = 0.2;
+        final double PROB_FINISH = 0.2; //small expected probability multiplier for non-terminal states
 
         int maxP = Arrays.stream(puddingCounts).max().orElse(0);
         int minP = Arrays.stream(puddingCounts).min().orElse(0);
@@ -214,11 +204,11 @@ public class GroupAAHeuristic implements IStateHeuristic {
         // --- Calculate rewards for ALL players ---
         for (int p = 0; p < nPlayers; p++) {
             double pReward = 0.0;
-            // MOST reward
+            //MOST reward
             if (puddingCounts[p] == maxP && maxP > 0) {
                 pReward += (double)mostScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == maxP).count()) * PROB_FINISH;
             }
-            // LEAST penalty
+            //LEAST penalty
             if (puddingCounts[p] == minP && nPlayers > 1) {
                 pReward -= (double)leastScore / Math.max(1, Arrays.stream(puddingCounts).filter(x -> x == minP).count()) * PROB_FINISH;
             }
@@ -232,21 +222,6 @@ public class GroupAAHeuristic implements IStateHeuristic {
                 maxOppPuddingReward = Math.max(maxOppPuddingReward, allRewards[p]);
             }
         }
-
         return new double[]{myPuddingReward, maxOppPuddingReward};
-    }
-
-    private int safeGetCounter(Map<SGCard.SGCardType, Counter>[] played, int player, SGCard.SGCardType type) {
-        try {
-            if (played == null || played[player] == null || played[player].get(type) == null) return 0;
-            return played[player].get(type).getValue();
-        } catch (Throwable t) {
-            return 0;
-        }
-    }
-
-    private double normalize(double raw) {
-        double clipped = Math.max(-MAX_POSSIBLE, Math.min(MAX_POSSIBLE, raw));
-        return clipped / MAX_POSSIBLE;
     }
 }

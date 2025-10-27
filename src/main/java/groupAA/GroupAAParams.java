@@ -12,7 +12,7 @@ public class GroupAAParams extends PlayerParameters {
     public int rolloutLength = 10; // default
     public int maxTreeDepth = 100;
     public double epsilon = 1e-6; // small numeric noise used in UCT
-    public double biasWeight = 0.1; // default progressive-bias weight (for AMAF)
+    public double biasWeight = 0.1; // progressive-bias weight (0.1)
     public IStateHeuristic heuristic = new GroupAAHeuristic(); // default to your heuristic
 
     // NEW: rollout policy and exploration inside rollout (epsilon-greedy)
