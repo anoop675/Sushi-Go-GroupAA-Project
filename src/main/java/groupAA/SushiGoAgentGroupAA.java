@@ -10,7 +10,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     private static final Logger LOGGER = Logger.getLogger(SushiGoAgentGroupAA.class.getName());
 
-    public SushiGoAgentGroupAA(AMAF_Params params) {
+    public SushiGoAgentGroupAA(GroupAAParams params) {
         super(params, "GroupAA MCTS Agent");
         initRandom();
         params.heuristic = new GroupAAHeuristic();
@@ -20,11 +20,11 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     }
 
     public SushiGoAgentGroupAA() {
-        this(new AMAF_Params());
+        this(new GroupAAParams());
     }
 
     public SushiGoAgentGroupAA(long randomSeed) {
-        super(new AMAF_Params(), "GroupAA MCTS Agent");
+        super(new GroupAAParams(), "GroupAA MCTS Agent");
         parameters.setRandomSeed(randomSeed);
         initRandom();
         setDefaultParams();
@@ -39,7 +39,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     //Overwrites the default AMAF parameters
     private void setDefaultParams() {
-        AMAF_Params params = getParameters();
+        GroupAAParams params = getParameters();
         params.K = Math.sqrt(2);
         params.rolloutLength = 10;
         params.maxTreeDepth = 5;
@@ -59,8 +59,8 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     }
 
     @Override
-    public AMAF_Params getParameters() {
-        return (AMAF_Params) parameters;
+    public GroupAAParams getParameters() {
+        return (GroupAAParams) parameters;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     public SushiGoAgentGroupAA copy() {
         LOGGER.info("Creating copy of SushiGoAgentGroupAA agent with parameters");
         // copy parameters first
-        AMAF_Params parametersCopy = (AMAF_Params) parameters.copy();
+        GroupAAParams parametersCopy = (GroupAAParams) parameters.copy();
 
         // create a new agent using the params-copy constructor
         SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy);

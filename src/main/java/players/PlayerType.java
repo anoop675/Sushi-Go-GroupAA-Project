@@ -20,7 +20,7 @@ import static players.PlayerType.Property.*;
 
 // Added imports for GroupAA agent (only new lines)
 import groupAA.SushiGoAgentGroupAA;
-import groupAA.AMAF_Params;
+import groupAA.GroupAAParams;
 
 /**
  * Encapsulates all players available in the framework.
@@ -108,19 +108,18 @@ public enum PlayerType {
                 }
                 player = new RMHCPlayer((RMHCParams) params);
                 break;
-            case GroupAA: // <<-- ADDED
-                // Ensure we have AMAF_Params for this agent
+            case GroupAA:
                 if (params == null) {
-                    params = new AMAF_Params();
-                } else if (!(params instanceof AMAF_Params)) {
+                    params = new GroupAAParams();
+                } else if (!(params instanceof GroupAAParams)) {
                     // If caller passed a generic PlayerParameters, replace with an AMAF_Params preserving seed
-                    AMAF_Params newParams = new AMAF_Params();
+                    GroupAAParams newParams = new GroupAAParams();
                     // copy seed into new params if present
                     newParams.setRandomSeed(seed);
                     params = newParams;
                 }
                 // params.setRandomSeed(seed); // already done at top, but safe
-                player = new SushiGoAgentGroupAA((AMAF_Params) params);
+                player = new SushiGoAgentGroupAA((GroupAAParams) params);
                 break;
         }
 
@@ -133,8 +132,8 @@ public enum PlayerType {
                 return new MCTSParams();
             case RMHC:
                 return new RMHCParams();
-            case GroupAA: // <<-- ADDED
-                return new AMAF_Params();
+            case GroupAA:
+                return new GroupAAParams();
             default:
                 return null;
         }
