@@ -42,7 +42,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         GroupAAParams params = getParameters();
         params.K = Math.sqrt(2);
         params.rolloutLength = 10;
-        params.maxTreeDepth = 5;
+        params.maxTreeDepth = 8;
         params.epsilon = 1e-6;
         params.heuristic = new GroupAAHeuristic();
         params.setParameterValue("heuristic", this.getParameters().heuristic);

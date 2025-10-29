@@ -180,6 +180,7 @@ class GroupAATreeNode {
                 currentNode = currentNode.children.get(actionChosen);
             }
         }
+
         return currentNode;
     }
 

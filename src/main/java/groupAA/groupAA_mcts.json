@@ -2,7 +2,7 @@
   "class": "groupAA.SushiGoAgentGroupAA",
   "K": 1.4142135623730951,
   "rolloutLength": 10,
-  "maxTreeDepth": 5,
+  "maxTreeDepth": 8,
   "treePolicy": "UCB",
   "opponentTreePolicy": "OneTree",
   "selectionPolicy": "SIMPLE",
@@ -15,5 +15,5 @@
   "heuristic": {
     "class": "groupAA.GroupAAHeuristic"
   },
-  "biasWeight": 0.10
+  "biasWeight": 0.5
 }
