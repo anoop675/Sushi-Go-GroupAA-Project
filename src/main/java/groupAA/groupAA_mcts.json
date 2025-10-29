@@ -2,7 +2,7 @@
   "class": "groupAA.SushiGoAgentGroupAA",
   "K": 1.4142135623730951,
   "rolloutLength": 10,
-  "maxTreeDepth": 8,
+  "maxTreeDepth": 100,
   "treePolicy": "UCB",
   "opponentTreePolicy": "OneTree",
   "selectionPolicy": "SIMPLE",

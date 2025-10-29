@@ -170,7 +170,7 @@ class GroupAATreeNode {
         LOGGER.info("---------Performing tree policy - selection then expansion----------");
         //keep iterating while the state reached is not terminal and the depth of the tree is not exceeded
         while (currentNode.state.isNotTerminal() && currentNode.depth < player.getParameters().maxTreeDepth) {
-            if (!currentNode.unexpandedActions().isEmpty()) {
+            if (!currentNode.unexpandedActions().isEmpty()) { //if this node has actions yet to be expanded
                 // We have an unexpanded action
                 currentNode = currentNode.expand();
                 return currentNode;
@@ -200,6 +200,7 @@ class GroupAATreeNode {
     private GroupAATreeNode expand() {
         // Find random child not already created
         Random r = new Random(player.getParameters().getRandomSeed());
+        System.out.println("SEED OF OUR PLAYER: " + player.getParameters().getRandomSeed());
         // pick a random unchosen action
         List<AbstractAction> notChosen = unexpandedActions();
         AbstractAction chosen = notChosen.get(r.nextInt(notChosen.size()));

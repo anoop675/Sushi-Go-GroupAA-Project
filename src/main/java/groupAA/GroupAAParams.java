@@ -10,7 +10,7 @@ public class GroupAAParams extends PlayerParameters {
 
     public double K = Math.sqrt(2);
     public int rolloutLength = 10; // default
-    public int maxTreeDepth = 8;
+    public int maxTreeDepth = 100;
     public double epsilon = 1e-6; // small numeric noise used in UCT
     public double biasWeight = 0.5; // progressive-bias weight (0.1 is safe, but 0.5 if heuristic is admissible)
     public IStateHeuristic heuristic = new GroupAAHeuristic(); // default to your heuristic
