@@ -275,7 +275,15 @@ public class GroupAAHeuristic implements IStateHeuristic {
         int mostScore = params.valuePuddingMost;
         int leastScore = params.valuePuddingLeast;
 
-        final double PROB_FINISH = 0.2; //small expected probability multiplier for non-terminal states
+        final double PROB_FINISH; //small expected probability multiplier for non-terminal states
+
+        if (sgState.getRoundCounter() == 1)
+            PROB_FINISH = 0.5;
+
+        else if (sgState.getRoundCounter() == 2)
+            PROB_FINISH = 0.75;
+
+        else PROB_FINISH = 1.0;
 
         int maxP = Arrays.stream(puddingCounts).max().orElse(0);
         int minP = Arrays.stream(puddingCounts).min().orElse(0);

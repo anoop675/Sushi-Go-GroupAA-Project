@@ -12,7 +12,7 @@ public class GroupAAParams extends PlayerParameters {
     public int rolloutLength = 10; // default
     public int maxTreeDepth = 100;
     public double epsilon = 1e-6; // small numeric noise used in UCT
-    public double biasWeight = 0.1; // progressive-bias weight (0.1)
+    public double biasWeight = 0.5; // progressive-bias weight (0.1 is safe, but 0.5 if heuristic is admissible)
     public IStateHeuristic heuristic = new GroupAAHeuristic(); // default to your heuristic
 
     // NEW: rollout policy and exploration inside rollout (epsilon-greedy)
@@ -22,10 +22,10 @@ public class GroupAAParams extends PlayerParameters {
     public GroupAAParams() {
         addTunableParameter("K", Math.sqrt(2), Arrays.asList(0.0, 0.1, 1.0, Math.sqrt(2), 3.0, 10.0));
         addTunableParameter("rolloutLength", rolloutLength, Arrays.asList(0, 3, 5, 10, 30, 100));
-        addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 10, 30, 100));
+        addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 8, 10, 30, 100));
         addTunableParameter("epsilon", epsilon);
         // Keep heuristic tunable (defaults to GroupAAHeuristic)
-        addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2));
+        addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2, 0.5));
         addTunableParameter("heuristic", this.heuristic);
 
         // New tunables for rollout policy
