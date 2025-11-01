@@ -1,0 +1,18 @@
+{
+  "class": "groupAA.SushiGoAgentGroupAA",
+  "K": 0.7,
+  "rolloutLength": 20,
+  "maxTreeDepth": 100,
+  "treePolicy": "UCB",
+  "opponentTreePolicy": "OneTree",
+  "selectionPolicy": "SIMPLE",
+  "information": "Open_Loop",
+  "rolloutType": "GREEDY",
+  "budgetType": "BUDGET_TIME",
+  "budget": 40,
+  "breakMS": 0,
+  "heuristic": {
+    "class": "groupAA.GroupAAHeuristic"
+  },
+  "biasWeight": 0.8
+}

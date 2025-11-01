@@ -1,0 +1,11 @@
+{
+  "game" : "SushiGo",
+  "nPlayers" : 3,
+  "mode" : "random",
+  "matchups" : 200,
+  "verbose" : true,
+  "seed" : 740234,
+  "listener": "json/listeners/basiclistener.json",
+  "destDir": "src/main/java/groupAA",
+  "playerDirectory": "json/config/RunGames/groupAA_Players"
+}
