@@ -166,3 +166,45 @@ mctsPlayer: Win rate 0.77 +/- 0.030	Mean Ordinal 1.27 +/- 0.04
 GroupAA MCTS Agent: Win rate 0.21 +/- 0.029	Mean Ordinal 2.11 +/- 0.05
 rheaPlayer: Win rate 0.02 +/- 0.010	Mean Ordinal 2.63 +/- 0.04
 
+Game: SushiGo, Players: 3, Mode: RANDOM, TotalGames: 200, GamesPerMatchup: 200
+rheaPlayer got 7.00 points. rheaPlayer won 3.5% of the 200 games of the tournament. rheaPlayer won 3.5% of the 200 games it played during the tournament.
+rheaPlayer got a mean score of 42.73.
+rheaPlayer won 3.5% of the 200 games against GroupAA MCTS Agent.
+rheaPlayer won 3.5% of the 200 games against mctsPlayer.
+
+GroupAA MCTS Agent got 5.00 points. GroupAA MCTS Agent won 2.5% of the 200 games of the tournament. GroupAA MCTS Agent won 2.5% of the 200 games it played during the tournament.
+GroupAA MCTS Agent got a mean score of 33.12.
+GroupAA MCTS Agent won 2.5% of the 200 games against rheaPlayer.
+GroupAA MCTS Agent won 2.5% of the 200 games against mctsPlayer.
+
+mctsPlayer got 188.00 points. mctsPlayer won 94.0% of the 200 games of the tournament. mctsPlayer won 94.0% of the 200 games it played during the tournament.
+mctsPlayer got a mean score of 56.83.
+mctsPlayer won 94.0% of the 200 games against rheaPlayer.
+mctsPlayer won 94.0% of the 200 games against GroupAA MCTS Agent.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+mctsPlayer: Win rate 0.94 +/- 0.017	Mean Ordinal 1.06 +/- 0.02
+rheaPlayer: Win rate 0.04 +/- 0.013	Mean Ordinal 2.13 +/- 0.03
+GroupAA MCTS Agent: Win rate 0.03 +/- 0.011	Mean Ordinal 2.82 +/- 0.03
+
+Game: SushiGo, Players: 3, Mode: RANDOM, TotalGames: 200, GamesPerMatchup: 200
+rheaPlayer got 8.00 points. rheaPlayer won 4.0% of the 200 games of the tournament. rheaPlayer won 4.0% of the 200 games it played during the tournament.
+rheaPlayer got a mean score of 40.15.
+rheaPlayer won 4.0% of the 200 games against GroupAA MCTS Agent.
+rheaPlayer won 4.0% of the 200 games against mctsPlayer.
+
+GroupAA MCTS Agent got 53.50 points. GroupAA MCTS Agent won 26.5% of the 200 games of the tournament. GroupAA MCTS Agent won 26.5% of the 200 games it played during the tournament.
+GroupAA MCTS Agent got a mean score of 44.63.
+GroupAA MCTS Agent won 26.5% of the 200 games against rheaPlayer.
+GroupAA MCTS Agent won 26.5% of the 200 games against mctsPlayer.
+
+mctsPlayer got 138.50 points. mctsPlayer won 69.0% of the 200 games of the tournament. mctsPlayer won 69.0% of the 200 games it played during the tournament.
+mctsPlayer got a mean score of 49.57.
+mctsPlayer won 69.0% of the 200 games against rheaPlayer.
+mctsPlayer won 69.0% of the 200 games against GroupAA MCTS Agent.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+mctsPlayer: Win rate 0.69 +/- 0.033	Mean Ordinal 1.36 +/- 0.04
+GroupAA MCTS Agent: Win rate 0.27 +/- 0.031	Mean Ordinal 2.07 +/- 0.05
+rheaPlayer: Win rate 0.04 +/- 0.014	Mean Ordinal 2.57 +/- 0.04
+
