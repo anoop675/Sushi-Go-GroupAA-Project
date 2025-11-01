@@ -28,7 +28,7 @@ public class GroupAAParams extends PlayerParameters {
         addTunableParameter("maxTreeDepth", maxTreeDepth, Arrays.asList(1, 3, 8, 10, 30, 100));
         addTunableParameter("epsilon", epsilon);
         // Keep heuristic tunable (defaults to GroupAAHeuristic)
-        addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2, 0.5, 0.8));
+        //addTunableParameter("biasWeight", biasWeight, Arrays.asList(0.0, 0.01, 0.05, 0.1, 0.2, 0.5, 0.8));
         addTunableParameter("heuristic", this.heuristic);
 
         // New tunables for rollout policy
@@ -48,7 +48,7 @@ public class GroupAAParams extends PlayerParameters {
         rolloutLength = (int) getParameterValue("rolloutLength");
         maxTreeDepth = (int) getParameterValue("maxTreeDepth");
         epsilon = (double) getParameterValue("epsilon");
-        biasWeight = (double) getParameterValue("biasWeight");
+        //biasWeight = (double) getParameterValue("biasWeight");
         heuristic = (IStateHeuristic) getParameterValue("heuristic");
 
         // read rollout extras (safely)
