@@ -119,7 +119,7 @@ public enum PlayerType {
                     params = newParams;
                 }
                 // params.setRandomSeed(seed); // already done at top, but safe
-                player = new SushiGoAgentGroupAA((GroupAAParams) params);
+                player = new SushiGoAgentGroupAA((GroupAAParams) params, "GroupAA MCTS Agent");
                 break;
         }
 

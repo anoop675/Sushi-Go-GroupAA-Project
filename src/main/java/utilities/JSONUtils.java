@@ -58,6 +58,7 @@ public class JSONUtils {
     @SuppressWarnings("unchecked")
     public static <T> T loadClassFromJSON(JSONObject json) {
         try {
+            System.out.println("JSON: \n" + json);
             String cl = (String) json.getOrDefault("class", "");
             if (cl.isEmpty()) {
                 // look for an enum

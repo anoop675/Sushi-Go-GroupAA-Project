@@ -51,67 +51,42 @@ class GroupAATreeNode {
     }
 
     private AbstractAction ucb() {
-        // Find child with highest UCB value, maximising for ourselves and minimizing for opponent
         AbstractAction bestAction = null;
         double bestValue = -Double.MAX_VALUE;
         GroupAAParams params = player.getParameters();
 
-        LOGGER.info("Performing selection using UCB with progressive bias");
+        LOGGER.info("Performing selection using standard UCB");
 
         for (AbstractAction action : children.keySet()) {
             GroupAATreeNode child = children.get(action);
             if (child == null)
-                throw new AssertionError("Should not be here");
-            else if (bestAction == null)
-                bestAction = action;
+                throw new AssertionError("Child node should not be null");
 
-            // Find child value (average reward)
-            double hvVal = child.t;
-            double childValue = hvVal / (child.n + params.epsilon);
+            // Average reward of child (guard against divide-by-zero)
+            double childValue = child.t / (child.n + params.epsilon);
 
-            // Heuristic progressive-bias: evaluate child's state using configured heuristic
-            double heuristicBias = 0.0;
-            try {
-                // access child's state (allowed since same class)
-                IStateHeuristic h = params.getStateHeuristic();
-                if (h != null && child.state != null) {
-                    heuristicBias = h.evaluateState(child.state, player.getPlayerID());
-                }
-            } catch (Throwable e) {
-                // swallow; keep heuristicBias = 0
-            }
-
-            // Decay bias as child gets visited: effective weight = biasWeight / (1 + visits)
-            double biasWeight = params.biasWeight; // default set in AMAF_Params
-            double effectiveBias = biasWeight / (1.0 + child.n);
-
-            // Mix heuristic bias and childValue (both should be on similar scale: average reward in [-1,1])
-            double mixedValue = (1.0 - effectiveBias) * childValue + effectiveBias * heuristicBias;
-
-            // default to standard UCB exploration term
+            // Standard UCB exploration term
             double explorationTerm = params.K * Math.sqrt(Math.log(this.n + 1.0) / (child.n + params.epsilon));
 
-            // If 'we' are taking a turn we use classic UCB, else opponent tries to minimize
-            boolean iAmMoving = state.getCurrentPlayer() == player.getPlayerID();
-            double uctValue = iAmMoving ? mixedValue : -mixedValue;
-            uctValue += explorationTerm;
+            // UCB value: exploitation + exploration
+            double uctValue = childValue + explorationTerm;
 
-            // Apply small noise to break ties randomly
-            uctValue = noise(uctValue, params.epsilon, player.getRnd().nextDouble());
+            // Small noise to break ties
+            uctValue += params.epsilon * player.getRnd().nextDouble();
 
             if (uctValue > bestValue) {
                 bestAction = action;
-                LOGGER.info("Selecting best action: " + bestAction);
                 bestValue = uctValue;
             }
         }
 
         if (bestAction == null)
-            throw new AssertionError("We have a null value in UCT : shouldn't really happen!");
+            throw new AssertionError("No action selected in UCB");
 
-        root.fmCalls++;  // log one iteration complete
+        root.fmCalls++;
         return bestAction;
     }
+
 
 
     void mctsSearch() {
@@ -199,11 +174,11 @@ class GroupAATreeNode {
     //Expands the node by creating a new random child node and adding to the tree.
     private GroupAATreeNode expand() {
         // Find random child not already created
-        Random r = new Random(player.getParameters().getRandomSeed());
-        System.out.println("SEED OF OUR PLAYER: " + player.getParameters().getRandomSeed());
+        //Random r = new Random(player.getParameters().getRandomSeed());
+        //System.out.println("SEED OF OUR PLAYER: " + player.getParameters().getRandomSeed());
         // pick a random unchosen action
         List<AbstractAction> notChosen = unexpandedActions();
-        AbstractAction chosen = notChosen.get(r.nextInt(notChosen.size()));
+        AbstractAction chosen = notChosen.get(rand.nextInt(notChosen.size()));
 
         // copy the current state and advance it using the chosen action
         // we first copy the action so that the one stored in the node will not have any state changes

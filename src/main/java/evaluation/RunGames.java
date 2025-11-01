@@ -48,6 +48,7 @@ public class RunGames implements IGameRunner {
     @SuppressWarnings({"ConstantConditions"})
     public static void main(String[] args) {
         List<String> argsList = Arrays.asList(args);
+        System.out.println("ARGS => " + java.util.Arrays.toString(args));
         if (argsList.contains("--help") || argsList.contains("-h")) {
             RunArg.printHelp(Usage.RunGames);
             return;

@@ -76,7 +76,7 @@ public class GroupAAHeuristic implements IStateHeuristic {
 
         return Math.max(-MAX_POSSIBLE, Math.min(MAX_POSSIBLE, scoreDifferential)) / MAX_POSSIBLE;
         //Using hyperbolic tangent to map scoreDifferential within range [-1, 1] instead of clamping for efficient smoothing and signal preservation when scoreDifferentials are high
-        //return Math.tanh(scoreDifferential / MAX_POSSIBLE); //the maximum achievable score is the scaling factor
+        //return Math.tanh(scoreDifferential / (MAX_POSSIBLE / 2.0)); //the maximum achievable score is the scaling factor
     }
 
     /**

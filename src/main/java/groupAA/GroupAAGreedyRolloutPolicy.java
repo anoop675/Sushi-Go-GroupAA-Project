@@ -14,10 +14,18 @@ public class GroupAAGreedyRolloutPolicy implements GroupAARolloutPolicy {
 
     private final SushiGoAgentGroupAA player;
     private final GroupAAParams params;
+    private final Random rnd;
+
+    public GroupAAGreedyRolloutPolicy() {
+        this.player = null;
+        this.params = null;
+        this.rnd = new Random(); // fallback RNG
+    }
 
     public GroupAAGreedyRolloutPolicy(SushiGoAgentGroupAA player) {
         this.player = player;
-        this.params = player.getParameters();
+        this.params = (player != null) ? player.getParameters() : null;
+        this.rnd = (player != null && player.getRnd() != null) ? player.getRnd() : new Random();
     }
 
     //does a cheap single-step (single simulation) greedy lookahead

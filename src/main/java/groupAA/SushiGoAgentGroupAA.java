@@ -9,25 +9,34 @@ import java.util.logging.Logger;
 public class SushiGoAgentGroupAA extends AbstractPlayer {
 
     private static final Logger LOGGER = Logger.getLogger(SushiGoAgentGroupAA.class.getName());
-
+    /*
     public SushiGoAgentGroupAA(GroupAAParams params) {
         super(params, "GroupAA MCTS Agent");
         initRandom();
         params.heuristic = new GroupAAHeuristic();
-        params.setParameterValue("heuristic", this.getParameters().heuristic);
+        //params.setParameterValue("heuristic", this.getParameters().heuristic);
 
         System.out.println("SushiGoAgentGroupAA initialized and ready!");
-    }
-
+    }*/
     public SushiGoAgentGroupAA() {
-        this(new GroupAAParams());
+        this(new GroupAAParams(), "GroupAA MCTS Agent");
     }
+    /*
+    public SushiGoAgentGroupAA(GroupAAParams params){
+        this(params, "GroupAA MCTS Agent");
+    }*/
 
+    /*
     public SushiGoAgentGroupAA(long randomSeed) {
         super(new GroupAAParams(), "GroupAA MCTS Agent");
         parameters.setRandomSeed(randomSeed);
         initRandom();
-        setDefaultParams();
+        //setDefaultParams();
+    }*/
+
+    public SushiGoAgentGroupAA(GroupAAParams params, String agentName) {
+        super(params, agentName);
+        initRandom();
     }
 
     private void initRandom() {
@@ -38,6 +47,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
     }
 
     //Overwrites the default AMAF parameters
+    /*
     private void setDefaultParams() {
         GroupAAParams params = getParameters();
         params.K = Math.sqrt(2);
@@ -45,10 +55,10 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         params.maxTreeDepth = 100;
         params.epsilon = 1e-6;
         params.heuristic = new GroupAAHeuristic();
-        params.setParameterValue("heuristic", this.getParameters().heuristic);
+        //params.setParameterValue("heuristic", this.getParameters().heuristic);
 
         LOGGER.info("AMAF Parameters initialized!");
-    }
+    }*/
 
     @Override
     public AbstractAction _getAction(AbstractGameState gameState, java.util.List<AbstractAction> actions) {
@@ -75,7 +85,7 @@ public class SushiGoAgentGroupAA extends AbstractPlayer {
         GroupAAParams parametersCopy = (GroupAAParams) parameters.copy();
 
         // create a new agent using the params-copy constructor
-        SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy);
+        SushiGoAgentGroupAA agentCopy = new SushiGoAgentGroupAA(parametersCopy, "Group AA MCTS Agent");
 
         // copy RNG state: seed a new Random with the saved seed (if available)
         long seed = parametersCopy.getRandomSeed();
